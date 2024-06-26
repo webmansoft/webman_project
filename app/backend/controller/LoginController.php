@@ -21,11 +21,10 @@ class LoginController extends BaseController
 
     /**
      * 获取验证码
-     * @param Request $request
      * @return Response
      * @throws NotFoundException
      */
-    public function captcha(Request $request): Response
+    public function captcha(): Response
     {
         return $this->getCaptcha();
     }
