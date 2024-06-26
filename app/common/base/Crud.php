@@ -54,12 +54,12 @@ class Crud
             $model->created_by = $this->admin_id;
         }
 
-        if (isset($fields['created_at'])) {
-            $model->created_at = date('Y-m-d H:i:s');
+        if (isset($fields[$this->model::CREATED_AT])) {
+            $model->{$this->model::CREATED_AT} = date('Y-m-d H:i:s');
         }
 
-        if (isset($fields['updated_at'])) {
-            $model->updated_at = date('Y-m-d H:i:s');
+        if (isset($fields[$this->model::UPDATED_AT])) {
+            $model->{$this->model::UPDATED_AT} = date('Y-m-d H:i:s');
         }
 
         return $model->save() ? $model->{$pk} : false;
@@ -79,12 +79,12 @@ class Crud
                     $row['created_by'] = $this->admin_id;
                 }
 
-                if (isset($fields['created_at'])) {
-                    $row['created_at'] = date('Y-m-d H:i:s');
+                if (isset($fields[$this->model::CREATED_AT])) {
+                    $row[$this->model::CREATED_AT] = date('Y-m-d H:i:s');
                 }
 
-                if (isset($fields['updated_at'])) {
-                    $row['updated_at'] = date('Y-m-d H:i:s');
+                if (isset($fields[$this->model::UPDATED_AT])) {
+                    $row[$this->model::UPDATED_AT] = date('Y-m-d H:i:s');
                 }
             }
 
@@ -137,8 +137,8 @@ class Crud
             $data['updated_by'] = $this->admin_id;
         }
 
-        if (isset($fields['updated_at'])) {
-            $data['updated_at'] = date('Y-m-d H:i:s');
+        if (isset($fields[$this->model::UPDATED_AT])) {
+            $data[$this->model::UPDATED_AT] = date('Y-m-d H:i:s');
         }
 
         unset($data[$pk]);
@@ -158,8 +158,8 @@ class Crud
             $data['updated_by'] = $this->admin_id;
         }
 
-        if (isset($fields['updated_at'])) {
-            $data['updated_at'] = date('Y-m-d H:i:s');
+        if (isset($fields[$this->model::UPDATED_AT])) {
+            $data[$this->model::UPDATED_AT] = date('Y-m-d H:i:s');
         }
 
         return $this->model->where($where)->update($data);
@@ -183,8 +183,8 @@ class Crud
      */
     public function deleteBatch(array $where = [], bool $batch = true): int
     {
-        $pk = $this->model->getKeyName();
         $ids = $this->getIds($batch);
+        $pk = $this->model->getKeyName();
         return $this->model->whereIn($pk, $ids)
             ->when($where, function ($query, $where) {
                 $query->where($where);
@@ -241,8 +241,8 @@ class Crud
      */
     public function forceDeleteBatch(array $where = [], bool $batch = true): bool
     {
-        $pk = $this->model->getKeyName();
         $ids = $this->getIds($batch);
+        $pk = $this->model->getKeyName();
         $data = $this->model->whereIn($pk, $ids)
             ->when($where, function ($query, $where) {
                 $query->where($where);
@@ -283,33 +283,33 @@ class Crud
     /**
      * 检测模型是否存在
      * @param int|string $id 编号
-     * @param string|bool $pk 模型检测字段名 默认主键字段
+     * @param string|bool $primary_key
      * @param array $fields
      * @return Model
      */
-    public function checkModel(int|string $id, string|bool $pk = true, array $fields = ['*']): Model
+    public function checkModel(int|string $id, string|bool $primary_key = true, array $fields = ['*']): Model
     {
-        $primary_key = $this->model->getKeyName();
-        $field = $pk === true ? $primary_key : $pk;
+        $pk = $this->model->getKeyName();
+        $field = $primary_key === true ? $pk : $primary_key;
         $model = $this->findOne($id, $field, $fields);
         if ($model) {
             return $model;
         }
 
         $table = $this->model->getTable();
-        throw new ApiException('【数据表】' . $table . '【主键】' . $primary_key . '【数据】' . $id . ' 不存在');
+        throw new ApiException('【数据表】' . $table . '【主键】' . $pk . '【数据】' . $id . ' 不存在');
     }
 
     /**
      * 检测模型是否存在
-     * @param string $pk
+     * @param string $primary_key
      * @param string $request_method
      * @return Model
      */
-    public function checkModelByRequest(string $pk = 'id', string $request_method = 'get'): Model
+    public function checkModelByRequest(string $primary_key = 'id', string $request_method = 'get'): Model
     {
         $id = $this->getIds(false, $request_method);
-        return $this->checkModel($id, $pk);
+        return $this->checkModel($id, $primary_key);
     }
 
     /**
@@ -349,18 +349,18 @@ class Crud
     /**
      * 获取模型
      * @param int|string $id
-     * @param string $pk
+     * @param string $primary_key
      * @param array $fields
      * @return Model|bool
      */
-    public function findOne(int|string $id, string $pk = 'id', array $fields = ['*']): Model|bool
+    public function findOne(int|string $id, string $primary_key = 'id', array $fields = ['*']): Model|bool
     {
-        $primary_key = $this->model->getKeyName();
         if ($id) {
-            if ($primary_key === $pk) {
+            $pk = $this->model->getKeyName();
+            if ($pk === $primary_key) {
                 $model = $this->model->select($fields)->find(intval($id));
             } else {
-                $model = $this->model->select($fields)->where($pk, $id)->first();
+                $model = $this->model->select($fields)->where($primary_key, $id)->first();
             }
 
             if ($model) {

@@ -11,7 +11,7 @@ abstract class BaseModel extends Model
 {
     const DELETED_AT = 'delete_time';
     const UPDATED_AT = 'update_time';
-    const created_at = 'create_time';
+    const CREATED_AT = 'create_time';
 
     protected $guarded = [];
 
