@@ -1,0 +1,42 @@
+<?php
+/**
+ * @desc {%controller_name%}
+ * @date {%current_time%}
+ */
+
+declare(strict_types=1);
+
+namespace {%namespace%};
+
+use support\Request;
+use support\Response;
+use app\common\trait\curd\IndexAction;
+use app\common\trait\curd\AddAction;
+use app\common\trait\curd\DoAddAction;
+use app\common\trait\curd\EditAction;
+use app\common\trait\curd\DoEditAction;
+use app\common\trait\curd\ViewAction;
+use app\common\trait\curd\DoDeleteAction;
+use app\common\trait\curd\DoRestoreAction;
+use app\common\trait\curd\DoForceDeleteAction;
+{%logic_use%};
+{%validate_use%};
+use app\common\base\BaseAdminController;
+
+class {%controller_name%} extends BaseAdminController
+{
+    use IndexAction;
+    use AddAction, DoAddAction;
+    use EditAction, DoEditAction;
+    use ViewAction;
+    use DoDeleteAction;
+    use DoRestoreAction;
+    use DoForceDeleteAction;
+
+    public function __construct()
+    {
+        $this->logic = new {%logic_name%}();
+        $this->validate = new {%validate_name%}();
+        parent::__construct();
+    }
+}

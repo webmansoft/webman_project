@@ -1,0 +1,42 @@
+<?php
+/**
+ * @desc {%controller_name%}
+ * @date {%current_time%}
+ */
+
+declare(strict_types=1);
+
+namespace {%namespace%};
+
+use support\Request;
+use support\Response;
+{%logic_use%};
+{%validate_use%};
+use app\common\base\BaseApiController;
+
+class {%controller_name%} extends BaseApiController
+{
+    /**
+     * 无需登录及鉴权的方法
+     * @var array
+     */
+    protected array $noNeedLogin = [];
+
+    /**
+     * 需要登录无需鉴权的方法
+     * @var array
+     */
+    protected array $noNeedAuth = [];
+
+    public function __construct()
+    {
+        $this->logic = new {%logic_name%}();
+        $this->validate = new {%validate_name%}();
+        parent::__construct();
+    }
+
+    public function index(Request $request): Response
+    {
+        return $this->success();
+    }
+}
