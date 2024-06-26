@@ -6,7 +6,7 @@ namespace app\common\base;
 use Webmansoft\Jwt\JwtToken;
 use app\common\exception\ApiException;
 
-abstract class BaseLogic extends Crud
+abstract class BaseLogic extends LogicCrud
 {
     /**
      * @param int $id
@@ -49,14 +49,16 @@ abstract class BaseLogic extends Crud
      * @param int $uid
      * @param string $username
      * @param string $client
+     * @param string $module
      * @return array
      */
-    protected function getToken(int $uid, string $username, string $client = JwtToken::TOKEN_CLIENT_WEB): array
+    protected function getToken(int $uid, string $username, string $client = JwtToken::TOKEN_CLIENT_WEB, string $module = 'backend'): array
     {
         $extend = [
             'id' => $uid,
             'username' => $username,
-            'client' => $client
+            'client' => $client,
+            'module' => $module,
         ];
         return JwtToken::generateToken($extend);
     }

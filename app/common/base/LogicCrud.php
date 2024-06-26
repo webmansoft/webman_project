@@ -3,19 +3,20 @@ declare(strict_types=1);
 
 namespace app\common\base;
 
-use support\Db;
-use support\Cache;
 use support\Model;
 use Illuminate\Database\Eloquent\Builder;
 use app\common\exception\ApiException;
 use app\common\library\DatabaseHelper;
+use app\common\trait\TableFieldsTrait;
 
-class Crud
+abstract class LogicCrud
 {
-    public Model $model;            // 模型
-    public int $admin_id = 0;       // 当前管理员编号
-    public array $admin = [];       // 当前管理员信息
-    protected bool $scope = false;  // 数据边界启用状态
+    use TableFieldsTrait;
+
+    protected Model $model;                // 模型
+    protected int $admin_id = 0;           // 当前管理员编号
+    protected array $admin = [];           // 当前管理员信息
+    protected bool $scope = false;      // 数据边界启用状态
 
     /**
      * 初始化
@@ -369,39 +370,6 @@ class Crud
         }
 
         return false;
-    }
-
-    /**
-     * 获取数据表全部字段
-     * @return array
-     */
-    public function getTableField(): array
-    {
-        $table = config('database.connections.mysql.prefix') . $this->model->getTable();
-        $field = Db::select("desc `$table`");
-        if (!$field) {
-            throw new ApiException($table . ' 表不存在');
-        } else {
-            return array_column($field, 'Field', 'Field');
-        }
-    }
-
-    /**
-     * 获取缓存数据表全部字段
-     * @param bool $force
-     * @return array
-     */
-    public function getCacheTableField(bool $force = false): array
-    {
-        $key = $this->model->getTable() . '_cache_field';
-        $fields = Cache::get($key);
-        if (empty($fields) || $force) {
-            $fields = $this->getTableField();
-            Cache::set($key, $fields);
-            return $fields;
-        }
-
-        return $fields;
     }
 
     /**

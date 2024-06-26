@@ -13,20 +13,12 @@ abstract class BaseController
     /**
      * 逻辑层注入
      */
-    protected object $logic;
+    protected ?object $logic = null;
 
     /**
      * 验证器注入
      */
     protected Validate $validate;
-
-    /**
-     * 构造方法
-     */
-    public function __construct()
-    {
-
-    }
 
     /**
      * 返回格式化json数据

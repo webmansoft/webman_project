@@ -29,7 +29,6 @@ abstract class BaseApiController extends BaseController
     public function __construct()
     {
         $this->init();
-        parent::__construct();
     }
 
     /**
