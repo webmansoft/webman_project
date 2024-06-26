@@ -31,6 +31,7 @@ class SystemUserEvent
         if (request()->method() === 'GET') {
             return;
         }
+
         $admin = get_jwt_user();
         $ip = request()->getRealIp();
         $module = request()->app;
@@ -48,13 +49,14 @@ class SystemUserEvent
 
     protected function getServiceName(): string
     {
-        $path = request()->route->getPath();
-        if (preg_match("/\{[^}]+}/", $path)) {
+        $path = request()->route?->getPath();
+        if ($path && preg_match("/\{[^}]+}/", $path)) {
             $path = rtrim(preg_replace("/\{[^}]+}/", '', $path), '/');
+            $name = SystemMenuModel::where('code', $path)->value('name');
+            return $name ?: '未知';
         }
 
-        $name = SystemMenuModel::where('code', $path)->value('name');
-        return $name ?: '未知';
+        return '未知';
     }
 
     /**
