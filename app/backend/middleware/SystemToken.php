@@ -26,7 +26,7 @@ class SystemToken implements MiddlewareInterface
 
         if (request()->isPost()) {
             // 记录日志
-            Event::emit('system.user.operation', true);
+            Event::emit('system.user.operation', null);
         }
 
         return $handler($request);

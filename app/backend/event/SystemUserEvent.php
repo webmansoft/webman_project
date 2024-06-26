@@ -31,7 +31,6 @@ class SystemUserEvent
         if (request()->method() === 'GET') {
             return;
         }
-
         $admin = get_jwt_user();
         $ip = request()->getRealIp();
         $module = request()->app;
@@ -54,12 +53,8 @@ class SystemUserEvent
             $path = rtrim(preg_replace("/\{[^}]+}/", '', $path), '/');
         }
 
-        $menu = SystemMenuModel::where('code', $path)->first();
-        if ($menu->exists()) {
-            return $menu->name;
-        } else {
-            return '未知';
-        }
+        $name = SystemMenuModel::where('code', $path)->value('name');
+        return $name ?: '未知';
     }
 
     /**
