@@ -1,5 +1,5 @@
 <?php
-declare (strict_types=1);
+declare(strict_types=1);
 
 namespace app\backend\controller;
 
@@ -16,7 +16,6 @@ class LoginController extends BaseController
     {
         $this->logic = new SystemUserLogic();
         $this->validate = new SystemUserValidate();
-        parent::__construct();
     }
 
     /**
