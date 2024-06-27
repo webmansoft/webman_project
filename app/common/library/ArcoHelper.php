@@ -47,12 +47,11 @@ class ArcoHelper
         $list = [];
         foreach ($data as $value) {
             if ($value['auth_type'] === 1) {
-                $path = $value['path'];
                 $temp = [
                     $pk => $value[$pk],
                     $pid => $value[$pid],
                     'name' => self::camelize(str_replace('/', '_', $value['path'])),
-                    'path' => $path,
+                    'path' => $value['path'],
                     'component' => $value['component'],
                     'meta' => [
                         'title' => $value['title'],
@@ -83,12 +82,11 @@ class ArcoHelper
         $list = [];
         foreach ($data as $value) {
             if ($value['type'] === 'M') {
-                $path = '/' . $value['route'];
                 $temp = [
                     $pk => $value[$pk],
                     $pid => $value[$pid],
                     'name' => $value['route'],
-                    'path' => $path,
+                    'path' => '/' . $value['route'],
                     'component' => $value['component'],
                     'redirect' => $value['redirect'],
                     'meta' => [
@@ -132,8 +130,7 @@ class ArcoHelper
         $list = [];
         foreach ($data as $value) {
             if ($value['type'] === 'B') {
-                $str = $value['code'];
-                $list[] = $str;
+                $list[] = $value['code'];
             }
         }
 
