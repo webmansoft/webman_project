@@ -20,12 +20,10 @@ class SystemUserLogic extends BaseLogic
     {
         $admin = $this->model->find($id);
         $data = $admin->makeHidden(['password', 'created_by', 'updated_by', 'create_time', 'update_time'])->toArray();
-        // write_log($data, 'read');
-        $data['role_list'] = $admin->role->toArray() ?: [];
-        $data['post_list'] = $admin->post->toArray() ?: [];
-        $data['department_list'] = $admin->department();
+        $data['role_list'] = $admin->getAttribute('role')->toArray() ?? [];
+        $data['post_list'] = $admin->getAttribute('post')->toArray() ?? [];
+        $data['department_list'] = $admin->getAttribute('department')->toArray() ?? [];
         return $data;
-        // return $this->checkModel($id, true, ['password'])->toArray();
     }
 
     /**

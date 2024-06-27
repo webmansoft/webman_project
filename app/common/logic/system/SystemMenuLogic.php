@@ -118,10 +118,10 @@ class SystemMenuLogic extends BaseLogic
 
     /**
      * 根据ids获取路由菜单
-     * @param $ids
+     * @param array $ids
      * @return array
      */
-    public function getRoutersByIds($ids): array
+    public function getRoutersByIds(array $ids): array
     {
         $query = $this->model
             ->where('status', 1)
@@ -140,7 +140,7 @@ class SystemMenuLogic extends BaseLogic
     {
         $ids = [];
         foreach ($roleData as $val) {
-            foreach ($val['menus'] as $menu) {
+            foreach ($val['menu'] as $menu) {
                 $ids[] = $menu['id'];
             }
         }

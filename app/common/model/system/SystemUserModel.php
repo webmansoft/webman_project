@@ -47,10 +47,12 @@ class SystemUserModel extends BaseModel
 
     /**
      * 通过中间表关联角色
+     * belongsToMany(关联表模型，中间表表名，中间表与当前模型的关联字段，中间表与关联表的关联字段);
+     * $parentKey第五个参数，如果第三个参数用的不是自己的主键，则需要第五个参数。现在我们使用的是user_id，第五个参数应该就是user_id
      */
     public function role(): BelongsToMany
     {
-        return $this->belongsToMany(SystemRoleMenuModel::class, SystemUserRoleModel::class, 'user_id', 'role_id');
+        return $this->belongsToMany(SystemRoleMenuModel::class, SystemUserRoleModel::class, 'user_id', 'role_id', 'user_id');
     }
 
     /**
