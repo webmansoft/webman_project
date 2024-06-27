@@ -6,6 +6,37 @@ namespace support;
 class Request extends \Webman\Http\Request
 {
     /**
+     * 获取参数增强方法
+     * [['test1','test2'], 'in' => ['test1','test2'], 'like' => ['origin_name','name'], 'between' => ['created_at']]
+     * @param array $data
+     * @return array
+     */
+    public function more(array $data): array
+    {
+        $where = [];
+        $rules = ['>', '>=', '=', '<', '<=', '<>', 'like', 'not like', 'in', 'not in', 'null', 'not null', 'betweenDate', 'between'];
+        foreach ($data as $rule => $fields) {
+            if (in_array($rule, $rules)) {
+                foreach ($fields as $field) {
+                    $value = trim($this->input($field, ''));
+                    if ($value) {
+                        $where[$rule][$field] = $value;
+                    }
+                }
+            } else {
+                foreach ($fields as $field) {
+                    $value = trim($this->input($field, ''));
+                    if ($value) {
+                        $where['='][$field] = $value;
+                    }
+                }
+            }
+        }
+
+        return $where;
+    }
+
+    /**
      * 去除POST左右空格
      * @param string|null $name
      * @param mixed $default

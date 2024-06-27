@@ -10,7 +10,11 @@ Route::group('/backend/login', function () {
 
 Route::group('/backend/system', function () {
     Route::get('/test', [app\backend\controller\SystemController::class, 'test']);
-    Route::get('/adminInfo', [app\backend\controller\SystemController::class, 'adminInfo']);
+
+    Route::get('/system/adminInfo', [app\backend\controller\SystemController::class, 'adminInfo']);
+    Route::get('/system/dictData', [app\backend\controller\SystemController::class, 'dictData']);
+    Route::get('/system/getResourceList', [app\backend\controller\SystemController::class, 'getResourceList']);
+    Route::get('/system/clearAllCache', [app\backend\controller\SystemController::class, 'clearAllCache']);
 });
 
 Route::fallback(function () {

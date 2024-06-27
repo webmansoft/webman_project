@@ -324,29 +324,29 @@ abstract class LogicCrud
         return $this->checkModel($this->admin_id)->toArray();
     }
 
-    public function selectByWhere(array $where, array $fields = ['*']): array
+    public function selectByWhere(array $where, array $select_fields = ['*']): array
     {
-        return $this->search($where)->select($fields)->get()->toArray();
+        return $this->search($where, $select_fields)->get()->toArray();
     }
 
-    public function countByWhere(array $where): int
+    public function countByWhere(array $where, array $select_fields = ['*']): int
     {
-        return $this->search($where)->count();
+        return $this->search($where, $select_fields)->count();
     }
 
-    public function sumByWhere(array $where, string $field): int
+    public function sumByWhere(array $where, string $field, array $select_fields = ['*']): int
     {
-        return $this->search($where)->sum($field);
+        return $this->search($where, $select_fields)->sum($field);
     }
 
-    public function columnByWhere(array $where, string $field, string|null $key = null): array
+    public function columnByWhere(array $where, string $field, string|null $key = null, array $select_fields = ['*']): array
     {
-        return $this->search($where)->pluck($field, $key)->toArray();
+        return $this->search($where, $select_fields)->pluck($field, $key)->toArray();
     }
 
-    public function findAll(array $where, array $fields = ['*']): array
+    public function findAll(array $where, array $select_fields = ['*']): array
     {
-        return $this->model->newQuery()->select($fields)->where($where)->get()->toArray();
+        return $this->search($where, $select_fields)->get()->toArray();
     }
 
     /**
@@ -376,36 +376,15 @@ abstract class LogicCrud
     }
 
     /**
-     * 获取查询分页数据
-     * @param Builder $query
-     * @param int $limit
-     * @param int $page
-     * @return array
-     */
-    public function getPaginateData(Builder $query, int $limit = 10, int $page = 1): array
-    {
-        $paginate = $query->paginate($limit, ['*'], 'page', $page)->toArray();
-        return [
-            // 获取当前页的所有项
-            'items' => $paginate['data'],
-            // 数据总数
-            'total' => $paginate['total'],
-            // 每页的数据条数
-            'limit' => $paginate['per_page'],
-            // 获取当前页页码
-            'page' => $paginate['current_page'],
-        ];
-    }
-
-    /**
      * ['in' => ['file_ext' => [1,2,3]],'like' => ['origin_name' => 'name'],'between' => ['created_at' => '2024-11-11 - 2024-11-12']]
      * 字段已定义规则和对应值
      * @param array $data
+     * @param array $select_fields
      * @return Builder
      */
-    protected function search(array $data): Builder
+    public function search(array $data, array $select_fields = ['*']): Builder
     {
-        $query = $this->model->newQuery();
+        $query = $this->model->newQuery()->select($select_fields);
         $rules = ['>', '>=', '=', '<', '<=', '<>', 'like', 'not like', 'in', 'not in', 'null', 'not null', 'betweenDate', 'between'];
         foreach ($data as $rule => $condition) {
             foreach ($condition as $field => $value) {
@@ -458,41 +437,73 @@ abstract class LogicCrud
             }
         }
 
+        if (config('app.debug')) {
+            write_log($query->toSql(), 'search toSql');
+        }
+
         return $query;
     }
 
-    protected function equalSearch(array $data): Builder
+    public function equalSearch(array $data, array $select_fields = ['*']): Builder
     {
-        return $this->search([$data]);
+        return $this->search([$data], $select_fields);
     }
 
-    protected function inSearch(array $data): Builder
+    public function inSearch(array $data, array $select_fields = ['*']): Builder
     {
-        return $this->search(['in' => $data]);
+        return $this->search(['in' => $data], $select_fields);
     }
 
-    protected function likeSearch(array $data): Builder
+    public function likeSearch(array $data, array $select_fields = ['*']): Builder
     {
-        return $this->search(['like' => $data]);
+        return $this->search(['like' => $data], $select_fields);
     }
 
-    protected function betweenSearch(array $data): Builder
+    public function betweenSearch(array $data, array $select_fields = ['*']): Builder
     {
-        return $this->search(['between' => $data]);
+        return $this->search(['between' => $data], $select_fields);
     }
 
-    protected function betweenDateSearch(array $data): Builder
+    public function betweenDateSearch(array $data, array $select_fields = ['*']): Builder
     {
-        return $this->search(['betweenDate' => $data]);
+        return $this->search(['betweenDate' => $data], $select_fields);
+    }
+
+    /**
+     * 分页查询数据
+     * @param Builder $query
+     * @return array
+     */
+    public function getQueryPageList(Builder $query): array
+    {
+        $limit = request()->input('limit') ?: 10;
+        $orderBy = request()->input('orderBy') ?: $this->model->getKeyName();
+        $orderType = request()->input('orderType') ?: 'ASC';
+        if ($this->scope) {
+            $query = $this->adminDataScope($query);
+        }
+
+        $query->orderBy($orderBy, $orderType);
+        $data = $query->paginate($limit)->toArray();
+        return [
+            // 获取当前页的所有项
+            'items' => $data['data'],
+            // 数据总数
+            'total' => $data['total'],
+            // 每页的数据条数
+            'limit' => $data['per_page'],
+            // 获取当前页页码
+            'page' => $data['current_page'],
+        ];
     }
 
     /**
      * 获取全部数据
      * @param Builder $query
-     * @param array $fields
+     * @param array $select_fields
      * @return array
      */
-    public function getAll(Builder $query, array $fields = ['*']): array
+    public function getQueryAll(Builder $query, array $select_fields = ['*']): array
     {
         $order_by = request()->input('orderBy') ?: $this->model->getKeyName();
         $order_type = request()->input('orderType') ?: 'asc';
@@ -501,7 +512,7 @@ abstract class LogicCrud
         }
 
         $query->orderBy($order_by, $order_type);
-        return $query->select($fields)->get()->toArray();
+        return $query->get($select_fields)->toArray();
     }
 
     /**
