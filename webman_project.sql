@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50740
 File Encoding         : 65001
 
-Date: 2024-06-27 11:43:59
+Date: 2024-06-27 21:15:13
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -351,7 +351,7 @@ CREATE TABLE `wp_system_login_log` (
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `idx_username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='登录日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='登录日志表';
 
 -- ----------------------------
 -- Records of wp_system_login_log
@@ -372,6 +372,9 @@ INSERT INTO `wp_system_login_log` VALUES ('13', 'admin', '127.0.0.1', '内网IP'
 INSERT INTO `wp_system_login_log` VALUES ('14', 'admin', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-27 11:05:25', null, '2024-06-27 11:05:25', '2024-06-27 11:05:25', null);
 INSERT INTO `wp_system_login_log` VALUES ('15', 'test1', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-27 11:31:52', null, '2024-06-27 11:31:52', '2024-06-27 11:31:52', null);
 INSERT INTO `wp_system_login_log` VALUES ('16', 'test1', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-27 11:34:47', null, '2024-06-27 11:34:47', '2024-06-27 11:34:47', null);
+INSERT INTO `wp_system_login_log` VALUES ('17', 'test1', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-27 14:52:07', null, '2024-06-27 14:52:07', '2024-06-27 14:52:07', null);
+INSERT INTO `wp_system_login_log` VALUES ('18', 'admin', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-27 14:52:11', null, '2024-06-27 14:52:11', '2024-06-27 14:52:11', null);
+INSERT INTO `wp_system_login_log` VALUES ('19', 'test1', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-27 14:52:58', null, '2024-06-27 14:52:58', '2024-06-27 14:52:58', null);
 
 -- ----------------------------
 -- Table structure for `wp_system_menu`
@@ -585,7 +588,7 @@ CREATE TABLE `wp_system_operation_log` (
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `username_index` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='操作日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='操作日志表';
 
 -- ----------------------------
 -- Records of wp_system_operation_log
@@ -596,6 +599,7 @@ INSERT INTO `wp_system_operation_log` VALUES ('3', 'admin', 'backend', 'POST', '
 INSERT INTO `wp_system_operation_log` VALUES ('4', 'admin', 'backend', 'POST', '/backend/system/test', '未知', '127.0.0.1', '内网IP', '[]', null, null, null, '2024-06-27 11:05:42', '2024-06-27 11:05:42', null);
 INSERT INTO `wp_system_operation_log` VALUES ('5', '', 'backend', 'POST', '/backend/system/test', '未知', '127.0.0.1', '内网IP', '[]', null, null, null, '2024-06-27 11:06:46', '2024-06-27 11:06:46', null);
 INSERT INTO `wp_system_operation_log` VALUES ('6', 'admin', 'backend', 'POST', '/backend/system/test', '未知', '127.0.0.1', '内网IP', '[]', null, null, null, '2024-06-27 11:06:54', '2024-06-27 11:06:54', null);
+INSERT INTO `wp_system_operation_log` VALUES ('7', 'admin', 'backend', 'POST', '/backend/system/test', '未知', '127.0.0.1', '内网IP', '[]', null, null, null, '2024-06-27 14:00:12', '2024-06-27 14:00:12', null);
 
 -- ----------------------------
 -- Table structure for `wp_system_post`
@@ -672,6 +676,7 @@ CREATE TABLE `wp_system_role_department` (
 INSERT INTO `wp_system_role_department` VALUES ('2', '2');
 INSERT INTO `wp_system_role_department` VALUES ('2', '4');
 INSERT INTO `wp_system_role_department` VALUES ('2', '5');
+INSERT INTO `wp_system_role_department` VALUES ('3', '3');
 
 -- ----------------------------
 -- Table structure for `wp_system_role_menu`
@@ -686,6 +691,9 @@ CREATE TABLE `wp_system_role_menu` (
 -- ----------------------------
 -- Records of wp_system_role_menu
 -- ----------------------------
+INSERT INTO `wp_system_role_menu` VALUES ('2', '1000');
+INSERT INTO `wp_system_role_menu` VALUES ('2', '1100');
+INSERT INTO `wp_system_role_menu` VALUES ('3', '1103');
 
 -- ----------------------------
 -- Table structure for `wp_system_upload`
@@ -712,11 +720,14 @@ CREATE TABLE `wp_system_upload` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `hash` (`hash`),
   KEY `storage_path` (`storage_path`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='上传文件信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='上传文件信息表';
 
 -- ----------------------------
 -- Records of wp_system_upload
 -- ----------------------------
+INSERT INTO `wp_system_upload` VALUES ('1', '1', 'test1', null, null, 'image', null, null, null, null, null, null, null, null, '2024-06-27 21:10:17', '2024-06-27 21:10:17', null);
+INSERT INTO `wp_system_upload` VALUES ('2', '1', 'test2', null, null, 'zip', null, null, null, null, null, null, null, null, '2024-06-27 21:10:17', '2024-06-27 21:10:17', null);
+INSERT INTO `wp_system_upload` VALUES ('3', '1', 'test3', null, null, 'zip', null, null, null, null, null, null, null, null, '2024-06-27 21:10:17', '2024-06-27 21:10:17', null);
 
 -- ----------------------------
 -- Table structure for `wp_system_user`
@@ -733,7 +744,7 @@ CREATE TABLE `wp_system_user` (
   `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户头像',
   `signed` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '个人签名',
   `dashboard` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '后台首页类型',
-  `dept_id` int(11) DEFAULT NULL COMMENT '部门ID',
+  `department_id` int(11) DEFAULT NULL COMMENT '部门ID',
   `status` int(11) DEFAULT '1' COMMENT '状态 (1正常 2停用)',
   `login_ip` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '最后登陆IP',
   `login_time` datetime DEFAULT NULL COMMENT '最后登陆时间',
@@ -746,14 +757,14 @@ CREATE TABLE `wp_system_user` (
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unx_dept_id` (`username`),
-  KEY `idx_dept_id` (`dept_id`)
+  KEY `idx_dept_id` (`department_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户信息表';
 
 -- ----------------------------
 -- Records of wp_system_user
 -- ----------------------------
-INSERT INTO `wp_system_user` VALUES ('1', 'admin', '$2y$10$Q70WC9RBqMSS72DmppsbIuQtyAydXSmeD.Ae6W8YhmE/w15uLLpiy', '100', '祭道之上', '13888888888', 'admin@admin.com', 'http://127.0.0.1:8787/storage/20240623/98fc9d262014cbed0ea1580e2f3d9da71ad29853.png', 'Today is very good！', 'statistics', null, '1', '127.0.0.1', '2024-06-27 11:05:25', '{\"mode\":\"light\",\"tag\":true,\"menuCollapse\":false,\"menuWidth\":230,\"layout\":\"classic\",\"skin\":\"mine\",\"i18n\":true,\"language\":\"zh_CN\",\"animation\":\"ma-slide-down\",\"color\":\"#165DFF\"}', null, '1', '1', '2024-01-20 16:02:23', '2024-06-27 11:05:25', null);
-INSERT INTO `wp_system_user` VALUES ('2', 'test1', '$2y$10$Q70WC9RBqMSS72DmppsbIuQtyAydXSmeD.Ae6W8YhmE/w15uLLpiy', '100', '小小测试员', '15822222222', 'test@saadmin.com', 'http://127.0.0.1:8787/storage/20240623/c5a22be92d325a2b8e0b3d609394dd86d1977fb5.png', null, 'work', '5', '1', '127.0.0.1', '2024-06-27 11:34:47', 'null', null, '1', '1', '2023-11-15 14:30:14', '2024-06-27 11:34:47', null);
+INSERT INTO `wp_system_user` VALUES ('1', 'admin', '$2y$10$Q70WC9RBqMSS72DmppsbIuQtyAydXSmeD.Ae6W8YhmE/w15uLLpiy', '100', '祭道之上', '13888888888', 'admin@admin.com', 'http://127.0.0.1:8787/storage/20240623/98fc9d262014cbed0ea1580e2f3d9da71ad29853.png', 'Today is very good！', 'statistics', null, '1', '127.0.0.1', '2024-06-27 14:52:11', '{\"mode\":\"light\",\"tag\":true,\"menuCollapse\":false,\"menuWidth\":230,\"layout\":\"classic\",\"skin\":\"mine\",\"i18n\":true,\"language\":\"zh_CN\",\"animation\":\"ma-slide-down\",\"color\":\"#165DFF\"}', null, '1', '1', '2024-01-20 16:02:23', '2024-06-27 14:52:11', null);
+INSERT INTO `wp_system_user` VALUES ('2', 'test1', '$2y$10$Q70WC9RBqMSS72DmppsbIuQtyAydXSmeD.Ae6W8YhmE/w15uLLpiy', '100', '小小测试员', '15822222222', 'test@saadmin.com', 'http://127.0.0.1:8787/storage/20240623/c5a22be92d325a2b8e0b3d609394dd86d1977fb5.png', null, 'work', '5', '1', '127.0.0.1', '2024-06-27 14:52:58', 'null', null, '1', '1', '2023-11-15 14:30:14', '2024-06-27 14:52:58', null);
 INSERT INTO `wp_system_user` VALUES ('3', 'test2', '', '100', '酱油党', '13977777777', 'zhang@saadmin.com', 'http://localhost:8787/upload/image/20231222/65854211f2a6.jpg', null, 'statistics', '2', '1', '127.0.0.1', '2023-11-22 22:47:26', 'null', '5566', '1', '1', '2023-11-15 16:27:27', '2024-06-23 16:32:39', null);
 
 -- ----------------------------
@@ -769,6 +780,7 @@ CREATE TABLE `wp_system_user_post` (
 -- ----------------------------
 -- Records of wp_system_user_post
 -- ----------------------------
+INSERT INTO `wp_system_user_post` VALUES ('2', '2');
 INSERT INTO `wp_system_user_post` VALUES ('2', '3');
 INSERT INTO `wp_system_user_post` VALUES ('3', '3');
 
@@ -787,7 +799,7 @@ CREATE TABLE `wp_system_user_role` (
 -- ----------------------------
 INSERT INTO `wp_system_user_role` VALUES ('1', '1');
 INSERT INTO `wp_system_user_role` VALUES ('2', '2');
-INSERT INTO `wp_system_user_role` VALUES ('3', '2');
+INSERT INTO `wp_system_user_role` VALUES ('2', '3');
 
 -- ----------------------------
 -- Table structure for `wp_tool_generate_columns`
