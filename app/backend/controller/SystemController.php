@@ -35,10 +35,10 @@ class SystemController extends BaseApiController
         } else {
             $role_ids = ArrayHelper::getArrayColumn($this->admin['role_list'], 'id');
             $roles = $roleLogic->getMenuIdsByRoleIds($role_ids);
-            $ids = $logic->filterMenuIds($roles);
-            $info['codes'] = $logic->getMenuCode($ids);
+            $menu_ids = $logic->filterMenuIds($roles);
+            $info['codes'] = $logic->getMenuCodeById($menu_ids);
             $info['roles'] = ArrayHelper::getArrayColumn($this->admin['role_list'],'code');
-            $info['routers'] = $logic->getRoutersByIds($ids);
+            $info['routers'] = $logic->getRoutersByIds($menu_ids);
         }
 
         return $this->successData($info);

@@ -90,7 +90,7 @@ class SystemMenuLogic extends BaseLogic
         // ['in' => ['file_ext' => [1,2,3]]
         $query = $this->search(['in' => ['type' => ['M', 'I', 'L']]])->orderBy('sort', 'desc');
         $data = $this->getAll($query);
-        write_log($data, 'getAllMenus');
+        // write_log($data, 'getAllMenus');
         return ArcoHelper::makeArcoMenus($data);
     }
 
@@ -103,15 +103,15 @@ class SystemMenuLogic extends BaseLogic
     }
 
     /**
-     * 根据ids获取权限
+     * 根据$ids获取权限
      * @param array $ids
      * @return array
      */
-    public function getMenuCode(array $ids): array
+    public function getMenuCodeById(array $ids): array
     {
         $where = [
-            ['type', '=', 'B'],
-            ['id', 'in', $ids],
+            ['type' => 'B'],
+            'in' => ['id' => $ids],
         ];
         return $this->columnByWhere($where, 'code');
     }
@@ -123,29 +123,34 @@ class SystemMenuLogic extends BaseLogic
      */
     public function getRoutersByIds(array $ids): array
     {
-        $query = $this->model
-            ->where('status', 1)
-            ->where('id', 'in', $ids)
-            ->orderBy('sort', 'desc');
-        $data = $this->getAll($query);
+        $where = [
+            ['status' => 1],
+            'in' => ['id' => $ids],
+        ];
+
+        $data = $this->search($where)
+            ->orderBy('sort', 'desc')
+            ->get()
+            ->toArray();
+
         return ArcoHelper::makeArcoMenus($data);
     }
 
     /**
      * 过滤通过角色查询出来的菜单id列表，并去重
-     * @param array $roleData
+     * @param array $role_data
      * @return array
      */
-    public function filterMenuIds(array &$roleData): array
+    public function filterMenuIds(array $role_data): array
     {
         $ids = [];
-        foreach ($roleData as $val) {
+        foreach ($role_data as $val) {
             foreach ($val['menu'] as $menu) {
                 $ids[] = $menu['id'];
             }
         }
 
-        unset($roleData);
+        unset($role_data);
         return array_unique($ids);
     }
 }

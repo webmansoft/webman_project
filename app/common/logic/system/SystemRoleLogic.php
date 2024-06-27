@@ -6,7 +6,6 @@ namespace app\common\logic\system;
 use app\common\base\BaseLogic;
 use app\common\base\BaseModel;
 use app\common\model\system\SystemRoleModel;
-use Illuminate\Database\Eloquent\Builder;
 
 class SystemRoleLogic extends BaseLogic
 {
@@ -21,9 +20,9 @@ class SystemRoleLogic extends BaseLogic
             return [];
         }
 
-        return $this->model
-            ->where('id', 'in', $ids)
-            ->with(['menu' => function (Builder $query) {
+        return $this->model->newQuery()
+            ->whereIn('id', $ids)
+            ->with(['menu' => function ($query) {
                 $query->where('status', 1)->orderBy('sort', 'desc');
             }])->get()->toArray();
     }
@@ -34,7 +33,7 @@ class SystemRoleLogic extends BaseLogic
         if ($role) {
             return [
                 'id' => $id,
-                'menu' => $role->menu() ?: []
+                'menu' => $role->menu() ?? []
             ];
         }
 
@@ -58,7 +57,7 @@ class SystemRoleLogic extends BaseLogic
         if ($role) {
             return [
                 'id' => $id,
-                'department' => $role->department() ?: []
+                'department' => $role->department() ?? []
             ];
         }
 
@@ -68,8 +67,8 @@ class SystemRoleLogic extends BaseLogic
     public function saveDepartmentPermission(int $id, array $data): BaseModel
     {
         $role = $this->model->find($id);
-        if($role){
-            $role->setAttribute('data_scope',$data['data_scope']);
+        if ($role) {
+            $role->setAttribute('data_scope', $data['data_scope']);
             $role->save();
             $role->department()->detach();
             $role->department()->insert($data['department_ids']);

@@ -52,7 +52,7 @@ class SystemUserModel extends BaseModel
      */
     public function role(): BelongsToMany
     {
-        return $this->belongsToMany(SystemRoleMenuModel::class, SystemUserRoleModel::class, 'user_id', 'role_id', 'user_id');
+        return $this->belongsToMany(SystemRoleModel::class, SystemUserRoleModel::class, 'user_id', 'role_id');
     }
 
     /**

@@ -286,7 +286,8 @@ abstract class LogicCrud
      * 检测模型是否存在
      * @param int|string $id 编号
      * @param string|bool $primary_key
-     * @param array $fields
+     * @param array $hidden_fields
+     * @param array $display_fields
      * @return Model
      */
     public function checkModel(int|string $id, string|bool $primary_key = true, array $hidden_fields = ['*'], array $display_fields = ['*']): Model
@@ -325,27 +326,27 @@ abstract class LogicCrud
 
     public function selectByWhere(array $where, array $fields = ['*']): array
     {
-        return $this->model->select($fields)->where($where)->get()->toArray();
+        return $this->search($where)->select($fields)->get()->toArray();
     }
 
     public function countByWhere(array $where): int
     {
-        return $this->model->where($where)->count();
+        return $this->search($where)->count();
     }
 
     public function sumByWhere(array $where, string $field): int
     {
-        return $this->model->where($where)->sum($field);
+        return $this->search($where)->sum($field);
     }
 
     public function columnByWhere(array $where, string $field, string|null $key = null): array
     {
-        return $this->model->where($where)->pluck($field, $key)->toArray();
+        return $this->search($where)->pluck($field, $key)->toArray();
     }
 
     public function findAll(array $where, array $fields = ['*']): array
     {
-        return $this->model->select($fields)->where($where)->get()->toArray();
+        return $this->model->newQuery()->select($fields)->where($where)->get()->toArray();
     }
 
     /**
@@ -404,6 +405,7 @@ abstract class LogicCrud
      */
     protected function search(array $data): Builder
     {
+        $query = $this->model->newQuery();
         $rules = ['>', '>=', '=', '<', '<=', '<>', 'like', 'not like', 'in', 'not in', 'null', 'not null', 'betweenDate', 'between'];
         foreach ($data as $rule => $condition) {
             foreach ($condition as $field => $value) {
@@ -414,25 +416,25 @@ abstract class LogicCrud
                 if (is_string($value) || is_array($value)) {
                     if (in_array($rule, $rules)) {
                         if ($rule === 'like' || $rule === 'not like') {
-                            $this->model->newQuery()->where($field, $rule, "%$value%");
+                            $query = $query->where($field, $rule, "%$value%");
                         } elseif (in_array($rule, ['>', '>=', '=', '<', '<=', '<>'])) {
-                            $this->model->newQuery()->where($field, $rule, $value);
+                            $query = $query->where($field, $rule, $value);
                         } elseif ($rule === 'in' && $value) {
                             if (is_string($value)) {
-                                $this->model->newQuery()->whereIn($field, explode(',', $value));
+                                $query = $query->whereIn($field, explode(',', $value));
                             } else {
-                                $this->model->newQuery()->whereIn($field, $value);
+                                $query = $query->whereIn($field, $value);
                             }
                         } elseif ($rule === 'not in' && $value) {
                             if (is_string($value)) {
-                                $this->model->newQuery()->whereNotIn($field, explode(',', $value));
+                                $query = $query->whereNotIn($field, explode(',', $value));
                             } else {
-                                $this->model->newQuery()->whereNotIn($field, $value);
+                                $query = $query->whereNotIn($field, $value);
                             }
                         } elseif ($rule === 'null') {
-                            $this->model->newQuery()->whereNull($field);
+                            $query = $query->whereNull($field);
                         } elseif ($rule === 'not null') {
-                            $this->model->newQuery()->whereNotNull($field);
+                            $query = $query->whereNotNull($field);
                         } elseif ($rule === 'betweenDate') {
                             $between = $value;
                             if (is_string($value) && str_contains($value, ' - ')) {
@@ -440,23 +442,48 @@ abstract class LogicCrud
                             }
 
                             $between[1] = $between[1] . ' 23:59:59';
-                            $this->model->newQuery()->whereBetween($field, $between);
+                            $query = $query->whereBetween($field, $between);
                         } elseif ($rule === 'between') {
                             $between = $value;
                             if (is_string($value) && str_contains($value, ' - ')) {
                                 $between = explode(' - ', $value);
                             }
 
-                            $this->model->newQuery()->whereBetween($field, $between);
+                            $query = $query->whereBetween($field, $between);
                         }
                     } else {
-                        $this->model->newQuery()->where($field, $value);
+                        $query = $query->where($field, $value);
                     }
                 }
             }
         }
 
-        return $this->model->newQuery();
+        return $query;
+    }
+
+    protected function equalSearch(array $data): Builder
+    {
+        return $this->search([$data]);
+    }
+
+    protected function inSearch(array $data): Builder
+    {
+        return $this->search(['in' => $data]);
+    }
+
+    protected function likeSearch(array $data): Builder
+    {
+        return $this->search(['like' => $data]);
+    }
+
+    protected function betweenSearch(array $data): Builder
+    {
+        return $this->search(['between' => $data]);
+    }
+
+    protected function betweenDateSearch(array $data): Builder
+    {
+        return $this->search(['betweenDate' => $data]);
     }
 
     /**
