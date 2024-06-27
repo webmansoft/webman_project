@@ -10,6 +10,7 @@ Route::group('/backend/login', function () {
 
 Route::group('/backend/system', function () {
     Route::get('/test', [app\backend\controller\SystemController::class, 'test']);
+    Route::get('/adminInfo', [app\backend\controller\SystemController::class, 'adminInfo']);
 });
 
 Route::fallback(function () {

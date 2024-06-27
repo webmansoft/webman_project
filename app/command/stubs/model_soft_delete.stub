@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace app\common\model\tool;
+namespace {%namespace%};
 
 use app\common\base\BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ToolGenerateColumnsModel extends BaseModel
+class {%model_name%} extends BaseModel
 {
     use SoftDeletes;
 
@@ -14,5 +14,5 @@ class ToolGenerateColumnsModel extends BaseModel
      * 数据表名称
      * @var string
      */
-    protected $table = 'tool_generate_columns';
+    protected $table = '{%table_name%}';
 }

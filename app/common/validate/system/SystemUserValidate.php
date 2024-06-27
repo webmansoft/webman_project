@@ -1,9 +1,4 @@
 <?php
-/**
- * @desc SystemUserValidate
- * @date 2024/06/25 15:45:24
- */
-
 declare(strict_types=1);
 
 namespace app\common\validate\system;
@@ -28,7 +23,7 @@ class SystemUserValidate extends BaseValidate
         'phone' => 'mobile',
         'email' => 'email',
         // 登录
-        'client' => 'require|in:WEB,MOBILE',
+        'client' => 'require|in:WEB,MOBILE,web,mobile,Web,Mobile',
         'uuid' => 'require',
         'captcha' => 'require|alphaNum|length:4|checkCaptcha',
     ];

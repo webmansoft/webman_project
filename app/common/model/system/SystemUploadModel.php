@@ -1,15 +1,10 @@
 <?php
-/**
- * @desc SystemUploadfileModel
- * @date 2024/06/25 15:44:08
- */
-
 declare(strict_types=1);
 
 namespace app\common\model\system;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 use app\common\base\BaseModel;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SystemUploadModel extends BaseModel
 {
@@ -19,5 +14,5 @@ class SystemUploadModel extends BaseModel
      * 数据表名称
      * @var string
      */
-    protected $table = 'system_uploadfile';
+    protected $table = 'system_upload';
 }

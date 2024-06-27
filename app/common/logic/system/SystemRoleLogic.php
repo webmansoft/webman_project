@@ -1,16 +1,12 @@
 <?php
-/**
- * @desc SystemRoleLogic
- * @date 2024/06/25 16:16:37
- */
-
 declare(strict_types=1);
 
 namespace app\common\logic\system;
 
-use Illuminate\Database\Eloquent\Builder;
 use app\common\base\BaseLogic;
+use app\common\base\BaseModel;
 use app\common\model\system\SystemRoleModel;
+use Illuminate\Database\Eloquent\Builder;
 
 class SystemRoleLogic extends BaseLogic
 {
@@ -19,36 +15,66 @@ class SystemRoleLogic extends BaseLogic
         $this->model = new SystemRoleModel();
     }
 
-//    /**
-//     * 搜索
-//     * @param array $params
-//     * @param bool $return_query
-//     * @return array|Builder
-//     */
-//    public function search(array $params = [], bool $return_query = false): Builder|array
-//    {
-//        $query = $this->model->query();
-//        if (!empty($params['name'])) {
-//            $query->where('name', 'like', '%' . $params['name'] . '%');
-//        }
-//
-//        if (isset($params['status']) && $params['status'] !== '') {
-//            $query->where('status', intval($params['status']));
-//        }
-//
-//        if (!empty($params['created_at'])) {
-//            $query->where('created_at', '>=', $params['created_at'] . ' 00:00:00');
-//            $query->where('created_at', '<=', $params['created_at'] . ' 23:59:59');
-//        }
-//
-//        if (!empty($params['is_deleted'])) {
-//            $query->whereNotNull('deleted_at');
-//        }
-//
-//        if ($return_query) {
-//            return $query;
-//        }
-//
-//        return $this->getPaginateData($query, $params['limit'] ?? 10, $params['page'] ?? 1);
-//    }
+    public function getMenuIdsByRoleIds(array $ids): array
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        return $this->model
+            ->where('id', 'in', $ids)
+            ->with(['menu' => function (Builder $query) {
+                $query->where('status', 1)->orderBy('sort', 'desc');
+            }])->get()->toArray();
+    }
+
+    public function getMenuByRole(int $id): array|bool
+    {
+        $role = $this->model->find($id);
+        if ($role) {
+            return [
+                'id' => $id,
+                'menu' => $role->menu() ?: []
+            ];
+        }
+
+        return false;
+    }
+
+    public function saveMenuPermission(int $id, array $menu_ids): BaseModel
+    {
+        $role = $this->model->find($id);
+        if ($role) {
+            $role->menu()->detach();
+            $role->menu()->insert($menu_ids);
+        }
+
+        return $role;
+    }
+
+    public function getDepartmentByRole(int $id): array|bool
+    {
+        $role = $this->model->find($id);
+        if ($role) {
+            return [
+                'id' => $id,
+                'department' => $role->department() ?: []
+            ];
+        }
+
+        return false;
+    }
+
+    public function saveDepartmentPermission(int $id, array $data): BaseModel
+    {
+        $role = $this->model->find($id);
+        if($role){
+            $role->setAttribute('data_scope',$data['data_scope']);
+            $role->save();
+            $role->department()->detach();
+            $role->department()->insert($data['department_ids']);
+        }
+
+        return $role;
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * @desc SystemDeptLogic
+ * @desc SystemRoleDeptLogic
  * @date 2024/06/25 16:16:37
  */
 
@@ -10,13 +10,13 @@ namespace app\common\logic\system;
 
 use Illuminate\Database\Eloquent\Builder;
 use app\common\base\BaseLogic;
-use app\common\model\system\SystemDeptModel;
+use app\common\model\system\SystemRoleDepartmentModel;
 
-class SystemDeptLogic extends BaseLogic
+class SystemRoleDepartmentLogic extends BaseLogic
 {
     public function __construct()
     {
-        $this->model = new SystemDeptModel();
+        $this->model = new SystemRoleDepartmentModel();
     }
 
 //    /**

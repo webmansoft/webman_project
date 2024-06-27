@@ -1,20 +1,12 @@
 <?php
-/**
- * @desc {%model_name%}
- * @date {%current_time%}
- */
-
 declare(strict_types=1);
 
 namespace {%namespace%};
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 use app\common\base\BaseModel;
 
 class {%model_name%} extends BaseModel
 {
-    use SoftDeletes;
-
     /**
      * 数据表名称
      * @var string

@@ -3,14 +3,17 @@ declare(strict_types=1);
 
 namespace app\command;
 
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Output\OutputInterface;
 use Webman\Console\Util;
 use app\common\library\FileHelper;
 use app\common\library\DatabaseHelper;
+use app\common\trait\TableFieldsTrait;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Output\OutputInterface;
 
 trait TraitCommon
 {
+    use TableFieldsTrait;
+
     /**
      * @return void
      */
@@ -66,7 +69,7 @@ trait TraitCommon
             $model_name = Util::nameToClass($class) . 'Model';
             $logic_name = Util::nameToClass($class) . 'Logic';
             $validate_name = Util::nameToClass($class) . 'Validate';
-            $stub = file_get_contents($this->getStub());
+            $stub = file_get_contents($this->getStub($table_name));
             $data = str_replace(
                 ['{%namespace%}', '{%model_dir%}', '{%model_name%}', '{%logic_name%}', '{%table_name%}', '{%validate_name%}', '{%current_time%}'],
                 [$namespace, $model_dir, $model_name, $logic_name, $table_name, $validate_name, date('Y/m/d H:i:s')],
@@ -103,10 +106,16 @@ trait TraitCommon
 
     /**
      * 获取文件路径字符串
+     * @param string $table_name
      * @return string
      */
-    protected function getStub(): string
+    protected function getStub(string $table_name): string
     {
+        $fields = $this->getCacheTableField($table_name);
+        if (self::TYPE_NAME === 'model' && (isset($fields['delete_time']) || isset($fields['deleted_at']))) {
+            return app_path('command') . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . self::TYPE_NAME . '_soft_delete.stub';
+        }
+
         return app_path('command') . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . self::TYPE_NAME . '.stub';
     }
 

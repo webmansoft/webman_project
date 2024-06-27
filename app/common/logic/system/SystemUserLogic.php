@@ -1,9 +1,4 @@
 <?php
-/**
- * @desc SystemUserLogic
- * @date 2024/06/25 16:16:37
- */
-
 declare(strict_types=1);
 
 namespace app\common\logic\system;
@@ -19,6 +14,18 @@ class SystemUserLogic extends BaseLogic
     public function __construct()
     {
         $this->model = new SystemUserModel();
+    }
+
+    public function read(int|string $id): array
+    {
+        $admin = $this->model->find($id);
+        $data = $admin->makeHidden(['password', 'created_by', 'updated_by', 'create_time', 'update_time'])->toArray();
+        // write_log($data, 'read');
+        $data['role_list'] = $admin->role->toArray() ?: [];
+        $data['post_list'] = $admin->post->toArray() ?: [];
+        $data['department_list'] = $admin->department();
+        return $data;
+        // return $this->checkModel($id, true, ['password'])->toArray();
     }
 
     /**

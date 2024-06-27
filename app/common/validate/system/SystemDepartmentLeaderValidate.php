@@ -1,16 +1,11 @@
 <?php
-/**
- * @desc SystemRoleDeptValidate
- * @date 2024/06/25 15:45:24
- */
-
 declare(strict_types=1);
 
 namespace app\common\validate\system;
 
 use app\common\base\BaseValidate;
 
-class SystemRoleDeptValidate extends BaseValidate
+class SystemDepartmentLeaderValidate extends BaseValidate
 {
     /**
      * 定义验证规则

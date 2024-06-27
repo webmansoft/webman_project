@@ -1,9 +1,4 @@
 <?php
-/**
- * @desc ToolGenerateTablesValidate
- * @date 2024/06/25 15:45:24
- */
-
 declare(strict_types=1);
 
 namespace app\common\validate\tool;

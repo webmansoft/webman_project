@@ -40,7 +40,7 @@ abstract class BaseApiController extends BaseController
         if ($result) {
             $this->admin_id = $result['id'];
             $this->admin_name = $result['username'];
-            $this->admin = (new SystemUserLogic)->checkModel($result['id'])->toArray();
+            $this->admin = (new SystemUserLogic)->read($this->admin_id);
         } else {
             throw new ApiException('当前用户信息读取失败,请重新登录');
         }
@@ -51,6 +51,7 @@ abstract class BaseApiController extends BaseController
             $this->admin_id > config('project.super_id') && $this->checkAuth();
         }
 
+        write_log($this->logic, 'logic');
         // 用户数据传递给逻辑层
         $this->logic && $this->logic->init($this->admin_id, $this->admin);
     }

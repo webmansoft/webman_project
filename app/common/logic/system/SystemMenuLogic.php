@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace app\common\logic\system;
 
 use app\common\base\BaseLogic;
+use app\common\library\ArcoHelper;
 use app\common\exception\ApiException;
 use app\common\model\system\SystemMenuModel;
 
@@ -70,12 +71,12 @@ class SystemMenuLogic extends BaseLogic
      */
     public function tree(array $where = []): array
     {
-        $query = $this->search($where);
-        if (request()->input('tree', 'false') === 'true') {
-            $query->field('id, id as value, name as label, parent_id');
-        }
-        $data = $this->getAll($query);
-        return Helper::makeTree($data);
+//        $query = $this->search($where);
+//        if (request()->input('tree', 'false') === 'true') {
+//            $query->field('id, id as value, name as label, parent_id');
+//        }
+//        $data = $this->getAll($query);
+//        return Helper::makeTree($data);
     }
 
     /**
@@ -83,9 +84,14 @@ class SystemMenuLogic extends BaseLogic
      */
     public function getAllMenus(): array
     {
-        $query = $this->search(['type' => ['M', 'I', 'L']])->order('sort', 'desc');
+//        $query = $this->search(['type' => ['M', 'I', 'L']])->order('sort', 'desc');
+//        $data = $this->getAll($query);
+//        return Helper::makeArcoMenus($data);
+        // ['in' => ['file_ext' => [1,2,3]]
+        $query = $this->search(['in' => ['type' => ['M', 'I', 'L']]])->orderBy('sort', 'desc');
         $data = $this->getAll($query);
-        return Helper::makeArcoMenus($data);
+        write_log($data, 'getAllMenus');
+        return ArcoHelper::makeArcoMenus($data);
     }
 
     /**
@@ -93,21 +99,21 @@ class SystemMenuLogic extends BaseLogic
      */
     public function getAllCode(): array
     {
-        $query = $this->search(['type' => 'B']);
-        return $query->column('code');
+        return $this->columnByWhere(['type' => 'B'], 'code');
     }
 
     /**
      * 根据ids获取权限
-     * @param $ids
+     * @param array $ids
      * @return array
      */
-    public function getMenuCode($ids): array
+    public function getMenuCode(array $ids): array
     {
-        return $this->model
-            ->where('status', 1)
-            ->where('id', 'in', $ids)
-            ->column('code');
+        $where = [
+            ['type', '=', 'B'],
+            ['id', 'in', $ids],
+        ];
+        return $this->columnByWhere($where, 'code');
     }
 
     /**
@@ -120,9 +126,9 @@ class SystemMenuLogic extends BaseLogic
         $query = $this->model
             ->where('status', 1)
             ->where('id', 'in', $ids)
-            ->order('sort', 'desc');
+            ->orderBy('sort', 'desc');
         $data = $this->getAll($query);
-        return Helper::makeArcoMenus($data);
+        return ArcoHelper::makeArcoMenus($data);
     }
 
     /**
@@ -138,8 +144,8 @@ class SystemMenuLogic extends BaseLogic
                 $ids[] = $menu['id'];
             }
         }
+
         unset($roleData);
         return array_unique($ids);
     }
-
 }

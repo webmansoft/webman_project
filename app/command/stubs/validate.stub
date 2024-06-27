@@ -1,9 +1,4 @@
 <?php
-/**
- * @desc {%validate_name%}
- * @date {%current_time%}
- */
-
 declare(strict_types=1);
 
 namespace {%namespace%};

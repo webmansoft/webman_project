@@ -28,6 +28,16 @@ abstract class BaseModel extends Model
         return DatetimeHelper::formatDatetime($value);
     }
 
+    public function getCreateTimeAttribute($value): string
+    {
+        return DatetimeHelper::formatDatetime($value);
+    }
+
+    public function getUpdateTimeAttribute($value): string
+    {
+        return DatetimeHelper::formatDatetime($value);
+    }
+
     /**
      * 字段属性处理
      * @param mixed $value

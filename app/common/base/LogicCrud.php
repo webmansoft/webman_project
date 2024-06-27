@@ -4,19 +4,20 @@ declare(strict_types=1);
 namespace app\common\base;
 
 use support\Model;
-use Illuminate\Database\Eloquent\Builder;
 use app\common\exception\ApiException;
 use app\common\library\DatabaseHelper;
 use app\common\trait\TableFieldsTrait;
+use Illuminate\Database\Eloquent\Builder;
 
 abstract class LogicCrud
 {
     use TableFieldsTrait;
 
-    protected Model $model;                // 模型
-    protected int $admin_id = 0;           // 当前管理员编号
-    protected array $admin = [];           // 当前管理员信息
-    protected bool $scope = false;      // 数据边界启用状态
+    protected Model $model; // 模型
+    protected int $admin_id = 0; // 当前管理员编号
+    protected array $admin = []; // 当前管理员信息
+    public array $admin_ids = []; // 管理员编号集合
+    protected bool $scope = false; // 数据边界启用状态
 
     /**
      * 初始化
@@ -40,7 +41,7 @@ abstract class LogicCrud
     {
         $pk = $this->model->getKeyName();
         $model = new (get_class($this->model));
-        $fields = $this->getCacheTableField();
+        $fields = $this->getCacheTableField($this->model->getTable());
         foreach ($data as $field => $value) {
             if (isset($fields[$field])) {
                 if (isset($data[$password_field])) {
@@ -74,7 +75,7 @@ abstract class LogicCrud
     public function insertBatch(array $data): bool
     {
         if ($data) {
-            $fields = $this->getCacheTableField();
+            $fields = $this->getCacheTableField($this->model->getTable());
             foreach ($data as &$row) {
                 if (isset($fields['created_by'])) {
                     $row['created_by'] = $this->admin_id;
@@ -118,7 +119,7 @@ abstract class LogicCrud
     {
         $pk = $this->model->getKeyName();
         $ids = $this->getIds($batch);
-        $fields = $this->getCacheTableField();
+        $fields = $this->getCacheTableField($this->model->getTable());
         foreach ($data as $field => $value) {
             if (!isset($fields[$field])) {
                 unset($data[$field]);
@@ -154,7 +155,7 @@ abstract class LogicCrud
      */
     public function updateByWhere(array $data, array $where): int
     {
-        $fields = $this->getCacheTableField();
+        $fields = $this->getCacheTableField($this->model->getTable());
         if (isset($fields['updated_by'])) {
             $data['updated_by'] = $this->admin_id;
         }
@@ -288,11 +289,11 @@ abstract class LogicCrud
      * @param array $fields
      * @return Model
      */
-    public function checkModel(int|string $id, string|bool $primary_key = true, array $fields = ['*']): Model
+    public function checkModel(int|string $id, string|bool $primary_key = true, array $hidden_fields = ['*'], array $display_fields = ['*']): Model
     {
         $pk = $this->model->getKeyName();
         $field = $primary_key === true ? $pk : $primary_key;
-        $model = $this->findOne($id, $field, $fields);
+        $model = $this->findOne($id, $field, $hidden_fields, $display_fields);
         if ($model) {
             return $model;
         }
@@ -351,17 +352,18 @@ abstract class LogicCrud
      * 获取模型
      * @param int|string $id
      * @param string $primary_key
-     * @param array $fields
+     * @param array $hidden_fields
+     * @param array $display_fields
      * @return Model|bool
      */
-    public function findOne(int|string $id, string $primary_key = 'id', array $fields = ['*']): Model|bool
+    public function findOne(int|string $id, string $primary_key = 'id', array $hidden_fields = ['*'], array $display_fields = ['*']): Model|bool
     {
         if ($id) {
             $pk = $this->model->getKeyName();
             if ($pk === $primary_key) {
-                $model = $this->model->select($fields)->find(intval($id));
+                $model = $this->model->newQuery()->select($display_fields)->find(intval($id))->makeHidden($hidden_fields);
             } else {
-                $model = $this->model->select($fields)->where($primary_key, $id)->first();
+                $model = $this->model->newQuery()->select($display_fields)->where($primary_key, $id)->first()->makeHidden($hidden_fields);
             }
 
             if ($model) {
@@ -392,5 +394,101 @@ abstract class LogicCrud
             // 获取当前页页码
             'page' => $paginate['current_page'],
         ];
+    }
+
+    /**
+     * ['in' => ['file_ext' => [1,2,3]],'like' => ['origin_name' => 'name'],'between' => ['created_at' => '2024-11-11 - 2024-11-12']]
+     * 字段已定义规则和对应值
+     * @param array $data
+     * @return Builder
+     */
+    protected function search(array $data): Builder
+    {
+        $rules = ['>', '>=', '=', '<', '<=', '<>', 'like', 'not like', 'in', 'not in', 'null', 'not null', 'betweenDate', 'between'];
+        foreach ($data as $rule => $condition) {
+            foreach ($condition as $field => $value) {
+                if (is_string($value)) {
+                    $value = trim($value);
+                }
+
+                if (is_string($value) || is_array($value)) {
+                    if (in_array($rule, $rules)) {
+                        if ($rule === 'like' || $rule === 'not like') {
+                            $this->model->newQuery()->where($field, $rule, "%$value%");
+                        } elseif (in_array($rule, ['>', '>=', '=', '<', '<=', '<>'])) {
+                            $this->model->newQuery()->where($field, $rule, $value);
+                        } elseif ($rule === 'in' && $value) {
+                            if (is_string($value)) {
+                                $this->model->newQuery()->whereIn($field, explode(',', $value));
+                            } else {
+                                $this->model->newQuery()->whereIn($field, $value);
+                            }
+                        } elseif ($rule === 'not in' && $value) {
+                            if (is_string($value)) {
+                                $this->model->newQuery()->whereNotIn($field, explode(',', $value));
+                            } else {
+                                $this->model->newQuery()->whereNotIn($field, $value);
+                            }
+                        } elseif ($rule === 'null') {
+                            $this->model->newQuery()->whereNull($field);
+                        } elseif ($rule === 'not null') {
+                            $this->model->newQuery()->whereNotNull($field);
+                        } elseif ($rule === 'betweenDate') {
+                            $between = $value;
+                            if (is_string($value) && str_contains($value, ' - ')) {
+                                $between = explode(' - ', $value);
+                            }
+
+                            $between[1] = $between[1] . ' 23:59:59';
+                            $this->model->newQuery()->whereBetween($field, $between);
+                        } elseif ($rule === 'between') {
+                            $between = $value;
+                            if (is_string($value) && str_contains($value, ' - ')) {
+                                $between = explode(' - ', $value);
+                            }
+
+                            $this->model->newQuery()->whereBetween($field, $between);
+                        }
+                    } else {
+                        $this->model->newQuery()->where($field, $value);
+                    }
+                }
+            }
+        }
+
+        return $this->model->newQuery();
+    }
+
+    /**
+     * 获取全部数据
+     * @param Builder $query
+     * @param array $fields
+     * @return array
+     */
+    public function getAll(Builder $query, array $fields = ['*']): array
+    {
+        $order_by = request()->input('orderBy') ?: $this->model->getKeyName();
+        $order_type = request()->input('orderType') ?: 'asc';
+        if ($this->scope) {
+            $query = $this->adminDataScope($query);
+        }
+
+        $query->orderBy($order_by, $order_type);
+        return $query->select($fields)->get()->toArray();
+    }
+
+    /**
+     * 数据权限处理
+     * @param Builder $query
+     * @return Builder
+     */
+    public function adminDataScope(Builder $query): Builder
+    {
+        if (!$this->admin) {
+            throw new ApiException('数据权限读取失败');
+        }
+
+        // todo
+        return $query->where('created_by', 'in', array_unique($this->admin_ids));
     }
 }

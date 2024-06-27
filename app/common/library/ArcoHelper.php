@@ -1,0 +1,246 @@
+<?php
+declare(strict_types=1);
+
+namespace app\common\library;
+
+class ArcoHelper
+{
+    /**
+     * 数据树形化
+     * @param array $data 数据
+     * @param string $pk 数据主键字段名
+     * @return array
+     */
+    public static function makeTree(array $data, string $pk = 'id'): array
+    {
+        $list = [];
+        foreach ($data as $value) {
+            $list[$value[$pk]] = $value;
+        }
+
+        return self::tree($list);
+    }
+
+    protected static function tree(array $list, string $children = 'children', string $pk = 'id', string $pid = 'parent_id'): array
+    {
+        $tree = []; // 格式化好的树
+        foreach ($list as $item) {
+            if (isset($list[$item[$pid]])) {
+                $list[$item[$pid]][$children][] = &$list[$item[$pk]];
+            } else {
+                $tree[] = &$list[$item[$pk]];
+            }
+        }
+
+        return $tree;
+    }
+
+    /**
+     * 生成ElementPlus菜单
+     * @param array $data 数据
+     * @param string $pk 数据主键字段名
+     * @param string $pid 数据上级字段名
+     * @return array
+     */
+    public static function makeEleMenus(array $data, string $pk = 'id', string $pid = 'parent_id'): array
+    {
+        $list = [];
+        foreach ($data as $value) {
+            if ($value['auth_type'] === 1) {
+                $path = $value['path'];
+                $temp = [
+                    $pk => $value[$pk],
+                    $pid => $value[$pid],
+                    'name' => self::camelize(str_replace('/', '_', $value['path'])),
+                    'path' => $path,
+                    'component' => $value['component'],
+                    'meta' => [
+                        'title' => $value['title'],
+                        'isLink' => $value['link_url'],
+                        'isKeepAlive' => $value['is_keep'] === 1,
+                        'isAffix' => $value['is_affix'] === 1,
+                        'isIframe' => $value['is_iframe'] === 1,
+                        'isHide' => $value['is_hide'] === 1,
+                        'icon' => $value['icon'],
+                    ],
+                ];
+                $list[$value[$pk]] = $temp;
+            }
+        }
+
+        return self::tree($list);
+    }
+
+    /**
+     * 生成Arco菜单
+     * @param array $data 数据
+     * @param string $pk 数据主键字段名
+     * @param string $pid 数据上级字段名
+     * @return array
+     */
+    public static function makeArcoMenus(array $data, string $pk = 'id', string $pid = 'parent_id'): array
+    {
+        $list = [];
+        foreach ($data as $value) {
+            if ($value['type'] === 'M') {
+                $path = '/' . $value['route'];
+                $temp = [
+                    $pk => $value[$pk],
+                    $pid => $value[$pid],
+                    'name' => $value['route'],
+                    'path' => $path,
+                    'component' => $value['component'],
+                    'redirect' => $value['redirect'],
+                    'meta' => [
+                        'title' => $value['name'],
+                        'type' => $value['type'],
+                        'hidden' => $value['is_hidden'] === 1,
+                        'hiddenBreadcrumb' => false,
+                        'icon' => $value['icon'],
+                    ],
+                ];
+                $list[$value[$pk]] = $temp;
+            }
+            if ($value['type'] === 'I' || $value['type'] === 'L') {
+                $temp = [
+                    $pk => $value[$pk],
+                    $pid => $value[$pid],
+                    'name' => $value['code'],
+                    'path' => $value['route'],
+                    'meta' => [
+                        'title' => $value['name'],
+                        'type' => $value['type'],
+                        'hidden' => $value['is_hidden'] === 1,
+                        'hiddenBreadcrumb' => false,
+                        'icon' => $value['icon'],
+                    ],
+                ];
+                $list[$value[$pk]] = $temp;
+            }
+        }
+
+        return self::tree($list);
+    }
+
+    /**
+     * 生成按钮权限数组
+     * @param array $data 数据
+     * @return array
+     */
+    public static function makeEleButtons(array $data): array
+    {
+        $list = [];
+        foreach ($data as $value) {
+            if ($value['type'] === 'B') {
+                $str = $value['code'];
+                $list[] = $str;
+            }
+        }
+
+        return $list;
+    }
+
+    /**
+     * 下划线转驼峰
+     */
+    public static function camelize(string $words, $separator = '_'): string
+    {
+        $words = $separator . str_replace($separator, ' ', strtolower($words));
+        return ltrim(str_replace(' ', '', ucwords($words)), $separator);
+    }
+
+    /**
+     * 驼峰命名转下划线命名
+     */
+    public static function unCamelize(string $words, $separator = '_'): string
+    {
+        return strtolower(preg_replace('/([a-z])([A-Z])/', "$1" . $separator . "$2", $words));
+    }
+
+    /**
+     * 转换为驼峰
+     * @param string $value
+     * @return string
+     */
+    public static function camel(string $value): string
+    {
+        static $cache = [];
+        $key = $value;
+
+        if (isset($cache[$key])) {
+            return $cache[$key];
+        }
+
+        $value = ucwords(str_replace(['-', '_'], ' ', $value));
+        return $cache[$key] = str_replace(' ', '', $value);
+    }
+
+    /**
+     * 获取业务名称
+     * @param string $tableName
+     * @return string
+     */
+    public static function getBusiness(string $tableName): string
+    {
+        $start = strrpos($tableName, '_');
+        if ($start !== false) {
+            $result = substr($tableName, $start + 1);
+        } else {
+            $result = $tableName;
+        }
+
+        return static::camelize($result);
+    }
+
+    /**
+     * 获取业务名称
+     * @param string $tableName
+     * @return string
+     */
+    public static function getBigBusiness(string $tableName): string
+    {
+        $start = strrpos($tableName, '_');
+        $result = substr($tableName, $start + 1);
+        return static::camel($result);
+    }
+
+    /**
+     * 只替换一次字符串
+     * @param string $needle
+     * @param string $replace
+     * @param string $haystack
+     * @return string|array
+     */
+    public static function strReplaceOnce(string $needle, string $replace, string $haystack): string|array
+    {
+        $pos = strpos($haystack, $needle);
+        if ($pos === false) {
+            return $haystack;
+        }
+
+        return substr_replace($haystack, $replace, $pos, strlen($needle));
+    }
+
+    /**
+     * 遍历目录
+     * @param $template_name
+     * @return array
+     */
+    public static function getDir($template_name): array
+    {
+        $dir = base_path($template_name);
+        $fileDir = [];
+        if (is_dir($dir)) {
+            if ($handle = opendir($dir)) {
+                while (($file = readdir($handle)) !== false) {
+                    if ($file != '.' && $file != '..') {
+                        $fileDir[] = $file;
+                    }
+                }
+                closedir($handle);
+            }
+        }
+
+        return $fileDir;
+    }
+}

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50740
 File Encoding         : 65001
 
-Date: 2024-06-26 10:32:26
+Date: 2024-06-27 11:43:59
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -197,10 +197,10 @@ CREATE TABLE `wp_system_crontab_log` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `wp_system_dept`
+-- Table structure for `wp_system_department`
 -- ----------------------------
-DROP TABLE IF EXISTS `wp_system_dept`;
-CREATE TABLE `wp_system_dept` (
+DROP TABLE IF EXISTS `wp_system_department`;
+CREATE TABLE `wp_system_department` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL COMMENT '父ID',
   `level` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '组级集合',
@@ -219,28 +219,28 @@ CREATE TABLE `wp_system_dept` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='部门信息表';
 
 -- ----------------------------
--- Records of wp_system_dept
+-- Records of wp_system_department
 -- ----------------------------
-INSERT INTO `wp_system_dept` VALUES ('1', '0', '0', '赛弟科技', '赛弟', '18888888888', '1', '1', null, '1', '1', '2023-10-24 12:00:00', '2023-10-24 12:00:00', null);
-INSERT INTO `wp_system_dept` VALUES ('2', '1', '0,1', '青岛分公司', null, null, '1', '1', null, '1', '1', '2023-10-24 12:00:00', '2023-10-24 12:00:00', null);
-INSERT INTO `wp_system_dept` VALUES ('3', '1', '0,1', '洛阳总公司', null, null, '1', '1', null, '1', '1', '2023-10-24 12:00:00', '2023-10-24 12:00:00', null);
-INSERT INTO `wp_system_dept` VALUES ('4', '2', '0,1,2', '市场部门', null, null, '1', '1', null, '1', '1', '2023-10-24 12:00:00', '2023-10-24 12:00:00', null);
-INSERT INTO `wp_system_dept` VALUES ('5', '2', '0,1,2', '财务部门', null, null, '1', '1', null, '1', '1', '2023-10-24 12:00:00', '2023-10-24 12:00:00', null);
-INSERT INTO `wp_system_dept` VALUES ('6', '3', '0,1,3', '研发部门', null, null, '1', '1', null, '1', '1', '2023-10-24 12:00:00', '2023-10-24 12:00:00', null);
-INSERT INTO `wp_system_dept` VALUES ('7', '3', '0,1,3', '市场部门', null, null, '1', '1', null, '1', '1', '2023-10-24 12:00:00', '2023-10-24 12:00:00', null);
+INSERT INTO `wp_system_department` VALUES ('1', '0', '0', '赛弟科技', '赛弟', '18888888888', '1', '1', null, '1', '1', '2023-10-24 12:00:00', '2023-10-24 12:00:00', null);
+INSERT INTO `wp_system_department` VALUES ('2', '1', '0,1', '青岛分公司', null, null, '1', '1', null, '1', '1', '2023-10-24 12:00:00', '2023-10-24 12:00:00', null);
+INSERT INTO `wp_system_department` VALUES ('3', '1', '0,1', '洛阳总公司', null, null, '1', '1', null, '1', '1', '2023-10-24 12:00:00', '2023-10-24 12:00:00', null);
+INSERT INTO `wp_system_department` VALUES ('4', '2', '0,1,2', '市场部门', null, null, '1', '1', null, '1', '1', '2023-10-24 12:00:00', '2023-10-24 12:00:00', null);
+INSERT INTO `wp_system_department` VALUES ('5', '2', '0,1,2', '财务部门', null, null, '1', '1', null, '1', '1', '2023-10-24 12:00:00', '2023-10-24 12:00:00', null);
+INSERT INTO `wp_system_department` VALUES ('6', '3', '0,1,3', '研发部门', null, null, '1', '1', null, '1', '1', '2023-10-24 12:00:00', '2023-10-24 12:00:00', null);
+INSERT INTO `wp_system_department` VALUES ('7', '3', '0,1,3', '市场部门', null, null, '1', '1', null, '1', '1', '2023-10-24 12:00:00', '2023-10-24 12:00:00', null);
 
 -- ----------------------------
--- Table structure for `wp_system_dept_leader`
+-- Table structure for `wp_system_department_leader`
 -- ----------------------------
-DROP TABLE IF EXISTS `wp_system_dept_leader`;
-CREATE TABLE `wp_system_dept_leader` (
-  `dept_id` int(11) NOT NULL COMMENT '部门主键',
+DROP TABLE IF EXISTS `wp_system_department_leader`;
+CREATE TABLE `wp_system_department_leader` (
+  `department_id` int(11) NOT NULL COMMENT '部门主键',
   `user_id` int(11) NOT NULL COMMENT '角色主键',
-  PRIMARY KEY (`dept_id`,`user_id`)
+  PRIMARY KEY (`department_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='部门领导关联表';
 
 -- ----------------------------
--- Records of wp_system_dept_leader
+-- Records of wp_system_department_leader
 -- ----------------------------
 
 -- ----------------------------
@@ -351,12 +351,27 @@ CREATE TABLE `wp_system_login_log` (
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `idx_username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='登录日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='登录日志表';
 
 -- ----------------------------
 -- Records of wp_system_login_log
 -- ----------------------------
 INSERT INTO `wp_system_login_log` VALUES ('1', 'admin', '127.0.0.1', '内网IP', 'Windows', 'Chrome', '1', '登录成功', '2024-06-23 16:31:38', null, '2024-06-23 16:31:38', '2024-06-23 16:31:38', null);
+INSERT INTO `wp_system_login_log` VALUES ('2', 'admin', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-26 17:33:00', null, '2024-06-26 17:33:00', '2024-06-26 17:33:00', null);
+INSERT INTO `wp_system_login_log` VALUES ('3', 'admin', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-26 17:34:25', null, '2024-06-26 17:34:25', '2024-06-26 17:34:25', null);
+INSERT INTO `wp_system_login_log` VALUES ('4', 'admin', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-26 17:34:59', null, '2024-06-26 17:34:59', '2024-06-26 17:34:59', null);
+INSERT INTO `wp_system_login_log` VALUES ('5', 'admin', '127.0.0.1', '内网IP', 'unknown', 'unknown', '0', '账号或密码错误', '2024-06-26 17:35:12', null, '2024-06-26 17:35:12', '2024-06-26 17:35:12', null);
+INSERT INTO `wp_system_login_log` VALUES ('6', 'admin', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-26 17:35:22', null, '2024-06-26 17:35:22', '2024-06-26 17:35:22', null);
+INSERT INTO `wp_system_login_log` VALUES ('7', 'admin', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-26 18:05:22', null, '2024-06-26 18:05:22', '2024-06-26 18:05:22', null);
+INSERT INTO `wp_system_login_log` VALUES ('8', 'admin', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-26 18:07:55', null, '2024-06-26 18:07:55', '2024-06-26 18:07:55', null);
+INSERT INTO `wp_system_login_log` VALUES ('9', 'admin', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-26 18:10:06', null, '2024-06-26 18:10:06', '2024-06-26 18:10:06', null);
+INSERT INTO `wp_system_login_log` VALUES ('10', 'admin', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-26 18:10:17', null, '2024-06-26 18:10:17', '2024-06-26 18:10:17', null);
+INSERT INTO `wp_system_login_log` VALUES ('11', 'admin', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-26 18:12:40', null, '2024-06-26 18:12:40', '2024-06-26 18:12:40', null);
+INSERT INTO `wp_system_login_log` VALUES ('12', 'admin', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-26 20:15:08', null, '2024-06-26 20:15:08', '2024-06-26 20:15:08', null);
+INSERT INTO `wp_system_login_log` VALUES ('13', 'admin', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-26 21:14:01', null, '2024-06-26 21:14:01', '2024-06-26 21:14:01', null);
+INSERT INTO `wp_system_login_log` VALUES ('14', 'admin', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-27 11:05:25', null, '2024-06-27 11:05:25', '2024-06-27 11:05:25', null);
+INSERT INTO `wp_system_login_log` VALUES ('15', 'test1', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-27 11:31:52', null, '2024-06-27 11:31:52', '2024-06-27 11:31:52', null);
+INSERT INTO `wp_system_login_log` VALUES ('16', 'test1', '127.0.0.1', '内网IP', 'unknown', 'unknown', '1', '登录成功', '2024-06-27 11:34:47', null, '2024-06-27 11:34:47', '2024-06-27 11:34:47', null);
 
 -- ----------------------------
 -- Table structure for `wp_system_menu`
@@ -570,11 +585,17 @@ CREATE TABLE `wp_system_operation_log` (
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `username_index` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='操作日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='操作日志表';
 
 -- ----------------------------
 -- Records of wp_system_operation_log
 -- ----------------------------
+INSERT INTO `wp_system_operation_log` VALUES ('1', '', 'backend', 'POST', '/backend/login/login', '未知', '127.0.0.1', '内网IP', '{\"username\":\"admin\",\"password\":\"******\",\"uuid\":\"abcd\",\"captcha\":\"abcd\",\"client\":\"WEB\"}', null, null, null, '2024-06-26 18:10:06', '2024-06-26 18:10:06', null);
+INSERT INTO `wp_system_operation_log` VALUES ('2', '', 'backend', 'POST', '/backend/login/login', '未知', '127.0.0.1', '内网IP', '{\"username\":\"admin\",\"password\":\"******\",\"uuid\":\"abcd\",\"captcha\":\"abcd\",\"client\":\"WEB\"}', null, null, null, '2024-06-26 18:10:17', '2024-06-26 18:10:17', null);
+INSERT INTO `wp_system_operation_log` VALUES ('3', 'admin', 'backend', 'POST', '/backend/system/test', '未知', '127.0.0.1', '内网IP', '[]', null, null, null, '2024-06-26 21:13:31', '2024-06-26 21:13:31', null);
+INSERT INTO `wp_system_operation_log` VALUES ('4', 'admin', 'backend', 'POST', '/backend/system/test', '未知', '127.0.0.1', '内网IP', '[]', null, null, null, '2024-06-27 11:05:42', '2024-06-27 11:05:42', null);
+INSERT INTO `wp_system_operation_log` VALUES ('5', '', 'backend', 'POST', '/backend/system/test', '未知', '127.0.0.1', '内网IP', '[]', null, null, null, '2024-06-27 11:06:46', '2024-06-27 11:06:46', null);
+INSERT INTO `wp_system_operation_log` VALUES ('6', 'admin', 'backend', 'POST', '/backend/system/test', '未知', '127.0.0.1', '内网IP', '[]', null, null, null, '2024-06-27 11:06:54', '2024-06-27 11:06:54', null);
 
 -- ----------------------------
 -- Table structure for `wp_system_post`
@@ -636,21 +657,21 @@ INSERT INTO `wp_system_role` VALUES ('5', '机构管理员', 'companyAdmin', '4'
 INSERT INTO `wp_system_role` VALUES ('6', '员工', 'staff', '5', '1', '1', null, '1', '1', '2023-10-24 12:00:00', '2023-12-12 16:11:12', null);
 
 -- ----------------------------
--- Table structure for `wp_system_role_dept`
+-- Table structure for `wp_system_role_department`
 -- ----------------------------
-DROP TABLE IF EXISTS `wp_system_role_dept`;
-CREATE TABLE `wp_system_role_dept` (
+DROP TABLE IF EXISTS `wp_system_role_department`;
+CREATE TABLE `wp_system_role_department` (
   `role_id` int(11) unsigned NOT NULL COMMENT '用户主键',
-  `dept_id` int(11) unsigned NOT NULL COMMENT '角色主键',
-  PRIMARY KEY (`role_id`,`dept_id`)
+  `department_id` int(11) unsigned NOT NULL COMMENT '角色主键',
+  PRIMARY KEY (`role_id`,`department_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='角色与部门关联表';
 
 -- ----------------------------
--- Records of wp_system_role_dept
+-- Records of wp_system_role_department
 -- ----------------------------
-INSERT INTO `wp_system_role_dept` VALUES ('2', '2');
-INSERT INTO `wp_system_role_dept` VALUES ('2', '4');
-INSERT INTO `wp_system_role_dept` VALUES ('2', '5');
+INSERT INTO `wp_system_role_department` VALUES ('2', '2');
+INSERT INTO `wp_system_role_department` VALUES ('2', '4');
+INSERT INTO `wp_system_role_department` VALUES ('2', '5');
 
 -- ----------------------------
 -- Table structure for `wp_system_role_menu`
@@ -731,8 +752,8 @@ CREATE TABLE `wp_system_user` (
 -- ----------------------------
 -- Records of wp_system_user
 -- ----------------------------
-INSERT INTO `wp_system_user` VALUES ('1', 'admin', '$2y$10$Q70WC9RBqMSS72DmppsbIuQtyAydXSmeD.Ae6W8YhmE/w15uLLpiy', '100', '祭道之上', '13888888888', 'admin@admin.com', 'http://127.0.0.1:8787/storage/20240623/98fc9d262014cbed0ea1580e2f3d9da71ad29853.png', 'Today is very good！', 'statistics', null, '1', '127.0.0.1', '2024-06-23 16:31:38', '{\"mode\":\"light\",\"tag\":true,\"menuCollapse\":false,\"menuWidth\":230,\"layout\":\"classic\",\"skin\":\"mine\",\"i18n\":true,\"language\":\"zh_CN\",\"animation\":\"ma-slide-down\",\"color\":\"#165DFF\"}', null, '1', '1', '2024-01-20 16:02:23', '2024-06-23 16:31:47', null);
-INSERT INTO `wp_system_user` VALUES ('2', 'test1', '$2y$10$Q70WC9RBqMSS72DmppsbIuQtyAydXSmeD.Ae6W8YhmE/w15uLLpiy', '100', '小小测试员', '15822222222', 'test@saadmin.com', 'http://127.0.0.1:8787/storage/20240623/c5a22be92d325a2b8e0b3d609394dd86d1977fb5.png', null, 'work', '5', '1', '127.0.0.1', '2024-01-20 15:59:17', 'null', null, '1', '1', '2023-11-15 14:30:14', '2024-06-23 16:32:18', null);
+INSERT INTO `wp_system_user` VALUES ('1', 'admin', '$2y$10$Q70WC9RBqMSS72DmppsbIuQtyAydXSmeD.Ae6W8YhmE/w15uLLpiy', '100', '祭道之上', '13888888888', 'admin@admin.com', 'http://127.0.0.1:8787/storage/20240623/98fc9d262014cbed0ea1580e2f3d9da71ad29853.png', 'Today is very good！', 'statistics', null, '1', '127.0.0.1', '2024-06-27 11:05:25', '{\"mode\":\"light\",\"tag\":true,\"menuCollapse\":false,\"menuWidth\":230,\"layout\":\"classic\",\"skin\":\"mine\",\"i18n\":true,\"language\":\"zh_CN\",\"animation\":\"ma-slide-down\",\"color\":\"#165DFF\"}', null, '1', '1', '2024-01-20 16:02:23', '2024-06-27 11:05:25', null);
+INSERT INTO `wp_system_user` VALUES ('2', 'test1', '$2y$10$Q70WC9RBqMSS72DmppsbIuQtyAydXSmeD.Ae6W8YhmE/w15uLLpiy', '100', '小小测试员', '15822222222', 'test@saadmin.com', 'http://127.0.0.1:8787/storage/20240623/c5a22be92d325a2b8e0b3d609394dd86d1977fb5.png', null, 'work', '5', '1', '127.0.0.1', '2024-06-27 11:34:47', 'null', null, '1', '1', '2023-11-15 14:30:14', '2024-06-27 11:34:47', null);
 INSERT INTO `wp_system_user` VALUES ('3', 'test2', '', '100', '酱油党', '13977777777', 'zhang@saadmin.com', 'http://localhost:8787/upload/image/20231222/65854211f2a6.jpg', null, 'statistics', '2', '1', '127.0.0.1', '2023-11-22 22:47:26', 'null', '5566', '1', '1', '2023-11-15 16:27:27', '2024-06-23 16:32:39', null);
 
 -- ----------------------------

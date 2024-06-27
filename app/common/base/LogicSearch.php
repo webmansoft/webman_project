@@ -99,7 +99,7 @@ abstract class LogicSearch
      */
     private function initFields(): void
     {
-        $this->fields = $this->getCacheTableField();
+        $this->fields = $this->getCacheTableField($this->model->getTable());
     }
 
     /**

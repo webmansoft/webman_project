@@ -1,15 +1,10 @@
 <?php
-/**
- * @desc SystemNoticeModel
- * @date 2024/06/25 15:44:08
- */
-
 declare(strict_types=1);
 
 namespace app\common\model\system;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 use app\common\base\BaseModel;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SystemNoticeModel extends BaseModel
 {
