@@ -7,15 +7,14 @@ use app\common\library\StringHelper;
 
 class CompileService
 {
-    private string $template; // 带编译文件
-    private string $content; // 需要替换的文本
-    private string $comfile; // 编译后的文件
-    private string $genpath; // 生成目录
+    protected string $template; // 带编译文件
+    protected string $content; // 需要替换的文本
+    protected string $comfile; // 编译后的文件
+    protected string $genpath; // 生成目录
+    protected array $value = []; // 值栈
+    protected string $fileName = ''; // 当前生成文件名称
 
-    private array $value = [];        //值栈
-    private string $fileName = ''; //当前生成文件名称
-
-    public function __construct($template, $compileFile, $genPath)
+    public function __construct(string $template, string $compileFile, string $genPath)
     {
         $this->template = $template;
         $this->comfile = $compileFile;
@@ -237,18 +236,4 @@ class CompileService
     {
         $this->value = $value;
     }
-
-//    public function __set($name, $value)
-//    {
-//        $this->$name = $value;
-//    }
-//
-//    public function __get($name)
-//    {
-//        if (isset($this->{$name})) {
-//            return $this->$name;
-//        } else {
-//            return null;
-//        }
-//    }
 }
