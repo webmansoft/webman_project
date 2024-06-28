@@ -157,5 +157,4 @@ class ExcelService
         $writer->save($file);
         return $file;
     }
-
 }

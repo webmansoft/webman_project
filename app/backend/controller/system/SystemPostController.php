@@ -5,6 +5,7 @@ namespace app\backend\controller\system;
 
 use support\Request;
 use support\Response;
+use PhpOffice\PhpSpreadsheet\Exception;
 use app\common\base\BaseApiController;
 use app\common\logic\system\SystemPostLogic;
 
@@ -30,7 +31,7 @@ class SystemPostController extends BaseApiController
         ];
         $query = $this->logic->search($condition);
         $data = $this->logic->getQueryList($query);
-        return $this->success($data);
+        return $this->successData($data);
     }
 
     /**
@@ -51,25 +52,26 @@ class SystemPostController extends BaseApiController
     public function import(Request $request) : Response
     {
         $file = current($request->file());
-        if (!$file || !$file->isValid()) {
-            return $this->fail('未找到上传文件');
+        if ($file && $file->isValid()) {
+            $this->logic->import($file);
+            return $this->success('导入成功');
         }
-        $this->logic->import($file);
-        return $this->success('导入成功');
+
+        return $this->fail('未找到上传文件');
     }
 
     /**
      * 导出数据
      * @param Request $request
      * @return Response
+     * @throws Exception
      */
     public function export(Request $request) : Response
     {
-        $where = $request->more([
-            ['name', ''],
-            ['code', ''],
-            ['status', ''],
-        ]);
-        return $this->logic->export($where);
+        $condition = [
+            ['status'],
+            'like' => ['name','code']
+        ];
+        return $this->logic->export($condition);
     }
 }
