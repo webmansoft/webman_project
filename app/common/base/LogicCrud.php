@@ -527,11 +527,11 @@ abstract class LogicCrud
      */
     public function adminDataScope(Builder $query): Builder
     {
-        if (!$this->admin) {
-            throw new ApiException('数据权限读取失败');
+        if ($this->admin) {
+            // todo
+            return $query->where('created_by', 'in', array_unique($this->admin_ids));
         }
 
-        // todo
-        return $query->where('created_by', 'in', array_unique($this->admin_ids));
+        throw new ApiException('数据权限读取失败');
     }
 }

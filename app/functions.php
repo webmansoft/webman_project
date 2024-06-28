@@ -105,12 +105,12 @@ function get_jwt_user(): bool|array
  * @param string $controller
  * @return void
  */
-function fast_route(string $name, string $controller): void
+function fastRoute(string $name, string $controller): void
 {
     $name = trim($name, '/');
     if (method_exists($controller, 'index')) Route::get("/$name/index", [$controller, 'index']);
     if (method_exists($controller, 'save')) Route::post("/$name/save", [$controller, 'save']);
-    if (method_exists($controller, 'update')) Route::put("/$name/update/{id}", [$controller, 'update']);
+    if (method_exists($controller, 'update')) Route::post("/$name/update", [$controller, 'update']);
     if (method_exists($controller, 'read')) Route::get("/$name/read/{id}", [$controller, 'read']);
     if (method_exists($controller, 'changeStatus')) Route::post("/$name/changeStatus", [$controller, 'changeStatus']);
     if (method_exists($controller, 'destroy')) Route::delete("/$name/destroy", [$controller, 'destroy']);

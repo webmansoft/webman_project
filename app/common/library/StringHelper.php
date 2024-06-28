@@ -47,6 +47,7 @@ class StringHelper
                     $array[$i] = '*';
                 }
             }
+
             $string = implode('', $array);
         } elseif ($type == 1) {
             $array = array_reverse($array);
@@ -55,28 +56,32 @@ class StringHelper
                     $array[$i] = '*';
                 }
             }
+
             $string = implode('', array_reverse($array));
         } elseif ($type == 2) {
             $array = explode($glue, $string);
             if (isset($array[0])) {
                 $array[0] = self::hideStr($array[0], $begin, $len, 1);
             }
+
             $string = implode($glue, $array);
         } elseif ($type == 3) {
             $array = explode($glue, $string);
             if (isset($array[1])) {
                 $array[1] = self::hideStr($array[1], $begin, $len);
             }
+
             $string = implode($glue, $array);
         } elseif ($type == 4) {
             $left = $begin;
             $right = $len;
-            $tem = array();
+            $tem = [];
             for ($i = 0; $i < ($length - $right); $i++) {
                 if (isset($array[$i])) {
                     $tem[] = $i >= $left ? '' : $array[$i];
                 }
             }
+
             $tem[] = '*****';
             $array = array_chunk(array_reverse($array), $right);
             $array = array_reverse($array[0]);
@@ -85,6 +90,7 @@ class StringHelper
                     $tem[] = $array[$i];
                 }
             }
+
             $string = implode('', $tem);
         }
 
@@ -110,18 +116,17 @@ class StringHelper
             return $str;
         }
 
-        if (function_exists("mb_substr")) {
+        if (function_exists('mb_substr')) {
             $slice = mb_substr($str, $start, $length, $charset);
         } elseif (function_exists('iconv_substr')) {
             $slice = iconv_substr($str, $start, $length, $charset);
-
         } else {
             $re['utf-8'] = "/[x01-x7f]|[xc2-xdf][x80-xbf]|[xe0-xef][x80-xbf]{2}|[xf0-xff][x80-xbf]{3}/";
             $re['gb2312'] = "/[x01-x7f]|[xb0-xf7][xa0-xfe]/";
             $re['gbk'] = "/[x01-x7f]|[x81-xfe][x40-xfe]/";
             $re['big5'] = "/[x01-x7f]|[x81-xfe]([x40-x7e]|xa1-xfe])/";
             preg_match_all($re[$charset], $str, $match);
-            $slice = join("", array_slice($match[0], $start, $length));
+            $slice = join('', array_slice($match[0], $start, $length));
         }
 
         $fix = '';
@@ -156,23 +161,6 @@ class StringHelper
     }
 
     /**
-     * 只替换一次字符串
-     * @param string $needle
-     * @param string|array $replace
-     * @param string $haystack
-     * @return string|array
-     */
-    public static function strReplaceOnce(string $needle, string|array $replace, string $haystack): string|array
-    {
-        $pos = strpos($haystack, $needle);
-        if ($pos === false) {
-            return $haystack;
-        }
-
-        return substr_replace($haystack, $replace, $pos, strlen($needle));
-    }
-
-    /**
      * 下划线转驼峰 首字母大写
      * @param string $value
      * @return string
@@ -193,7 +181,7 @@ class StringHelper
     }
 
     /**
-     * 驼峰命名转下划线命名
+     * 驼峰转下划线
      */
     public static function unCamelize(string|array $camelCaps, string $separator = '_'): string
     {

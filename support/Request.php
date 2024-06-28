@@ -36,6 +36,31 @@ class Request extends \Webman\Http\Request
         return $where;
     }
 
+    public function equal(array $fields): array
+    {
+        return $this->more([$fields]);
+    }
+
+    public function in(array $fields): array
+    {
+        return $this->more(['in' => $fields]);
+    }
+
+    public function like(array $fields): array
+    {
+        return $this->more(['like' => $fields]);
+    }
+
+    public function between(array $fields): array
+    {
+        return $this->more(['between' => $fields]);
+    }
+
+    public function betweenDate(array $fields): array
+    {
+        return $this->more(['betweenDate' => $fields]);
+    }
+
     /**
      * 去除POST左右空格
      * @param string|null $name

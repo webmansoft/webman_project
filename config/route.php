@@ -4,8 +4,11 @@ use Webman\Route;
 use Webman\Exception\NotFoundException;
 use app\backend\controller\IndexController;
 use app\backend\controller\LoginController;
+use app\backend\controller\system\SystemPostController;
 use app\backend\controller\system\SystemUserController;
 use app\backend\controller\system\SystemUploadController;
+use app\backend\controller\tool\GenerateTablesController;
+use app\backend\controller\system\SystemNoticeController;
 use app\backend\controller\system\SystemLoginLogController;
 use app\backend\controller\system\SystemDictionaryController;
 use app\backend\controller\system\SystemOperationLogController;
@@ -56,6 +59,23 @@ Route::group('/backend/upload', function () {
     Route::post('/saveNetworkImage', [SystemUploadController::class, 'saveNetworkImage']);
     Route::post('/uploadImage', [SystemUploadController::class, 'uploadImage']);
     Route::post('/uploadFile', [SystemUploadController::class, 'uploadFile']);
+});
+
+// 岗位
+Route::group('/backend/post', function () {
+    Route::post('/downloadTemplate', [SystemPostController::class, 'downloadTemplate']);
+});
+
+fastRoute('backend/post', SystemPostController::class);
+fastRoute('backend/notice', SystemNoticeController::class);
+
+Route::group('/tool', function () {
+    fastRoute('code', GenerateTablesController::class);
+    Route::post("/code/loadTable", [GenerateTablesController::class, 'loadTable']);
+    Route::get("/code/getTableColumns", [GenerateTablesController::class, 'getTableColumns']);
+    Route::get("/code/preview/{id}", [GenerateTablesController::class, 'preview']);
+    Route::post("/code/generate", [GenerateTablesController::class, 'generate']);
+    Route::post("/code/sync/{id}", [GenerateTablesController::class, 'sync']);
 });
 
 Route::fallback(function () {

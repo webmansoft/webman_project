@@ -3,11 +3,6 @@ declare(strict_types=1);
 
 namespace app\common\library;
 
-use Closure;
-use Generator;
-use SplFileInfo;
-use FilesystemIterator;
-
 class FileHelper
 {
     /**
@@ -69,8 +64,10 @@ class FileHelper
 
     /**
      * 递归删除目录
+     * @param string $dir
+     * @return void
      */
-    public static function recursiveDelete($dir): void
+    public static function recursiveDelete(string $dir): void
     {
         // 打开指定目录
         if ($handle = @opendir($dir)) {
@@ -117,8 +114,8 @@ class FileHelper
 
     /**
      * 递归遍历文件夹
-     * @param bool $bool 是否递归
      * @param string $dir 文件夹路径
+     * @param bool $bool 是否递归
      * @return array
      */
     public static function traverseScanDir(string $dir, bool $bool = true): array
@@ -141,7 +138,8 @@ class FileHelper
 
     /**
      * 删除空目录
-     * @param string $dir 目录
+     * @param string $dir
+     * @return void
      */
     public static function removeEmptyDir(string $dir): void
     {
@@ -181,63 +179,26 @@ class FileHelper
     }
 
     /**
-     * 扫描目录列表
-     * @param string $path 扫描目录
-     * @param string $filterExt 筛选后缀
-     * @param boolean $shortPath 相对路径
+     * 遍历目录
+     * @param string $dir
      * @return array
      */
-    public static function scanDirectory(string $path, string $filterExt = '', bool $shortPath = true): array
+    public static function getDir(string $dir): array
     {
-        return static::findFilesArray($path, static function (SplFileInfo $info) use ($filterExt) {
-            return empty($filterExt) || $info->getExtension() === $filterExt;
-        }, static function (SplFileInfo $info) {
-            return !str_starts_with($info->getBasename(), '.');
-        }, $shortPath);
-    }
-
-    /**
-     * 扫描指定目录
-     * @param string $path
-     * @param ?Closure $filterFile
-     * @param ?Closure $filterPath
-     * @param boolean $shortPath
-     * @return array
-     */
-    public static function findFilesArray(string $path, ?Closure $filterFile = null, ?Closure $filterPath = null, bool $shortPath = true): array
-    {
-        $items = [];
-        if (file_exists($path)) {
-            $files = static::findFilesYield($path, $filterFile, $filterPath);
-            foreach ($files as $file) $items[] = $file->getRealPath();
-            if ($shortPath && ($offset = strlen(realpath($path)) + 1)) {
-                foreach ($items as &$item) $item = substr($item, $offset);
-            }
-        }
-
-        return $items;
-    }
-
-    /**
-     * 扫描指定目录
-     * @param string $path
-     * @param Closure|null $filterFile
-     * @param Closure|null $filterPath
-     * @param boolean $fullDirectory
-     * @return Generator
-     */
-    public static function findFilesYield(string $path, ?Closure $filterFile = null, ?Closure $filterPath = null, bool $fullDirectory = false): Generator
-    {
-        if (file_exists($path)) {
-            $items = is_file($path) ? [new SplFileInfo($path)] : new FilesystemIterator($path);
-            foreach ($items as $item) if ($item->isDir() && !$item->isLink()) {
-                if (is_null($filterPath) || $filterPath($item)) {
-                    yield from static::findFilesYield($item->getPathname(), $filterFile, $filterPath, $fullDirectory);
+        $dir = base_path($dir);
+        $file_dir = [];
+        if (is_dir($dir)) {
+            if ($handle = opendir($dir)) {
+                while (($file = readdir($handle)) !== false) {
+                    if ($file != '.' && $file != '..') {
+                        $file_dir[] = $file;
+                    }
                 }
-                $fullDirectory && yield $item;
-            } elseif (is_null($filterFile) || $filterFile($item)) {
-                yield $item;
+
+                closedir($handle);
             }
         }
+
+        return $file_dir;
     }
 }

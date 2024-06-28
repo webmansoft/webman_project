@@ -50,7 +50,7 @@ class ArcoHelper
                 $temp = [
                     $pk => $value[$pk],
                     $pid => $value[$pid],
-                    'name' => self::camelize(str_replace('/', '_', $value['path'])),
+                    'name' => StringHelper::camelize(str_replace('/', '_', $value['path'])),
                     'path' => $value['path'],
                     'component' => $value['component'],
                     'meta' => [
@@ -138,41 +138,6 @@ class ArcoHelper
     }
 
     /**
-     * 下划线转驼峰
-     */
-    public static function camelize(string $words, $separator = '_'): string
-    {
-        $words = $separator . str_replace($separator, ' ', strtolower($words));
-        return ltrim(str_replace(' ', '', ucwords($words)), $separator);
-    }
-
-    /**
-     * 驼峰命名转下划线命名
-     */
-    public static function unCamelize(string $words, $separator = '_'): string
-    {
-        return strtolower(preg_replace('/([a-z])([A-Z])/', "$1" . $separator . "$2", $words));
-    }
-
-    /**
-     * 转换为驼峰
-     * @param string $value
-     * @return string
-     */
-    public static function camel(string $value): string
-    {
-        static $cache = [];
-        $key = $value;
-
-        if (isset($cache[$key])) {
-            return $cache[$key];
-        }
-
-        $value = ucwords(str_replace(['-', '_'], ' ', $value));
-        return $cache[$key] = str_replace(' ', '', $value);
-    }
-
-    /**
      * 获取业务名称
      * @param string $tableName
      * @return string
@@ -186,7 +151,7 @@ class ArcoHelper
             $result = $tableName;
         }
 
-        return static::camelize($result);
+        return StringHelper::camelize($result);
     }
 
     /**
@@ -198,7 +163,7 @@ class ArcoHelper
     {
         $start = strrpos($tableName, '_');
         $result = substr($tableName, $start + 1);
-        return static::camel($result);
+        return StringHelper::camel($result);
     }
 
     /**
@@ -216,28 +181,5 @@ class ArcoHelper
         }
 
         return substr_replace($haystack, $replace, $pos, strlen($needle));
-    }
-
-    /**
-     * 遍历目录
-     * @param $template_name
-     * @return array
-     */
-    public static function getDir($template_name): array
-    {
-        $dir = base_path($template_name);
-        $fileDir = [];
-        if (is_dir($dir)) {
-            if ($handle = opendir($dir)) {
-                while (($file = readdir($handle)) !== false) {
-                    if ($file != '.' && $file != '..') {
-                        $fileDir[] = $file;
-                    }
-                }
-                closedir($handle);
-            }
-        }
-
-        return $fileDir;
     }
 }

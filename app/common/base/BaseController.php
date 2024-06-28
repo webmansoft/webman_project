@@ -18,7 +18,7 @@ abstract class BaseController
     /**
      * 验证器注入
      */
-    protected Validate $validate;
+    protected ?Validate $validate = null;
 
     /**
      * 返回格式化json数据
@@ -26,13 +26,13 @@ abstract class BaseController
      * @param mixed $message
      * @param mixed $data
      * @param int $count
-     * @param bool $isCount
+     * @param bool $is_count
      * @return Response
      */
-    protected function json(int $code, mixed $message = '', mixed $data = '', int $count = 0, bool $isCount = false): Response
+    protected function json(int $code, mixed $message = '', mixed $data = '', int $count = 0, bool $is_count = false): Response
     {
         $result = ['code' => $code, 'message' => $message, 'data' => $data];
-        if ($isCount) {
+        if ($is_count) {
             $result['count'] = $count;
         }
 
