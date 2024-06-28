@@ -23,7 +23,7 @@ class SystemUserController extends BaseApiController
      * 获取管理员信息
      * @return Response
      */
-    public function adminInfo(): Response
+    public function getAdminInfo(): Response
     {
         $logic = new SystemMenuLogic();
         $roleLogic = new SystemRoleLogic();
@@ -65,7 +65,7 @@ class SystemUserController extends BaseApiController
      * @param Request $request
      * @return Response
      */
-    public function getSystemUserList(Request $request): Response
+    public function getUserList(Request $request): Response
     {
         $condition = [
             ['dept_id', 'role_id', 'post_id'],

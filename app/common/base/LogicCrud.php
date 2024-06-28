@@ -324,9 +324,9 @@ abstract class LogicCrud
         return $this->checkModel($this->admin_id)->toArray();
     }
 
-    public function selectByWhere(array $where, array $select_fields = ['*']): array
+    public function selectByWhere(array $where, array $hidden_fields = [], array $select_fields = ['*']): array
     {
-        return $this->search($where, $select_fields)->get()->toArray();
+        return $this->search($where, $select_fields)->get()->makeHidden($hidden_fields)->toArray();
     }
 
     public function countByWhere(array $where, array $select_fields = ['*']): int
@@ -339,14 +339,14 @@ abstract class LogicCrud
         return $this->search($where, $select_fields)->sum($field);
     }
 
-    public function columnByWhere(array $where, string $field, string|null $key = null, array $select_fields = ['*']): array
+    public function columnByWhere(array $where, string $field, string|null $key = null): array
     {
-        return $this->search($where, $select_fields)->pluck($field, $key)->toArray();
+        return $this->search($where)->pluck($field, $key)->toArray();
     }
 
-    public function findAll(array $where, array $select_fields = ['*']): array
+    public function findAll(array $where, array $hidden_fields = [], array $select_fields = ['*']): array
     {
-        return $this->search($where, $select_fields)->get()->toArray();
+        return $this->search($where, $select_fields)->get()->makeHidden($hidden_fields)->toArray();
     }
 
     /**
@@ -354,17 +354,17 @@ abstract class LogicCrud
      * @param int|string $id
      * @param string $primary_key
      * @param array $hidden_fields
-     * @param array $display_fields
+     * @param array $select_fields
      * @return Model|bool
      */
-    public function findOne(int|string $id, string $primary_key = 'id', array $hidden_fields = ['*'], array $display_fields = ['*']): Model|bool
+    public function findOne(int|string $id, string $primary_key = 'id', array $hidden_fields = [], array $select_fields = ['*']): Model|bool
     {
         if ($id) {
             $pk = $this->model->getKeyName();
             if ($pk === $primary_key) {
-                $model = $this->model->newQuery()->select($display_fields)->find(intval($id))->makeHidden($hidden_fields);
+                $model = $this->model->newQuery()->select($select_fields)->find(intval($id))->makeHidden($hidden_fields);
             } else {
-                $model = $this->model->newQuery()->select($display_fields)->where($primary_key, $id)->first()->makeHidden($hidden_fields);
+                $model = $this->model->newQuery()->select($select_fields)->where($primary_key, $id)->first()->makeHidden($hidden_fields);
             }
 
             if ($model) {
@@ -473,38 +473,42 @@ abstract class LogicCrud
     /**
      * 启用边界 分页查询数据
      * @param Builder $query
+     * @param array $hidden_fields
      * @return array
      */
-    public function getQueryList(Builder $query): array
+    public function getQueryList(Builder $query, array $hidden_fields = []): array
     {
-        $limit = request()->input('limit') ?: 10;
+        $page = intval(request()->input('page') ?: 1);
+        $limit = intval(request()->input('limit') ?: 10);
         $orderBy = request()->input('orderBy') ?: $this->model->getKeyName();
         $orderType = request()->input('orderType') ?: 'ASC';
         if ($this->scope) {
             $query = $this->adminDataScope($query);
         }
 
-        $query->orderBy($orderBy, $orderType);
-        $data = $query->paginate($limit)->toArray();
+        $total = $query->count();
+        $data = $query->offset(($page - 1) * $limit)->limit($limit)->orderBy($orderBy, $orderType)->get()->makeHidden($hidden_fields);
+
         return [
             // 获取当前页的所有项
-            'items' => $data['data'],
+            'items' => $data,
             // 数据总数
-            'total' => $data['total'],
+            'total' => $total,
             // 每页的数据条数
-            'limit' => $data['per_page'],
+            'limit' => $limit,
             // 获取当前页页码
-            'page' => $data['current_page'],
+            'page' => $page,
         ];
     }
 
     /**
      * 启用边界 获取全部数据
      * @param Builder $query
+     * @param array $hidden_fields
      * @param array $select_fields
      * @return array
      */
-    public function getQueryAll(Builder $query, array $select_fields = ['*']): array
+    public function getQueryAll(Builder $query, array $hidden_fields = [], array $select_fields = ['*']): array
     {
         $order_by = request()->input('orderBy') ?: $this->model->getKeyName();
         $order_type = request()->input('orderType') ?: 'asc';
@@ -513,7 +517,7 @@ abstract class LogicCrud
         }
 
         $query->orderBy($order_by, $order_type);
-        return $query->get($select_fields)->toArray();
+        return $query->get($select_fields)->makeHidden($hidden_fields)->toArray();
     }
 
     /**

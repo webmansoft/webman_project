@@ -37,7 +37,7 @@
     "illuminate/events": "^10.48",
     "zoujingli/ip2region": "^2.0",
     "tinywan/validate": "^0.0.3",
-    "tinywan/storage": "^0.3",
+    "tinywan/storage": "^1.0",
     "endroid/qr-code": "^4.8",
     "php-di/php-di": "^6.4",
     "yansongda/pay": "^3.7",

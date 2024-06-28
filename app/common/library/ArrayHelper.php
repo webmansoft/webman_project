@@ -22,4 +22,21 @@ class ArrayHelper
 
         return $columnArr;
     }
+
+    /**
+     * 数组中根据key值获取value
+     * @param array $array
+     * @param string $key
+     * @return mixed
+     */
+    public static function getConfigValue(array $array, string $key): mixed
+    {
+        foreach ($array as $item) {
+            if ($item['key'] === $key) {
+                return $item['value'];
+            }
+        }
+
+        return '';
+    }
 }

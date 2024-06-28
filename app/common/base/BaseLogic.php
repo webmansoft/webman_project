@@ -52,7 +52,7 @@ abstract class BaseLogic extends LogicCrud
      * @param string $module
      * @return array
      */
-    protected function getToken(int $uid, string $username, string $client = JwtToken::TOKEN_CLIENT_WEB, string $module = 'backend'): array
+    public function getToken(int $uid, string $username, string $client = JwtToken::TOKEN_CLIENT_WEB, string $module = 'backend'): array
     {
         $extend = [
             'id' => $uid,
@@ -61,5 +61,16 @@ abstract class BaseLogic extends LogicCrud
             'module' => $module,
         ];
         return JwtToken::generateToken($extend);
+    }
+
+    /**
+     * 真实删除日志
+     * @param int $day
+     * @return mixed
+     */
+    public function clearLog(int $day = 30): mixed
+    {
+        $time = date('Y-m-d', strtotime('-' . $day . ' day'));
+        return $this->model->where($this->model::CREATED_AT, '<', $time)->forceDelete();
     }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0f1355179aa9df0eaf9384e39bf78358",
+    "content-hash": "b55c6171206aaab891f178609f3f7075",
     "packages": [
         {
             "name": "aliyuncs/oss-sdk-php",
@@ -5155,16 +5155,16 @@
         },
         {
             "name": "tinywan/storage",
-            "version": "v0.3.4",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Tinywan/webman-storage.git",
-                "reference": "0867631bbd1731658ac745481131ef93415cdf62"
+                "reference": "3b310206556bf105f0b27662bf092333a1250102"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Tinywan/webman-storage/zipball/0867631bbd1731658ac745481131ef93415cdf62",
-                "reference": "0867631bbd1731658ac745481131ef93415cdf62",
+                "url": "https://api.github.com/repos/Tinywan/webman-storage/zipball/3b310206556bf105f0b27662bf092333a1250102",
+                "reference": "3b310206556bf105f0b27662bf092333a1250102",
                 "shasum": ""
             },
             "require": {
@@ -5193,9 +5193,9 @@
             "description": "webman storage plugin",
             "support": {
                 "issues": "https://github.com/Tinywan/webman-storage/issues",
-                "source": "https://github.com/Tinywan/webman-storage/tree/v0.3.4"
+                "source": "https://github.com/Tinywan/webman-storage/tree/v1.0.0"
             },
-            "time": "2022-08-03T12:12:34+00:00"
+            "time": "2024-01-13T08:34:30+00:00"
         },
         {
             "name": "tinywan/validate",

@@ -17,7 +17,8 @@ return [
         // 本地对象存储
         'local' => [
             'adapter' => LocalAdapter::class,
-            'root' => runtime_path('storage'),
+            //'root' => runtime_path('storage'),
+            'root' => public_path('storage'),
             'dirname' => function () {
                 return date('Ymd');
             },
@@ -43,7 +44,7 @@ return [
             'adapter' => CosAdapter::class,
             'secretId' => '',
             'secretKey' => '',
-            'bucket' => 'resty-webman-',
+            'bucket' => 'resty-webman',
             'dirname' => 'storage',
             'domain' => 'http://webman.oss.tinywan.com',
             'region' => 'ap-shanghai',
