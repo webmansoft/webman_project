@@ -19,10 +19,11 @@ class SystemUserLogic extends BaseLogic
     public function read(int|string $id): array
     {
         $admin = $this->model->find($id);
-        $data = $admin->makeHidden(['password', 'created_by', 'updated_by', 'create_time', 'update_time'])->toArray();
-        $data['role_list'] = $admin->getAttribute('role')->toArray() ?? [];
-        $data['post_list'] = $admin->getAttribute('post')->toArray() ?? [];
-        $data['department_list'] = $admin->getAttribute('department')->toArray() ?? [];
+        $hidden = ['password', 'created_by', 'updated_by', $this->model::CREATED_AT, $this->model::UPDATED_AT];
+        $data = $admin->makeHidden($hidden)->toArray();
+        $data['role_list'] = $admin->getAttribute('role')?->toArray() ?? [];
+        $data['post_list'] = $admin->getAttribute('post')?->toArray() ?? [];
+        $data['department_list'] = $admin->getAttribute('department')?->toArray() ?? [];
         return $data;
     }
 

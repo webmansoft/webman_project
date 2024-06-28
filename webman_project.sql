@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50740
 File Encoding         : 65001
 
-Date: 2024-06-27 21:15:13
+Date: 2024-06-28 08:41:28
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -244,10 +244,10 @@ CREATE TABLE `wp_system_department_leader` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `wp_system_dict_data`
+-- Table structure for `wp_system_dictionary`
 -- ----------------------------
-DROP TABLE IF EXISTS `wp_system_dict_data`;
-CREATE TABLE `wp_system_dict_data` (
+DROP TABLE IF EXISTS `wp_system_dictionary`;
+CREATE TABLE `wp_system_dictionary` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `type_id` int(11) DEFAULT NULL COMMENT '字典类型ID',
   `label` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '字典标签',
@@ -266,44 +266,44 @@ CREATE TABLE `wp_system_dict_data` (
 ) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='字典数据表';
 
 -- ----------------------------
--- Records of wp_system_dict_data
+-- Records of wp_system_dictionary
 -- ----------------------------
-INSERT INTO `wp_system_dict_data` VALUES ('1', '1', 'InnoDB', 'InnoDB', 'table_engine', '1', '1', null, '1', '1', '2021-06-27 00:37:11', '2023-12-06 21:54:25', null);
-INSERT INTO `wp_system_dict_data` VALUES ('2', '1', 'MyISAM', 'MyISAM', 'table_engine', '1', '1', null, '1', '1', '2021-06-27 00:37:21', '2023-11-16 11:51:35', null);
-INSERT INTO `wp_system_dict_data` VALUES ('3', '2', '本地存储', '1', 'upload_mode', '99', '1', null, '1', '1', '2021-06-27 13:33:43', '2021-06-27 13:33:43', null);
-INSERT INTO `wp_system_dict_data` VALUES ('4', '2', '阿里云OSS', '2', 'upload_mode', '98', '1', null, '1', '1', '2021-06-27 13:33:55', '2021-06-27 13:33:55', null);
-INSERT INTO `wp_system_dict_data` VALUES ('5', '2', '七牛云', '3', 'upload_mode', '97', '1', null, '1', '1', '2021-06-27 13:34:07', '2023-12-13 16:50:26', null);
-INSERT INTO `wp_system_dict_data` VALUES ('6', '2', '腾讯云COS', '4', 'upload_mode', '96', '1', null, '1', '1', '2021-06-27 13:34:19', '2023-12-13 16:47:34', null);
-INSERT INTO `wp_system_dict_data` VALUES ('7', '3', '正常', '1', 'data_status', '0', '1', '1为正常', '1', '1', '2021-06-27 13:36:51', '2021-06-27 13:37:01', null);
-INSERT INTO `wp_system_dict_data` VALUES ('8', '3', '停用', '2', 'data_status', '0', '1', '2为停用', '1', '1', '2021-06-27 13:37:10', '2021-06-27 13:37:10', null);
-INSERT INTO `wp_system_dict_data` VALUES ('9', '4', '统计页面', 'statistics', 'dashboard', '0', '1', '管理员用', '1', '1', '2021-08-09 12:53:53', '2023-11-16 11:39:17', null);
-INSERT INTO `wp_system_dict_data` VALUES ('10', '4', '工作台', 'work', 'dashboard', '0', '1', '员工使用', '1', '1', '2021-08-09 12:54:18', '2021-08-09 12:54:18', null);
-INSERT INTO `wp_system_dict_data` VALUES ('11', '5', '男', '1', 'sex', '0', '1', null, '1', '1', '2021-08-09 12:55:00', '2021-08-09 12:55:00', null);
-INSERT INTO `wp_system_dict_data` VALUES ('12', '5', '女', '2', 'sex', '0', '1', null, '1', '1', '2021-08-09 12:55:08', '2021-08-09 12:55:08', null);
-INSERT INTO `wp_system_dict_data` VALUES ('13', '5', '未知', '3', 'sex', '0', '1', null, '1', '1', '2021-08-09 12:55:16', '2021-08-09 12:55:16', null);
-INSERT INTO `wp_system_dict_data` VALUES ('22', '7', '通知', '1', 'backend_notice_type', '2', '1', null, '1', '1', '2021-11-11 17:29:27', '2021-11-11 17:30:51', null);
-INSERT INTO `wp_system_dict_data` VALUES ('23', '7', '公告', '2', 'backend_notice_type', '1', '1', null, '1', '1', '2021-11-11 17:31:42', '2021-11-11 17:31:42', null);
-INSERT INTO `wp_system_dict_data` VALUES ('24', '8', '所有', 'A', 'request_mode', '5', '1', null, '1', '1', '2021-11-14 17:23:25', '2023-12-13 17:21:28', null);
-INSERT INTO `wp_system_dict_data` VALUES ('25', '8', 'GET', 'G', 'request_mode', '4', '1', null, '1', '1', '2021-11-14 17:23:45', '2023-12-13 17:21:28', null);
-INSERT INTO `wp_system_dict_data` VALUES ('26', '8', 'POST', 'P', 'request_mode', '3', '1', null, '1', '1', '2021-11-14 17:23:38', '2023-12-13 17:21:28', null);
-INSERT INTO `wp_system_dict_data` VALUES ('27', '8', 'PUT', 'U', 'request_mode', '2', '1', null, '1', '1', '2021-11-14 17:23:45', '2023-12-13 17:21:28', null);
-INSERT INTO `wp_system_dict_data` VALUES ('28', '8', 'DELETE', 'D', 'request_mode', '1', '1', null, '1', '1', '2021-11-14 17:23:45', '2023-12-13 17:21:28', null);
-INSERT INTO `wp_system_dict_data` VALUES ('39', '6', '通知', 'notice', 'queue_msg_type', '1', '1', null, '1', '1', '2021-12-25 18:30:31', '2024-01-20 14:42:55', null);
-INSERT INTO `wp_system_dict_data` VALUES ('40', '6', '公告', 'announcement', 'queue_msg_type', '2', '1', null, '1', '1', '2021-12-25 18:31:00', '2024-01-20 14:42:57', null);
-INSERT INTO `wp_system_dict_data` VALUES ('41', '6', '待办', 'todo', 'queue_msg_type', '3', '1', null, '1', '1', '2021-12-25 18:31:26', '2024-01-20 14:42:59', null);
-INSERT INTO `wp_system_dict_data` VALUES ('42', '6', '抄送我的', 'carbon_copy_mine', 'queue_msg_type', '4', '1', null, '1', '1', '2021-12-25 18:31:26', '2024-01-20 14:42:59', null);
-INSERT INTO `wp_system_dict_data` VALUES ('43', '6', '私信', 'private_message', 'queue_msg_type', '5', '1', null, '1', '1', '2021-12-25 18:31:26', '2024-01-20 14:42:59', null);
-INSERT INTO `wp_system_dict_data` VALUES ('44', '12', '图片', 'image', 'attachment_type', '10', '1', null, '1', '1', '2022-03-17 14:49:59', '2022-03-17 14:49:59', null);
-INSERT INTO `wp_system_dict_data` VALUES ('45', '12', '文档', 'text', 'attachment_type', '9', '1', null, '1', '1', '2022-03-17 14:50:20', '2022-03-17 14:50:49', null);
-INSERT INTO `wp_system_dict_data` VALUES ('46', '12', '音频', 'audio', 'attachment_type', '8', '1', null, '1', '1', '2022-03-17 14:50:37', '2022-03-17 14:50:52', null);
-INSERT INTO `wp_system_dict_data` VALUES ('47', '12', '视频', 'video', 'attachment_type', '7', '1', null, '1', '1', '2022-03-17 14:50:45', '2022-03-17 14:50:57', null);
-INSERT INTO `wp_system_dict_data` VALUES ('48', '12', '应用程序', 'application', 'attachment_type', '6', '1', null, '1', '1', '2022-03-17 14:50:52', '2022-03-17 14:50:59', null);
+INSERT INTO `wp_system_dictionary` VALUES ('1', '1', 'InnoDB', 'InnoDB', 'table_engine', '1', '1', null, '1', '1', '2021-06-27 00:37:11', '2023-12-06 21:54:25', null);
+INSERT INTO `wp_system_dictionary` VALUES ('2', '1', 'MyISAM', 'MyISAM', 'table_engine', '1', '1', null, '1', '1', '2021-06-27 00:37:21', '2023-11-16 11:51:35', null);
+INSERT INTO `wp_system_dictionary` VALUES ('3', '2', '本地存储', '1', 'upload_mode', '99', '1', null, '1', '1', '2021-06-27 13:33:43', '2021-06-27 13:33:43', null);
+INSERT INTO `wp_system_dictionary` VALUES ('4', '2', '阿里云OSS', '2', 'upload_mode', '98', '1', null, '1', '1', '2021-06-27 13:33:55', '2021-06-27 13:33:55', null);
+INSERT INTO `wp_system_dictionary` VALUES ('5', '2', '七牛云', '3', 'upload_mode', '97', '1', null, '1', '1', '2021-06-27 13:34:07', '2023-12-13 16:50:26', null);
+INSERT INTO `wp_system_dictionary` VALUES ('6', '2', '腾讯云COS', '4', 'upload_mode', '96', '1', null, '1', '1', '2021-06-27 13:34:19', '2023-12-13 16:47:34', null);
+INSERT INTO `wp_system_dictionary` VALUES ('7', '3', '正常', '1', 'data_status', '0', '1', '1为正常', '1', '1', '2021-06-27 13:36:51', '2021-06-27 13:37:01', null);
+INSERT INTO `wp_system_dictionary` VALUES ('8', '3', '停用', '2', 'data_status', '0', '1', '2为停用', '1', '1', '2021-06-27 13:37:10', '2021-06-27 13:37:10', null);
+INSERT INTO `wp_system_dictionary` VALUES ('9', '4', '统计页面', 'statistics', 'dashboard', '0', '1', '管理员用', '1', '1', '2021-08-09 12:53:53', '2023-11-16 11:39:17', null);
+INSERT INTO `wp_system_dictionary` VALUES ('10', '4', '工作台', 'work', 'dashboard', '0', '1', '员工使用', '1', '1', '2021-08-09 12:54:18', '2021-08-09 12:54:18', null);
+INSERT INTO `wp_system_dictionary` VALUES ('11', '5', '男', '1', 'sex', '0', '1', null, '1', '1', '2021-08-09 12:55:00', '2021-08-09 12:55:00', null);
+INSERT INTO `wp_system_dictionary` VALUES ('12', '5', '女', '2', 'sex', '0', '1', null, '1', '1', '2021-08-09 12:55:08', '2021-08-09 12:55:08', null);
+INSERT INTO `wp_system_dictionary` VALUES ('13', '5', '未知', '3', 'sex', '0', '1', null, '1', '1', '2021-08-09 12:55:16', '2021-08-09 12:55:16', null);
+INSERT INTO `wp_system_dictionary` VALUES ('22', '7', '通知', '1', 'backend_notice_type', '2', '1', null, '1', '1', '2021-11-11 17:29:27', '2021-11-11 17:30:51', null);
+INSERT INTO `wp_system_dictionary` VALUES ('23', '7', '公告', '2', 'backend_notice_type', '1', '1', null, '1', '1', '2021-11-11 17:31:42', '2021-11-11 17:31:42', null);
+INSERT INTO `wp_system_dictionary` VALUES ('24', '8', '所有', 'A', 'request_mode', '5', '1', null, '1', '1', '2021-11-14 17:23:25', '2023-12-13 17:21:28', null);
+INSERT INTO `wp_system_dictionary` VALUES ('25', '8', 'GET', 'G', 'request_mode', '4', '1', null, '1', '1', '2021-11-14 17:23:45', '2023-12-13 17:21:28', null);
+INSERT INTO `wp_system_dictionary` VALUES ('26', '8', 'POST', 'P', 'request_mode', '3', '1', null, '1', '1', '2021-11-14 17:23:38', '2023-12-13 17:21:28', null);
+INSERT INTO `wp_system_dictionary` VALUES ('27', '8', 'PUT', 'U', 'request_mode', '2', '1', null, '1', '1', '2021-11-14 17:23:45', '2023-12-13 17:21:28', null);
+INSERT INTO `wp_system_dictionary` VALUES ('28', '8', 'DELETE', 'D', 'request_mode', '1', '1', null, '1', '1', '2021-11-14 17:23:45', '2023-12-13 17:21:28', null);
+INSERT INTO `wp_system_dictionary` VALUES ('39', '6', '通知', 'notice', 'queue_msg_type', '1', '1', null, '1', '1', '2021-12-25 18:30:31', '2024-01-20 14:42:55', null);
+INSERT INTO `wp_system_dictionary` VALUES ('40', '6', '公告', 'announcement', 'queue_msg_type', '2', '1', null, '1', '1', '2021-12-25 18:31:00', '2024-01-20 14:42:57', null);
+INSERT INTO `wp_system_dictionary` VALUES ('41', '6', '待办', 'todo', 'queue_msg_type', '3', '1', null, '1', '1', '2021-12-25 18:31:26', '2024-01-20 14:42:59', null);
+INSERT INTO `wp_system_dictionary` VALUES ('42', '6', '抄送我的', 'carbon_copy_mine', 'queue_msg_type', '4', '1', null, '1', '1', '2021-12-25 18:31:26', '2024-01-20 14:42:59', null);
+INSERT INTO `wp_system_dictionary` VALUES ('43', '6', '私信', 'private_message', 'queue_msg_type', '5', '1', null, '1', '1', '2021-12-25 18:31:26', '2024-01-20 14:42:59', null);
+INSERT INTO `wp_system_dictionary` VALUES ('44', '12', '图片', 'image', 'attachment_type', '10', '1', null, '1', '1', '2022-03-17 14:49:59', '2022-03-17 14:49:59', null);
+INSERT INTO `wp_system_dictionary` VALUES ('45', '12', '文档', 'text', 'attachment_type', '9', '1', null, '1', '1', '2022-03-17 14:50:20', '2022-03-17 14:50:49', null);
+INSERT INTO `wp_system_dictionary` VALUES ('46', '12', '音频', 'audio', 'attachment_type', '8', '1', null, '1', '1', '2022-03-17 14:50:37', '2022-03-17 14:50:52', null);
+INSERT INTO `wp_system_dictionary` VALUES ('47', '12', '视频', 'video', 'attachment_type', '7', '1', null, '1', '1', '2022-03-17 14:50:45', '2022-03-17 14:50:57', null);
+INSERT INTO `wp_system_dictionary` VALUES ('48', '12', '应用程序', 'application', 'attachment_type', '6', '1', null, '1', '1', '2022-03-17 14:50:52', '2022-03-17 14:50:59', null);
 
 -- ----------------------------
--- Table structure for `wp_system_dict_type`
+-- Table structure for `wp_system_dictionary_type`
 -- ----------------------------
-DROP TABLE IF EXISTS `wp_system_dict_type`;
-CREATE TABLE `wp_system_dict_type` (
+DROP TABLE IF EXISTS `wp_system_dictionary_type`;
+CREATE TABLE `wp_system_dictionary_type` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '字典名称',
   `code` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '字典标示',
@@ -319,17 +319,17 @@ CREATE TABLE `wp_system_dict_type` (
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='字典类型表';
 
 -- ----------------------------
--- Records of wp_system_dict_type
+-- Records of wp_system_dictionary_type
 -- ----------------------------
-INSERT INTO `wp_system_dict_type` VALUES ('1', '数据表引擎', 'table_engine', '1', '数据表引擎字典', '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
-INSERT INTO `wp_system_dict_type` VALUES ('2', '存储模式', 'upload_mode', '1', '上传文件存储模式', '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
-INSERT INTO `wp_system_dict_type` VALUES ('3', '数据状态', 'data_status', '1', '通用数据状态', '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
-INSERT INTO `wp_system_dict_type` VALUES ('4', '后台首页', 'dashboard', '1', null, '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
-INSERT INTO `wp_system_dict_type` VALUES ('5', '性别', 'sex', '1', null, '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
-INSERT INTO `wp_system_dict_type` VALUES ('6', '消息类型', 'queue_msg_type', '1', null, '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
-INSERT INTO `wp_system_dict_type` VALUES ('7', '后台公告类型', 'backend_notice_type', '1', null, '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
-INSERT INTO `wp_system_dict_type` VALUES ('8', '请求方式', 'request_mode', '1', null, '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
-INSERT INTO `wp_system_dict_type` VALUES ('12', '附件类型', 'attachment_type', '1', null, '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
+INSERT INTO `wp_system_dictionary_type` VALUES ('1', '数据表引擎', 'table_engine', '1', '数据表引擎字典', '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
+INSERT INTO `wp_system_dictionary_type` VALUES ('2', '存储模式', 'upload_mode', '1', '上传文件存储模式', '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
+INSERT INTO `wp_system_dictionary_type` VALUES ('3', '数据状态', 'data_status', '1', '通用数据状态', '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
+INSERT INTO `wp_system_dictionary_type` VALUES ('4', '后台首页', 'dashboard', '1', null, '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
+INSERT INTO `wp_system_dictionary_type` VALUES ('5', '性别', 'sex', '1', null, '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
+INSERT INTO `wp_system_dictionary_type` VALUES ('6', '消息类型', 'queue_msg_type', '1', null, '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
+INSERT INTO `wp_system_dictionary_type` VALUES ('7', '后台公告类型', 'backend_notice_type', '1', null, '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
+INSERT INTO `wp_system_dictionary_type` VALUES ('8', '请求方式', 'request_mode', '1', null, '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
+INSERT INTO `wp_system_dictionary_type` VALUES ('12', '附件类型', 'attachment_type', '1', null, '1', '1', '2024-03-17 14:50:52', '2024-03-17 14:50:52', null);
 
 -- ----------------------------
 -- Table structure for `wp_system_login_log`

@@ -6,7 +6,7 @@ namespace app\common\model\system;
 use app\common\base\BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SystemDictDataModel extends BaseModel
+class SystemDictionaryModel extends BaseModel
 {
     use SoftDeletes;
 
@@ -14,5 +14,5 @@ class SystemDictDataModel extends BaseModel
      * 数据表名称
      * @var string
      */
-    protected $table = 'system_dict_data';
+    protected $table = 'system_dictionary';
 }

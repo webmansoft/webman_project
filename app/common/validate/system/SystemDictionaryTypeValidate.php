@@ -5,7 +5,7 @@ namespace app\common\validate\system;
 
 use app\common\base\BaseValidate;
 
-class SystemDictTypeValidate extends BaseValidate
+class SystemDictionaryTypeValidate extends BaseValidate
 {
     /**
      * 定义验证规则

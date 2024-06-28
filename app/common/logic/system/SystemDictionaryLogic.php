@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace app\common\logic\system;
 
 use app\common\base\BaseLogic;
-use app\common\model\system\SystemUploadModel;
+use app\common\model\system\SystemDictionaryModel;
 
-class SystemUploadLogic extends BaseLogic
+class SystemDictionaryLogic extends BaseLogic
 {
     public function __construct()
     {
-        $this->model = new SystemUploadModel();
+        $this->model = new SystemDictionaryModel();
     }
 }

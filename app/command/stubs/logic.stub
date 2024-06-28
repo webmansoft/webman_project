@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace {%namespace%};
 
-use Illuminate\Database\Eloquent\Builder;
 use app\common\base\BaseLogic;
 use app\common\model\{%model_dir%}\{%model_name%};
 

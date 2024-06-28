@@ -474,7 +474,7 @@ abstract class LogicCrud
      * @param Builder $query
      * @return array
      */
-    public function getQueryPageList(Builder $query): array
+    public function getQueryList(Builder $query): array
     {
         $limit = request()->input('limit') ?: 10;
         $orderBy = request()->input('orderBy') ?: $this->model->getKeyName();
