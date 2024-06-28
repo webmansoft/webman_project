@@ -21,7 +21,7 @@ class ExcelService
      */
     public function instance(): Spreadsheet
     {
-        if (is_null(self::$instance)){
+        if (is_null(self::$instance)) {
             self::$instance = new Spreadsheet();
         }
 
@@ -64,9 +64,9 @@ class ExcelService
     public function setStyle(array $bodyStyle = []): static
     {
         $this->bodyStyle = array_merge([
-            'font'=>[
-                'bold'=>true,
-                'size'=>20,
+            'font' => [
+                'bold' => true,
+                'size' => 20,
             ],
             'borders' => [
                 'allBorders' => [
@@ -105,9 +105,9 @@ class ExcelService
         // 总列数
         $count = count($header);
         // 设置表头
-        $start = 'A'.$this->currentRow;
+        $start = 'A' . $this->currentRow;
         $colEn = 'A';
-        for ($i=0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; $i++) {
             $sheet->setCellValueByColumnAndRow($i + 1, $this->currentRow, $header[$i]);
             if ($i > 0) {
                 $colEn++;
@@ -117,10 +117,10 @@ class ExcelService
         $sheet->getRowDimension($this->currentRow)->setRowHeight($this->height);
         $this->currentRow += 1;
         // 设置数据
-        for ($i=0; $i < count($data); $i++) {
+        for ($i = 0; $i < count($data); $i++) {
             $j = 0;
             foreach ($data[$i] as $item) {
-                $sheet->getCellByColumnAndRow($j + 1, $this->currentRow)->setValueExplicit($item,'s'); // 修复数字内容自动转换成科学计数法
+                $sheet->getCellByColumnAndRow($j + 1, $this->currentRow)->setValueExplicit($item, 's'); // 修复数字内容自动转换成科学计数法
                 $j++;
             }
 
@@ -128,9 +128,9 @@ class ExcelService
             $this->currentRow += 1;
         }
 
-        $endCol = $colEn.($this->currentRow - 1);
+        $endCol = $colEn . ($this->currentRow - 1);
         // 设置内容样式
-        $sheet->getStyle($start.':'.$endCol)->applyFromArray($this->bodyStyle);
+        $sheet->getStyle($start . ':' . $endCol)->applyFromArray($this->bodyStyle);
         return $this;
     }
 
@@ -144,7 +144,7 @@ class ExcelService
     public function saveFile(string $fileName = 'test.xlsx', bool $isMix = false): bool|string
     {
         if ($isMix) {
-            $fileName = md5(time().rand(1000,9999)).'.'.pathinfo($fileName, PATHINFO_EXTENSION);
+            $fileName = md5(time() . rand(1000, 9999)) . '.' . pathinfo($fileName, PATHINFO_EXTENSION);
         }
 
         $file = $this->getFileName($fileName);
