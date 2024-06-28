@@ -22,7 +22,7 @@ class SystemUploadController extends BaseApiController
      * @param Request $request
      * @return Response
      */
-    public function getUploadList(Request $request): Response
+    public function getList(Request $request): Response
     {
         $condition = [
             ['mime_type', 'storage_mode'],

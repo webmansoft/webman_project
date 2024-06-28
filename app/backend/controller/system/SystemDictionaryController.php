@@ -22,7 +22,7 @@ class SystemDictionaryController extends BaseApiController
      * @param Request $request
      * @return Response
      */
-    public function getDictionaryList(Request $request): Response
+    public function getList(Request $request): Response
     {
         $code = $request->input('code');
         if (empty($code)) {

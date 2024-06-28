@@ -19,9 +19,14 @@ class SystemOperationLogController extends BaseApiController
      * 获取操作日志
      * @return Response
      */
-    public function getOperationLogList(): Response
+    public function getList(): Response
     {
-        $query = $this->logic->equalSearch(['username' => $this->admin_name]);
+        $condition = [
+            ['ip'],
+            'like' => ['username','router'],
+            'betweenDate' => ['create_time']
+        ];
+        $query = $this->logic->search($condition);
         $data = $this->logic->getQueryList($query, ['request_data', 'delete_time']);
         return $this->successData($data);
     }

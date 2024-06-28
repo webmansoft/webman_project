@@ -16,12 +16,28 @@ class SystemLoginLogController extends BaseApiController
     }
 
     /**
+     * 获取我的登录日志
+     * @return Response
+     */
+    public function getListByUsername(): Response
+    {
+        $query = $this->logic->equalSearch(['username' => $this->admin_name]);
+        $data = $this->logic->getQueryList($query);
+        return $this->successData($data);
+    }
+
+    /**
      * 获取登录日志
      * @return Response
      */
-    public function getLoginLogList(): Response
+    public function getList(): Response
     {
-        $query = $this->logic->search(['username' => $this->admin_name]);
+        $condition = [
+            ['status', 'ip'],
+            'like' => ['username'],
+            'betweenDate'=>['login_time']
+        ];
+        $query = $this->logic->search($condition);
         $data = $this->logic->getQueryList($query);
         return $this->successData($data);
     }
