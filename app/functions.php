@@ -1,6 +1,7 @@
 <?php
 
 use support\Log;
+use support\Response;
 use Webman\Route;
 use Webmansoft\Jwt\JwtToken;
 use Tinywan\Validate\Validate;
@@ -97,6 +98,21 @@ function get_jwt_user(): bool|array
     }
 
     return false;
+}
+
+/**
+ * 下载模板
+ * @param $file_name
+ * @return Response
+ */
+function download_file($file_name): Response
+{
+    $base_dir = base_path() . '/extend/template';
+    if (file_exists($base_dir . DIRECTORY_SEPARATOR . $file_name)) {
+        return response()->download($base_dir . DIRECTORY_SEPARATOR . $file_name, urlencode($file_name));
+    } else {
+        throw new ApiException('模板不存在');
+    }
 }
 
 /**

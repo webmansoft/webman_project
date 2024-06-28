@@ -534,4 +534,22 @@ abstract class LogicCrud
 
         throw new ApiException('数据权限读取失败');
     }
+
+    /**
+     * 获取上传的导入文件
+     * @param $file
+     * @return string
+     */
+    public function getImport($file): string
+    {
+        $full_dir = runtime_path() . '/resource/';
+        if (!is_dir($full_dir)) {
+            mkdir($full_dir, 0777, true);
+        }
+
+        $ext = $file->getUploadExtension() ?: null;
+        $full_path = $full_dir. md5((string)time()). '.'. $ext;
+        $file->move($full_path);
+        return $full_path;
+    }
 }

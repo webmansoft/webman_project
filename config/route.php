@@ -45,7 +45,7 @@ Route::group('/backend/loginLog', function () {
 
 // 操作日志
 Route::group('/backend/operationLog', function () {
-    Route::get('/getList', [SystemOperationLogController::class, 'getLogList']);
+    Route::get('/getList', [SystemOperationLogController::class, 'getList']);
     Route::delete('/clearLog', [SystemOperationLogController::class, 'clearLog']);
 });
 

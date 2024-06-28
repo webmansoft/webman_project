@@ -55,7 +55,8 @@
     "ext-zlib": "*",
     "ext-curl": "*",
     "ext-redis": "*",
-    "ext-zip": "*"
+    "ext-zip": "*",
+    "ext-xlswriter": "*"
   },
   "suggest": {
     "ext-event": "For better performance. "
