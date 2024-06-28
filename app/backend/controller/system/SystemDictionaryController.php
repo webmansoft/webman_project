@@ -7,9 +7,16 @@ use support\Cache;
 use support\Request;
 use support\Response;
 use app\common\base\BaseApiController;
+use app\common\logic\system\SystemDictionaryLogic;
 
 class SystemDictionaryController extends BaseApiController
 {
+    public function __construct()
+    {
+        $this->logic = new SystemDictionaryLogic();
+        parent::__construct();
+    }
+
     /**
      * 获取字典列表
      * @param Request $request
@@ -27,9 +34,8 @@ class SystemDictionaryController extends BaseApiController
             return $this->successData($data);
         }
 
-        $logic = new SystemDictionaryLogic();
-        $query = $logic->equalSearch(['status' => 1, 'code' => $code], ['id', 'label', 'value']);
-        $data = $logic->getQueryAll($query);
+        $query = $this->logic->equalSearch(['status' => 1, 'code' => $code], ['id', 'label', 'value']);
+        $data = $this->logic->getQueryAll($query);
         if ($data) {
             Cache::set($code, $data);
             return $this->successData($data);

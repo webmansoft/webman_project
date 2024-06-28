@@ -471,7 +471,7 @@ abstract class LogicCrud
     }
 
     /**
-     * 分页查询数据
+     * 启用边界 分页查询数据
      * @param Builder $query
      * @return array
      */
@@ -499,7 +499,7 @@ abstract class LogicCrud
     }
 
     /**
-     * 获取全部数据
+     * 启用边界 获取全部数据
      * @param Builder $query
      * @param array $select_fields
      * @return array
@@ -517,7 +517,7 @@ abstract class LogicCrud
     }
 
     /**
-     * 数据权限处理
+     * 启用边界 数据权限处理
      * @param Builder $query
      * @return Builder
      */

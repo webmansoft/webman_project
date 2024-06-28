@@ -13,6 +13,12 @@ use app\common\logic\system\SystemUserLogic;
 
 class SystemUserController extends BaseApiController
 {
+    public function __construct()
+    {
+        $this->logic = new SystemUserLogic();
+        parent::__construct();
+    }
+
     /**
      * 获取管理员信息
      * @return Response
@@ -39,20 +45,35 @@ class SystemUserController extends BaseApiController
     }
 
     /**
+     * 根据id获取管理员信息
+     * @param Request $request
+     * @return Response
+     */
+    public function getAdminInfoByIds(Request $request): Response
+    {
+        $ids = $request->input('ids');
+        if (empty($ids)) {
+            return $this->fail('IDS 参数错误');
+        }
+
+        $data = $this->logic->inSearch(['id' => $ids], ['id', 'username', 'nickname', 'phone', 'email', 'create_time'])->get()->toArray();
+        return $this->successData($data);
+    }
+
+    /**
      * 获取用户列表
      * @param Request $request
      * @return Response
      */
     public function getSystemUserList(Request $request): Response
     {
-        $logic = new SystemUserLogic();
         $condition = [
             ['dept_id', 'role_id', 'post_id'],
             'like' => ['username', 'nickname', 'phone', 'email'],
         ];
         $where = $request->more($condition);
-        $query = $logic->search($where);
-        $data = $logic->getQueryList($query);
+        $query = $this->logic->search($where);
+        $data = $this->logic->getQueryList($query);
         return $this->successData($data);
     }
 }
