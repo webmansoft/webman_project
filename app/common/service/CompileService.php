@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace app\common\service;
 
+use app\common\library\FileHelper;
 use app\common\library\StringHelper;
 
 class CompileService
@@ -39,10 +40,7 @@ class CompileService
         $this->fileName = pathinfo($fileName, PATHINFO_FILENAME);
         $this->c_all();
         $path = $this->genpath . DIRECTORY_SEPARATOR . $fileName;
-        if (!is_dir(dirname($path))) {
-            $flag = mkdir(dirname($path), 0777, true);
-        }
-
+        FileHelper::mkDirs($path);
         file_put_contents($path, $this->content);
     }
 
