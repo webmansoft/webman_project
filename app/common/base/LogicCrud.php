@@ -384,6 +384,7 @@ abstract class LogicCrud
      */
     public function search(array $data, array $select_fields = ['*']): Builder
     {
+        // withWhereHas
         $query = $this->model->newQuery()->select($select_fields);
         $rules = ['>', '>=', '=', '<', '<=', '<>', 'like', 'not like', 'in', 'not in', 'null', 'not null', 'betweenDate', 'between'];
         foreach ($data as $rule => $condition) {
