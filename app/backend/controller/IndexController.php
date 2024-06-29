@@ -7,15 +7,15 @@ use support\Request;
 use support\Response;
 use app\common\library\OsHelper;
 use app\common\base\BaseController;
-use app\common\logic\system\SystemUserLogic;
+use app\common\logic\system\SystemLoginLogLogic;
 
 class IndexController extends BaseController
 {
     public function index(Request $request): Response
     {
-        $condition = $request->inputLike(['phone']);
-        $query = (new SystemUserLogic)->search($condition);
-        $data = (new SystemUserLogic)->getQueryList($query);
+        $condition = $request->inputLike(['username']);
+        $query = (new SystemLoginLogLogic)->search($condition);
+        $data = (new SystemLoginLogLogic)->getQueryList($query, ['remark']);
         return $this->successData($data);
     }
 
