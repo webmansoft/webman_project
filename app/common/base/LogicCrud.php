@@ -16,7 +16,8 @@ abstract class LogicCrud
     protected Model $model; // 模型
     protected int $admin_id = 0; // 当前管理员编号
     protected array $admin = []; // 当前管理员信息
-    public array $admin_ids = []; // 管理员编号集合
+
+    protected array $admin_ids = []; // 管理员编号集合
     protected bool $scope = false; // 数据边界启用状态
 
     /**
@@ -109,7 +110,7 @@ abstract class LogicCrud
     }
 
     /**
-     * 批量更新
+     * 按主键批量更新
      * @param array $data
      * @param bool $batch
      * @param string $password_field
@@ -168,7 +169,7 @@ abstract class LogicCrud
     }
 
     /**
-     * 软删除
+     * 按主键软删除
      * @param array $where
      * @return int
      */
@@ -178,7 +179,7 @@ abstract class LogicCrud
     }
 
     /**
-     * 批量软删除
+     * 按主键批量软删除
      * @param array $where
      * @param bool $batch
      * @return int
@@ -194,7 +195,20 @@ abstract class LogicCrud
     }
 
     /**
-     * 恢复软删除
+     * 获取回收站模型
+     * @param array $where
+     * @return array
+     */
+    public function recycle(array $where = []): array
+    {
+        return (new (get_class($this->model)))->onlyTrashed()->when($where, function ($query, $where) {
+            // $query->where($where);
+            $this->getQuerySearch($query, $where);
+        })->get()->toArray();
+    }
+
+    /**
+     * 按主键恢复软删除
      * @param array $where
      * @return bool
      */
@@ -204,7 +218,7 @@ abstract class LogicCrud
     }
 
     /**
-     * 批量 恢复软删除
+     * 按主键批量恢复软删除
      * @param array $where
      * @param bool $batch
      * @return bool
@@ -226,7 +240,7 @@ abstract class LogicCrud
     }
 
     /**
-     * 真实删除
+     * 按主键真实删除
      * @param array $where
      * @return bool
      */
@@ -236,7 +250,7 @@ abstract class LogicCrud
     }
 
     /**
-     * 批量真实删除
+     * 按主键批量真实删除
      * @param array $where
      * @param bool $batch
      * @return bool
@@ -287,14 +301,14 @@ abstract class LogicCrud
      * @param int|string $id 编号
      * @param string|bool $primary_key
      * @param array $hidden_fields
-     * @param array $display_fields
+     * @param array $select_fields
      * @return Model
      */
-    public function checkModel(int|string $id, string|bool $primary_key = true, array $hidden_fields = ['*'], array $display_fields = ['*']): Model
+    public function checkModel(int|string $id, string|bool $primary_key = true, array $hidden_fields = ['*'], array $select_fields = ['*']): Model
     {
         $pk = $this->model->getKeyName();
         $field = $primary_key === true ? $pk : $primary_key;
-        $model = $this->findOne($id, $field, $hidden_fields, $display_fields);
+        $model = $this->findOne($id, $field, $hidden_fields, $select_fields);
         if ($model) {
             return $model;
         }
@@ -324,11 +338,6 @@ abstract class LogicCrud
         return $this->checkModel($this->admin_id)->toArray();
     }
 
-    public function selectByWhere(array $where, array $hidden_fields = [], array $select_fields = ['*']): array
-    {
-        return $this->search($where, $select_fields)->get()->makeHidden($hidden_fields)->toArray();
-    }
-
     public function countByWhere(array $where, array $select_fields = ['*']): int
     {
         return $this->search($where, $select_fields)->count();
@@ -346,7 +355,9 @@ abstract class LogicCrud
 
     public function findAll(array $where, array $hidden_fields = [], array $select_fields = ['*']): array
     {
-        return $this->search($where, $select_fields)->get()->makeHidden($hidden_fields)->toArray();
+        return $this->search($where, $select_fields)->get()->when($hidden_fields, function ($query, $hidden_fields) {
+            $query->makeHidden($hidden_fields);
+        })->toArray();
     }
 
     /**
@@ -362,9 +373,13 @@ abstract class LogicCrud
         if ($id) {
             $pk = $this->model->getKeyName();
             if ($pk === $primary_key) {
-                $model = $this->model->newQuery()->select($select_fields)->find(intval($id))->makeHidden($hidden_fields);
+                $model = $this->model->newQuery()->select($select_fields)->find(intval($id))->when($hidden_fields, function ($query, $hidden_fields) {
+                    $query->makeHidden($hidden_fields);
+                });
             } else {
-                $model = $this->model->newQuery()->select($select_fields)->where($primary_key, $id)->first()->makeHidden($hidden_fields);
+                $model = $this->model->newQuery()->select($select_fields)->where($primary_key, $id)->first()->when($hidden_fields, function ($query, $hidden_fields) {
+                    $query->makeHidden($hidden_fields);
+                });
             }
 
             if ($model) {
@@ -386,7 +401,12 @@ abstract class LogicCrud
     {
         // withWhereHas
         $query = $this->model->newQuery()->select($select_fields);
-        $rules = ['>', '>=', '=', '<', '<=', '<>', 'like', 'not like', 'in', 'not in', 'null', 'not null', 'betweenDate', 'between'];
+        return $this->getQuerySearch($query, $data);
+    }
+
+    public function getQuerySearch(Builder $query, array $data)
+    {
+        $rules = ['>', '>=', '=', '<', '<=', '<>', 'like', 'notLike', 'in', 'notIn', 'null', 'notNull', 'betweenDate', 'between'];
         foreach ($data as $rule => $condition) {
             foreach ($condition as $field => $value) {
                 if (is_string($value)) {
@@ -395,7 +415,7 @@ abstract class LogicCrud
 
                 if (is_string($value) || is_array($value)) {
                     if (in_array($rule, $rules)) {
-                        if ($rule === 'like' || $rule === 'not like') {
+                        if ($rule === 'like' || $rule === 'notLike') {
                             $query = $query->where($field, $rule, "%$value%");
                         } elseif (in_array($rule, ['>', '>=', '=', '<', '<=', '<>'])) {
                             $query = $query->where($field, $rule, $value);
@@ -405,7 +425,7 @@ abstract class LogicCrud
                             } else {
                                 $query = $query->whereIn($field, $value);
                             }
-                        } elseif ($rule === 'not in' && $value) {
+                        } elseif ($rule === 'notIn' && $value) {
                             if (is_string($value)) {
                                 $query = $query->whereNotIn($field, explode(',', $value));
                             } else {
@@ -413,7 +433,7 @@ abstract class LogicCrud
                             }
                         } elseif ($rule === 'null') {
                             $query = $query->whereNull($field);
-                        } elseif ($rule === 'not null') {
+                        } elseif ($rule === 'notNull') {
                             $query = $query->whereNotNull($field);
                         } elseif ($rule === 'betweenDate') {
                             $between = $value;
@@ -487,7 +507,9 @@ abstract class LogicCrud
         }
 
         $total = $query->count();
-        $data = $query->offset(($page - 1) * $limit)->limit($limit)->orderBy($orderBy, $orderType)->get()->makeHidden($hidden_fields);
+        $data = $query->offset(($page - 1) * $limit)->limit($limit)->orderBy($orderBy, $orderType)->get()->when($hidden_fields, function ($query, $hidden_fields) {
+            $query->makeHidden($hidden_fields);
+        });
 
         return [
             // 获取当前页的所有项
@@ -517,7 +539,9 @@ abstract class LogicCrud
         }
 
         $query->orderBy($order_by, $order_type);
-        return $query->get($select_fields)->makeHidden($hidden_fields)->toArray();
+        return $query->get($select_fields)->when($hidden_fields, function ($query, $hidden_fields) {
+            $query->makeHidden($hidden_fields);
+        })->toArray();
     }
 
     /**
@@ -548,7 +572,7 @@ abstract class LogicCrud
         }
 
         $ext = $file->getUploadExtension() ?: null;
-        $full_path = $full_dir. md5((string)time()). '.'. $ext;
+        $full_path = $full_dir . md5((string)time()) . '.' . $ext;
         $file->move($full_path);
         return $full_path;
     }

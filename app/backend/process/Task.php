@@ -11,7 +11,7 @@ class Task
     public function onWorkerStart(): void
     {
 //        $logic = new SystemCrontabLogic();
-//        $taskList = $logic->selectByWhere(['status' => 1]);
+//        $taskList = $logic->findAll(['status' => 1]);
 //        foreach ($taskList as $item) {
 //            new Crontab($item['rule'], function () use ($logic, $item) {
 //                $logic->run($item['id']);

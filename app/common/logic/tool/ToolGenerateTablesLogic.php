@@ -209,7 +209,7 @@ class ToolGenerateTablesLogic extends BaseLogic
     public function generate(array $table_ids): array
     {
         $zip = new ZipService();
-        $tables = $this->selectByWhere(['id', 'in', $table_ids]);
+        $tables = $this->findAll(['id', 'in', $table_ids]);
         foreach ($table_ids as $table_id) {
             $this->genUnit($table_id, $tables);
         }
@@ -233,7 +233,7 @@ class ToolGenerateTablesLogic extends BaseLogic
             throw new ApiException('模板必须为plugin或者app');
         }
 
-        $columns = $this->columnLogic->selectByWhere(['table_id' => $table_id]);
+        $columns = $this->columnLogic->findAll(['table_id' => $table_id]);
         $pk = 'id';
         foreach ($columns as &$column) {
             if ($column['is_pk'] == 2) {

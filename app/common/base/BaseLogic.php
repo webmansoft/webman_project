@@ -64,7 +64,7 @@ abstract class BaseLogic extends LogicCrud
     }
 
     /**
-     * 真实删除日志
+     * 真实删除 30之前日志
      * @param int $day
      * @return mixed
      */

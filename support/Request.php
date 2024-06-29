@@ -6,15 +6,15 @@ namespace support;
 class Request extends \Webman\Http\Request
 {
     /**
-     * 获取参数增强方法
+     * 获取格式化条件参数
      * [['test1','test2'], 'in' => ['test1','test2'], 'like' => ['origin_name','name'], 'between' => ['created_at']]
      * @param array $data
      * @return array
      */
-    public function more(array $data): array
+    public function formatInput(array $data): array
     {
         $where = [];
-        $rules = ['>', '>=', '=', '<', '<=', '<>', 'like', 'not like', 'in', 'not in', 'null', 'not null', 'betweenDate', 'between'];
+        $rules = ['>', '>=', '=', '<', '<=', '<>', 'like', 'notLike', 'in', 'notIn', 'null', 'notNull', 'betweenDate', 'between'];
         foreach ($data as $rule => $fields) {
             if (in_array($rule, $rules)) {
                 foreach ($fields as $field) {
@@ -36,29 +36,94 @@ class Request extends \Webman\Http\Request
         return $where;
     }
 
-    public function equal(array $fields): array
+    /**
+     * 等于 =
+     * @param array $fields
+     * @return array
+     */
+    public function inputEqual(array $fields): array
     {
-        return $this->more([$fields]);
+        return $this->formatInput([$fields]);
     }
 
-    public function in(array $fields): array
+    /**
+     * 大于 >
+     * @param array $fields
+     * @return array
+     */
+    public function inputGreaterThan(array $fields): array
     {
-        return $this->more(['in' => $fields]);
+        return $this->formatInput(['>' => $fields]);
     }
 
-    public function like(array $fields): array
+    /**
+     * 大于等于 >=
+     * @param array $fields
+     * @return array
+     */
+    public function inputGreaterThanOrEqual(array $fields): array
     {
-        return $this->more(['like' => $fields]);
+        return $this->formatInput(['>=' => $fields]);
     }
 
-    public function between(array $fields): array
+    /**
+     * 小于 <
+     * @param array $fields
+     * @return array
+     */
+    public function inputLessThan(array $fields): array
     {
-        return $this->more(['between' => $fields]);
+        return $this->formatInput(['<' => $fields]);
     }
 
-    public function betweenDate(array $fields): array
+    /**
+     * 小于等于 <=
+     * @param array $fields
+     * @return array
+     */
+    public function inputLessThanOrEqual(array $fields): array
     {
-        return $this->more(['betweenDate' => $fields]);
+        return $this->formatInput(['<=' => $fields]);
+    }
+
+    /**
+     * 不等于 <>
+     * @param array $fields
+     * @return array
+     */
+    public function inputNotEqual(array $fields): array
+    {
+        return $this->formatInput(['<>' => $fields]);
+    }
+
+    public function inputIn(array $fields): array
+    {
+        return $this->formatInput(['in' => $fields]);
+    }
+
+    public function inputNotIn(array $fields): array
+    {
+        return $this->formatInput(['notIn' => $fields]);
+    }
+
+    public function inputLike(array $fields): array
+    {
+        return $this->formatInput(['like' => $fields]);
+    }
+
+    public function inputNotLike(array $fields): array
+    {
+        return $this->formatInput(['notLike' => $fields]);
+    }
+
+    public function inputBetween(array $fields): array
+    {
+        return $this->formatInput(['between' => $fields]);
+    }
+
+    public function inputBetweenDate(array $fields): array
+    {
+        return $this->formatInput(['betweenDate' => $fields]);
     }
 
     /**
@@ -86,7 +151,16 @@ class Request extends \Webman\Http\Request
             return $postData;
         }
 
-        return isset($this->_data['post'][$name]) ? trim($this->_data['post'][$name]) : $default;
+        if (isset($this->_data['post'][$name])) {
+            $value = $this->_data['post'][$name];
+            if (is_string($value)) {
+                return trim($value);
+            }
+
+            return $value;
+        } else {
+            return $default;
+        }
     }
 
     /**

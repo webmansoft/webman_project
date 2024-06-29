@@ -7,19 +7,22 @@ use support\Request;
 use support\Response;
 use app\common\library\OsHelper;
 use app\common\base\BaseController;
+use app\common\logic\system\SystemUserLogic;
 
 class IndexController extends BaseController
 {
     public function index(Request $request): Response
     {
-        return $this->success('index');
+        $condition = $request->inputLike(['phone']);
+        $data = (new SystemUserLogic)->recycle($condition);
+        return $this->successData($data);
     }
 
     /**
      * 获取服务器信息
      * @return Response
      */
-    public function getServerInfo() : Response
+    public function getServerInfo(): Response
     {
         return $this->successData([
             'cpu' => OsHelper::getCpuInfo(),
