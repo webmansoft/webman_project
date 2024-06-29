@@ -15,6 +15,7 @@ class SystemUploadLogic extends BaseLogic
     public function __construct()
     {
         $this->model = new SystemUploadModel();
+        parent::__construct();
     }
 
     /**

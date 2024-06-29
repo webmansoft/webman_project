@@ -12,6 +12,7 @@ class SystemRoleLogic extends BaseLogic
     public function __construct()
     {
         $this->model = new SystemRoleModel();
+        parent::__construct();
     }
 
     public function getMenuIdsByRoleIds(array $ids): array

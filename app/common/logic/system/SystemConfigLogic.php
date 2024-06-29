@@ -13,6 +13,7 @@ class SystemConfigLogic extends BaseLogic
     public function __construct()
     {
         $this->model = new SystemConfigModel();
+        parent::__construct();
     }
 
     /**

@@ -13,6 +13,7 @@ class SystemMenuLogic extends BaseLogic
     public function __construct()
     {
         $this->model = new SystemMenuModel();
+        parent::__construct();
     }
 
     /**

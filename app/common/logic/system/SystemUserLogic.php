@@ -14,6 +14,7 @@ class SystemUserLogic extends BaseLogic
     public function __construct()
     {
         $this->model = new SystemUserModel();
+        parent::__construct();
     }
 
     public function read(int|string $id): array

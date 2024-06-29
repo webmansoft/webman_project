@@ -13,12 +13,22 @@ abstract class LogicCrud
 {
     use TableFieldsTrait;
 
-    protected Model $model; // 模型
+    public ?Model $model = null; // 模型
+    public object $modelClass; // get_class
     protected int $admin_id = 0; // 当前管理员编号
     protected array $admin = []; // 当前管理员信息
 
     protected array $admin_ids = []; // 管理员编号集合
     protected bool $scope = false; // 数据边界启用状态
+
+    public function __construct()
+    {
+        if ($this->model) {
+            $this->modelClass = new (get_class($this->model));
+        } else {
+            throw new ApiException('MODEL 未初始化');
+        }
+    }
 
     /**
      * 初始化
@@ -41,7 +51,7 @@ abstract class LogicCrud
     public function insert(array $data, string $password_field = 'password'): int|bool
     {
         $pk = $this->model->getKeyName();
-        $model = new (get_class($this->model));
+        $model = new $this->modelClass;
         $fields = $this->getCacheTableField($this->model->getTable());
         foreach ($data as $field => $value) {
             if (isset($fields[$field])) {
@@ -53,7 +63,7 @@ abstract class LogicCrud
             }
         }
 
-        if (isset($fields['created_by'])) {
+        if ($this->admin_id && isset($fields['created_by'])) {
             $model->created_by = $this->admin_id;
         }
 
@@ -78,7 +88,7 @@ abstract class LogicCrud
         if ($data) {
             $fields = $this->getCacheTableField($this->model->getTable());
             foreach ($data as &$row) {
-                if (isset($fields['created_by'])) {
+                if ($this->admin_id && isset($fields['created_by'])) {
                     $row['created_by'] = $this->admin_id;
                 }
 
@@ -136,7 +146,7 @@ abstract class LogicCrud
             }
         }
 
-        if (isset($fields['updated_by'])) {
+        if ($this->admin_id && isset($fields['updated_by'])) {
             $data['updated_by'] = $this->admin_id;
         }
 
@@ -157,7 +167,7 @@ abstract class LogicCrud
     public function updateByWhere(array $data, array $where): int
     {
         $fields = $this->getCacheTableField($this->model->getTable());
-        if (isset($fields['updated_by'])) {
+        if ($this->admin_id && isset($fields['updated_by'])) {
             $data['updated_by'] = $this->admin_id;
         }
 
@@ -201,7 +211,7 @@ abstract class LogicCrud
      */
     public function recycle(array $where = []): array
     {
-        return (new (get_class($this->model)))->onlyTrashed()->when($where, function ($query, $where) {
+        return (new $this->modelClass)->onlyTrashed()->when($where, function ($query, $where) {
             // $query->where($where);
             $this->getQuerySearch($query, $where);
         })->get()->toArray();
@@ -227,7 +237,7 @@ abstract class LogicCrud
     {
         $pk = $this->model->getKeyName();
         $ids = $this->getIds($batch);
-        $data = $this->model->whereIn($pk, $ids)
+        $data = (new $this->modelClass)->withTrashed()->whereIn($pk, $ids)
             ->when($where, function ($query, $where) {
                 $query->where($where);
             })->get();
@@ -259,7 +269,7 @@ abstract class LogicCrud
     {
         $ids = $this->getIds($batch);
         $pk = $this->model->getKeyName();
-        $data = $this->model->whereIn($pk, $ids)
+        $data = (new $this->modelClass)->withTrashed()->whereIn($pk, $ids)
             ->when($where, function ($query, $where) {
                 $query->where($where);
             })->get();

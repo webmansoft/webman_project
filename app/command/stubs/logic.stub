@@ -11,5 +11,6 @@ class {%logic_name%} extends BaseLogic
     public function __construct()
     {
         $this->model = new {%model_name%}();
+        parent::__construct();
     }
 }
