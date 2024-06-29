@@ -7,9 +7,8 @@ use support\Redis;
 use Ramsey\Uuid\Uuid;
 use Webman\Captcha\PhraseBuilder;
 use Webman\Captcha\CaptchaBuilder;
-use app\common\base\BaseService;
 
-class CaptchaService extends BaseService
+class CaptchaService
 {
     private string $code; // 验证码
     private string $uuid; // 验证码唯一序号
@@ -26,22 +25,7 @@ class CaptchaService extends BaseService
     private bool $debug = false;
     private string $testValue = 'abcd';
 
-    /**
-     * 动态切换配置
-     * @param array $config
-     * @return $this
-     */
-    public function config(array $config = []): static
-    {
-        return $this->init($config);
-    }
-
-    /**
-     * 验证码服务初始化
-     * @param array $config
-     * @return $this
-     */
-    public function init(array $config = []): static
+    public function __construct(array $config = [])
     {
         // 动态配置属性
         foreach ($config as $k => $v) {
@@ -72,8 +56,6 @@ class CaptchaService extends BaseService
         } else {
             session($key, $this->code);
         }
-
-        return $this; // 返回当前对象
     }
 
     /**

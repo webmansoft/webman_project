@@ -5,8 +5,6 @@ namespace app\common\base;
 
 use support\Response;
 use Tinywan\Validate\Validate;
-use Webman\Exception\NotFoundException;
-use app\common\service\CaptchaService;
 
 abstract class BaseController
 {
@@ -62,16 +60,5 @@ abstract class BaseController
     protected function fail(mixed $message = '操作失败', int $code = 1): Response
     {
         return $this->json($code, $message);
-    }
-
-    /**
-     * 获取验证码
-     * @return Response
-     * @throws NotFoundException
-     */
-    protected function getCaptcha(): Response
-    {
-        $captcha = CaptchaService::mk()->init();
-        return $this->successData($captcha->getAttrs());
     }
 }

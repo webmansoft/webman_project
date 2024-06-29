@@ -5,8 +5,8 @@ namespace app\backend\controller;
 
 use support\Request;
 use support\Response;
-use Webman\Exception\NotFoundException;
 use app\common\base\BaseController;
+use app\common\service\CaptchaService;
 use app\common\logic\system\SystemUserLogic;
 use app\common\validate\system\SystemUserValidate;
 
@@ -21,11 +21,10 @@ class LoginController extends BaseController
     /**
      * 获取验证码
      * @return Response
-     * @throws NotFoundException
      */
     public function captcha(): Response
     {
-        return $this->getCaptcha();
+        return $this->successData((new CaptchaService())->getAttrs());
     }
 
     /**
