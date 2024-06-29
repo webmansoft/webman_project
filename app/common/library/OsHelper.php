@@ -167,7 +167,7 @@ class OsHelper
      * 获取内存信息
      * @return array
      */
-    public static function getMemInfo(): array
+    public static function getMemoryInfo(): array
     {
         if (PHP_OS == 'Linux') {
             $string = shell_exec('cat /proc/meminfo | grep MemTotal');

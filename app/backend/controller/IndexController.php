@@ -26,7 +26,7 @@ class IndexController extends BaseController
     {
         return $this->successData([
             'cpu' => OsHelper::getCpuInfo(),
-            'memory' => OsHelper::getMemInfo(),
+            'memory' => OsHelper::getMemoryInfo(),
             'php' => OsHelper::getPhpAndEnvInfo(),
         ]);
     }
