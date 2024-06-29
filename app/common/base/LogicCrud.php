@@ -503,12 +503,11 @@ abstract class LogicCrud
     /**
      * 启用边界 分页查询数据
      * @param Builder $query
-     * @param array $hidden_fields
+     * @param array $select_fields
      * @return array
      */
-    public function getQueryList(Builder $query, array $hidden_fields = []): array
+    public function getQueryList(Builder $query, array $select_fields = ['*']): array
     {
-        $page = intval(request()->input('page') ?: 1);
         $limit = intval(request()->input('limit') ?: 10);
         $orderBy = request()->input('orderBy') ?: $this->model->getKeyName();
         $orderType = request()->input('orderType') ?: 'ASC';
@@ -516,20 +515,19 @@ abstract class LogicCrud
             $query = $this->adminDataScope($query);
         }
 
-        $total = $query->count();
-        $data = $query->offset(($page - 1) * $limit)->limit($limit)->orderBy($orderBy, $orderType)->get()->when($hidden_fields, function ($query, $hidden_fields) {
-            $query->makeHidden($hidden_fields);
-        });
+        $data = $query->orderBy($orderBy, $orderType)->paginate($limit, $select_fields)->toArray();
 
         return [
-            // 获取当前页的所有项
-            'items' => $data,
             // 数据总数
-            'total' => $total,
+            'total' => $data['total'],
             // 每页的数据条数
-            'limit' => $limit,
+            'per_page' => $data['per_page'],
             // 获取当前页页码
-            'page' => $page,
+            'current_page' => $data['current_page'],
+            // 获取当前页页码
+            'last_page' => $data['last_page'],
+            // 获取当前页的所有项
+            'data' => $data['data'],
         ];
     }
 

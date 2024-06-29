@@ -24,12 +24,11 @@ class SystemUploadController extends BaseApiController
      */
     public function getList(Request $request): Response
     {
-        $condition = [
+        $condition = $request->formatInput([
             ['mime_type', 'storage_mode'],
             'like' => ['origin_name']
-        ];
-        $where = $request->more($condition);
-        $query = $this->logic->search($where);
+        ]);
+        $query = $this->logic->search($condition);
         $data = $this->logic->getQueryList($query);
         return $this->successData($data);
     }
@@ -89,8 +88,8 @@ class SystemUploadController extends BaseApiController
      */
     public function downloadById(int|string $id): Response
     {
-        $model = $this->logic->checkModel($id)->toArray();
-        return response()->download($model['storage_path'], $model['object_name']);
+        $data = $this->logic->checkModel($id)->toArray();
+        return response()->download($data['storage_path'], $data['object_name']);
     }
 
     /**
@@ -100,8 +99,8 @@ class SystemUploadController extends BaseApiController
      */
     public function downloadByHash(string $hash): Response
     {
-        $model = $this->logic->checkModel($hash, 'hash')->toArray();
-        return response()->download($model['storage_path'], $model['object_name']);
+        $data = $this->logic->checkModel($hash, 'hash')->toArray();
+        return response()->download($data['storage_path'], $data['object_name']);
     }
 
     /**
@@ -111,8 +110,8 @@ class SystemUploadController extends BaseApiController
      */
     public function getUploadInfoById(int|string $id): Response
     {
-        $model = $this->logic->checkModel($id)->toArray();
-        return $this->successData($model);
+        $data = $this->logic->checkModel($id)->toArray();
+        return $this->successData($data);
     }
 
     /**
@@ -122,7 +121,7 @@ class SystemUploadController extends BaseApiController
      */
     public function getUploadInfoByHash(string $hash): Response
     {
-        $model = $this->logic->checkModel($hash, 'hash')->toArray();
-        return $this->successData($model);
+        $data = $this->logic->checkModel($hash, 'hash')->toArray();
+        return $this->successData($data);
     }
 }

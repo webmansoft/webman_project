@@ -14,7 +14,8 @@ class IndexController extends BaseController
     public function index(Request $request): Response
     {
         $condition = $request->inputLike(['phone']);
-        $data = (new SystemUserLogic)->recycle($condition);
+        $query = (new SystemUserLogic)->search($condition);
+        $data = (new SystemUserLogic)->getQueryList($query);
         return $this->successData($data);
     }
 

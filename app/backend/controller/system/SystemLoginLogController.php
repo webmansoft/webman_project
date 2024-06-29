@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace app\backend\controller\system;
 
-use Webman\Http\Response;
+use support\Request;
+use support\Response;
 use app\common\base\BaseApiController;
 use app\common\logic\system\SystemLoginLogLogic;
 
@@ -28,15 +29,16 @@ class SystemLoginLogController extends BaseApiController
 
     /**
      * 获取登录日志
+     * @param Request $request
      * @return Response
      */
-    public function getList(): Response
+    public function getList(Request $request): Response
     {
-        $condition = [
+        $condition = $request->formatInput([
             ['status', 'ip'],
             'like' => ['username'],
-            'betweenDate'=>['login_time']
-        ];
+            'betweenDate' => ['login_time']
+        ]);
         $query = $this->logic->search($condition);
         $data = $this->logic->getQueryList($query);
         return $this->successData($data);

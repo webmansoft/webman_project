@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace app\backend\controller\system;
 
+use support\Request;
 use support\Response;
 use app\common\base\BaseApiController;
 use app\common\logic\system\SystemOperationLogLogic;
@@ -17,15 +18,16 @@ class SystemOperationLogController extends BaseApiController
 
     /**
      * 获取操作日志
+     * @param Request $request
      * @return Response
      */
-    public function getList(): Response
+    public function getList(Request $request): Response
     {
-        $condition = [
+        $condition = $request->formatInput([
             ['ip'],
-            'like' => ['username','router'],
+            'like' => ['username', 'router'],
             'betweenDate' => ['create_time']
-        ];
+        ]);
         $query = $this->logic->search($condition);
         $data = $this->logic->getQueryList($query, ['request_data', 'delete_time']);
         return $this->successData($data);
