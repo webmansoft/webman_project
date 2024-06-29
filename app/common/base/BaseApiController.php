@@ -155,10 +155,9 @@ abstract class BaseApiController extends BaseController
 
     /**
      * 删除数据
-     * @param Request $request
      * @return Response
      */
-    public function destroy(Request $request): Response
+    public function destroy(): Response
     {
         $this->logic->delete();
         $this->afterChange('destroy');
@@ -191,10 +190,9 @@ abstract class BaseApiController extends BaseController
 
     /**
      * 恢复数据
-     * @param Request $request
      * @return Response
      */
-    public function recovery(Request $request): Response
+    public function recovery(): Response
     {
         $this->logic->restore();
         $this->afterChange('recovery');
@@ -203,10 +201,9 @@ abstract class BaseApiController extends BaseController
 
     /**
      * 数据销毁-真实删除
-     * @param Request $request
      * @return Response
      */
-    public function realDestroy(Request $request): Response
+    public function realDestroy(): Response
     {
         $this->logic->forceDelete();
         $this->afterChange('realDestroy');

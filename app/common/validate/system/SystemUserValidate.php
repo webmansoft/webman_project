@@ -5,7 +5,6 @@ namespace app\common\validate\system;
 
 use app\common\base\BaseValidate;
 use app\common\service\CaptchaService;
-use Webman\Exception\NotFoundException;
 
 class SystemUserValidate extends BaseValidate
 {
@@ -82,12 +81,10 @@ class SystemUserValidate extends BaseValidate
      * @param string $rule
      * @param array $data
      * @return bool|string
-     * @throws NotFoundException
      */
     protected function checkCaptcha(string $captcha, string $rule, array $data = []): bool|string
     {
-        $service = CaptchaService::mk()->init();
-        if ($service->verify($data['uuid'], $captcha)) {
+        if ((new CaptchaService)->verify($data['uuid'], $captcha)) {
             return true;
         } else {
             return '验证码验证失败';
