@@ -33,6 +33,7 @@ abstract class BaseApiController extends BaseController
      */
     public function __construct()
     {
+        parent::__construct();
         $this->init();
     }
 
@@ -139,7 +140,7 @@ abstract class BaseApiController extends BaseController
     public function changeStatus(Request $request): Response
     {
         $data = $request->post();
-        if ($this->validate->scene('changeStatus')->check($data) === false) {
+        if ($this->commonValidate->scene('changeStatus')->check($data) === false) {
             return $this->fail($this->validate->getError());
         }
 
@@ -182,8 +183,8 @@ abstract class BaseApiController extends BaseController
      */
     public function recycle(Request $request): Response
     {
-        $where = $request->more(['betweenDate' => ['create_time'], 'null' => ['delete_time']]);
-        $query = $this->logic->search($where);
+        $condition = $request->inputBetweenDate(['create_time']);
+        $query = $this->logic->search($condition);
         $data = $this->logic->getQueryList($query);
         return $this->success($data);
     }

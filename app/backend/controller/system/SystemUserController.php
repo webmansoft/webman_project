@@ -67,12 +67,11 @@ class SystemUserController extends BaseApiController
      */
     public function getList(Request $request): Response
     {
-        $condition = [
+        $condition = $request->formatInput([
             ['dept_id', 'role_id', 'post_id'],
             'like' => ['username', 'nickname', 'phone', 'email'],
-        ];
-        $where = $request->more($condition);
-        $query = $this->logic->search($where);
+        ]);
+        $query = $this->logic->search($condition);
         $data = $this->logic->getQueryList($query);
         return $this->successData($data);
     }

@@ -5,6 +5,7 @@ namespace app\common\base;
 
 use support\Response;
 use Tinywan\Validate\Validate;
+use app\common\validate\CommonValidate;
 
 abstract class BaseController
 {
@@ -17,6 +18,19 @@ abstract class BaseController
      * 验证器注入
      */
     protected ?Validate $validate = null;
+
+    /**
+     * 公共验证器注入
+     */
+    protected Validate $commonValidate;
+
+    /**
+     * 构造函数
+     */
+    public function __construct()
+    {
+        $this->commonValidate = new CommonValidate();
+    }
 
     /**
      * 返回格式化json数据
