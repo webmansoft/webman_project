@@ -1,10 +1,10 @@
 <?php
 
+use Webman\Route;
 use support\Log;
 use support\Response;
-use Webman\Route;
-use Webmansoft\Jwt\JwtToken;
 use Tinywan\Validate\Validate;
+use app\common\service\JwtService;
 use app\common\exception\ApiException;
 
 function version(): string
@@ -91,9 +91,11 @@ function validate(array $data, array|string $validate = '', array $message = [],
 function get_jwt_user(): bool|array
 {
     if (request()) {
-        $result = JwtToken::getExtend(false);
-        if (isset($result['id']) && isset($result['username']) && $result['id'] && $result['username']) {
-            return $result;
+        $authorization = request()->header(config('project.jwt.token_name', 'Authorization'));
+        $token = trim($authorization);
+        if ($token && $token !== 'null') {
+            [$id, $username, $client] = (new JwtService())->parseToken($token);
+            return compact('id', 'username', 'client');
         }
     }
 

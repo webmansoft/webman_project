@@ -15,16 +15,19 @@ abstract class BaseApiController extends BaseController
 {
     /**
      * 当前用户信息
+     * @var array
      */
     protected array $admin;
 
     /**
      * 当前用户编号
+     * @var int
      */
     protected int $admin_id = 0;
 
     /**
      * 当前用户账号
+     * @var string
      */
     protected string $admin_name = '';
 
@@ -39,9 +42,12 @@ abstract class BaseApiController extends BaseController
 
     /**
      * 控制器初始化
+     * @return void
      */
     protected function init(): void
     {
+        // 检查默认请求类型
+        $this->checkDefaultMethod();
         $result = get_jwt_user();
         if ($result) {
             $this->admin_id = $result['id'];
@@ -83,6 +89,43 @@ abstract class BaseApiController extends BaseController
                     throw new ApiException('您没有权限进行访问');
                 }
             }
+        }
+    }
+
+    /**
+     * 检查默认方法
+     * @return void
+     */
+    protected function checkDefaultMethod(): void
+    {
+        $lists = [
+            'index' => 'get',
+            'save' => 'post',
+            'update' => 'put',
+            'read' => 'get',
+            'changeStatus' => 'post',
+            'destroy' => 'delete',
+            'recycle' => 'get',
+            'recovery' => 'post',
+            'realDestroy' => 'delete',
+            'import' => 'post',
+            'export' => 'post',
+        ];
+        $action = request()->action;
+        if (array_key_exists($action, $lists)) {
+            $this->checkMethod($lists[$action]);
+        }
+    }
+
+    /**
+     * 验证请求方式
+     * @param string $method
+     * @return void
+     */
+    protected function checkMethod(string $method): void
+    {
+        if (request()->method() !== $method) {
+            throw new ApiException('Not Found', 404);
         }
     }
 

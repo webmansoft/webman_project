@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace app\common\logic\system;
 
 use Webman\Event\Event;
-use Webmansoft\Jwt\JwtToken;
 use app\common\base\BaseLogic;
+use app\common\service\JwtService;
 use app\common\exception\ApiException;
 use app\common\model\system\SystemUserModel;
 
@@ -35,7 +35,7 @@ class SystemUserLogic extends BaseLogic
      * @param string $client
      * @return array
      */
-    public function login(string $username, string $password, string $client = JwtToken::TOKEN_CLIENT_WEB): array
+    public function login(string $username, string $password, string $client): array
     {
         $status = 1;
         $message = '登录成功';
@@ -66,6 +66,11 @@ class SystemUserLogic extends BaseLogic
         $admin->save();
         // 登录事件
         Event::emit('system.user.login', compact('username', 'status', 'message', 'client'));
-        return $this->getToken($admin->id, $username, $client);
+
+        $token = (new JwtService())->createToken($admin->id, $admin->username, $client);
+        return [
+            'token' => $token['token'],
+            'expires_time' => $token['params']['exp']
+        ];
     }
 }

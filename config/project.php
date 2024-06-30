@@ -30,6 +30,14 @@ return [
         '/backend/login/login',
     ],
 
+    // jwt
+    'jwt'=>[
+        // token 字段名
+        'token_name' => 'Authorization',
+        // 过期时间 (小时)
+        'token_expire' => 6,
+    ],
+
     // 接口限速
     'limit' => [
         'limit' => 10, // 请求次数
