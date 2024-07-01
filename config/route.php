@@ -44,8 +44,12 @@ Route::group('/backend/loginLog', function () {
 // 操作日志
 Route::group('/backend/operationLog', function () {
     Route::get('/getList', [SystemOperationLogController::class, 'getList']);
+    Route::get('/getListByUsername', [SystemOperationLogController::class, 'getListByUsername']);
     Route::delete('/clearLog', [SystemOperationLogController::class, 'clearLog']);
 });
+
+// 系统公告
+// fastRoute('notice',SystemNoticeController::class);
 
 // 上传
 Route::group('/backend/upload', function () {
