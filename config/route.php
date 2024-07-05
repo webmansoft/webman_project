@@ -76,8 +76,8 @@ Route::group('/backend/post', function () {
 // fastRoute('backend/post', SystemPostController::class);
 // fastRoute('backend/notice', SystemNoticeController::class);
 
-fastRoute('config', SystemConfigController::class);
-fastRoute('configGroup', SystemConfigGroupController::class);
+fastRoute('backend/config', SystemConfigController::class);
+fastRoute('backend/configGroup', SystemConfigGroupController::class);
 
 Route::group('/tool', function () {
 //    fastRoute('code', GenerateTablesController::class);

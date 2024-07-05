@@ -32,6 +32,7 @@ class SystemConfigController extends BaseApiController
             'like' => ['name'],
         ]);
         $query = $this->logic->search($condition);
+        write_log($query,'query');
         $data = $this->logic->getQueryAll($query);
         return $this->successData($data);
     }
