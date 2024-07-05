@@ -9,7 +9,9 @@ use app\backend\controller\system\SystemUserController;
 use app\backend\controller\system\SystemUploadController;
 use app\backend\controller\system\SystemNoticeController;
 use app\backend\controller\system\SystemLoginLogController;
+use app\backend\controller\system\SystemConfigController;
 use app\backend\controller\system\SystemDictionaryController;
+use app\backend\controller\system\SystemConfigGroupController;
 use app\backend\controller\system\SystemOperationLogController;
 
 Route::group('/backend', function () {
@@ -73,6 +75,9 @@ Route::group('/backend/post', function () {
 
 // fastRoute('backend/post', SystemPostController::class);
 // fastRoute('backend/notice', SystemNoticeController::class);
+
+fastRoute('config', SystemConfigController::class);
+fastRoute('configGroup', SystemConfigGroupController::class);
 
 Route::group('/tool', function () {
 //    fastRoute('code', GenerateTablesController::class);
