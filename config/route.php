@@ -49,7 +49,10 @@ Route::group('/backend/operationLog', function () {
 });
 
 // 系统公告
-// fastRoute('notice',SystemNoticeController::class);
+Route::group('/backend/notice', function () {
+    Route::get('/getList', [SystemNoticeController::class, 'getList']);
+    Route::get('/getRecycleList', [SystemNoticeController::class, 'getRecycleList']);
+});
 
 // 上传
 Route::group('/backend/upload', function () {
@@ -68,8 +71,8 @@ Route::group('/backend/post', function () {
 //    Route::post('/downloadTemplate', [SystemPostController::class, 'downloadTemplate']);
 });
 
-fastRoute('backend/post', SystemPostController::class);
-fastRoute('backend/notice', SystemNoticeController::class);
+// fastRoute('backend/post', SystemPostController::class);
+// fastRoute('backend/notice', SystemNoticeController::class);
 
 Route::group('/tool', function () {
 //    fastRoute('code', GenerateTablesController::class);

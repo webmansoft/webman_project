@@ -22,9 +22,8 @@ class SystemUserValidate extends BaseValidate
         'phone' => 'mobile',
         'email' => 'email',
         // 登录
-        'client' => 'require|in:WEB,MOBILE,web,mobile,Web,Mobile',
         'uuid' => 'require',
-        'captcha' => 'require|alphaNum|length:4|checkCaptcha',
+        'code' => 'require|alphaNum|length:4|checkCaptcha',
     ];
 
     /**
@@ -51,12 +50,10 @@ class SystemUserValidate extends BaseValidate
         'email.email' => '邮箱格式错误',
         'phone.mobile' => '手机号格式错误',
         // 登录
-        'client.require' => '客户端类型必须填写',
-        'client.in' => '客户端类型范围错误',
         'uuid.require' => '唯一码不能为空',
-        'captcha.require' => '验证码必须填写',
-        'captcha.alphaNum' => '验证码必须字母和数字',
-        'captcha.length' => '验证码长度必须为4',
+        'code.require' => '验证码必须填写',
+        'code.alphaNum' => '验证码必须字母和数字',
+        'code.length' => '验证码长度必须为4',
     ];
 
     /**
@@ -67,9 +64,8 @@ class SystemUserValidate extends BaseValidate
         'login' => [
             'username',
             'password',
-            'client',
             'uuid',
-            'captcha'
+            'code'
         ],
     ];
 
@@ -77,14 +73,14 @@ class SystemUserValidate extends BaseValidate
      * 验证数据 / 验证规则 / 全部数据（数组）/ 字段名 / 字段描述
      * https://doc.thinkphp.cn/v8_0/validator.html
      * 检测验证码
-     * @param string $captcha
+     * @param string $code
      * @param string $rule
      * @param array $data
      * @return bool|string
      */
-    protected function checkCaptcha(string $captcha, string $rule, array $data = []): bool|string
+    protected function checkCaptcha(string $code, string $rule, array $data = []): bool|string
     {
-        if ((new CaptchaService)->verify($data['uuid'], $captcha)) {
+        if ((new CaptchaService)->verify($data['uuid'], $code)) {
             return true;
         } else {
             return '验证码验证失败';

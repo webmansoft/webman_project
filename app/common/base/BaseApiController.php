@@ -54,7 +54,7 @@ abstract class BaseApiController extends BaseController
             $this->admin_name = $result['username'];
             $this->admin = (new SystemUserLogic)->read($this->admin_id);
         } else {
-            throw new ApiException('当前用户信息读取失败,请重新登录');
+            throw new ApiException('当前用户信息读取失败，请重新登录。');
         }
 
         // 接口权限认证
@@ -223,12 +223,11 @@ abstract class BaseApiController extends BaseController
      * @param Request $request
      * @return Response
      */
-    public function recycle(Request $request): Response
+    public function recycle(array $condition): Response
     {
-        $condition = $request->inputBetweenDate(['create_time']);
         $query = $this->logic->search($condition);
         $data = $this->logic->getQueryList($query);
-        return $this->success($data);
+        return $this->successData($data);
     }
 
     /**

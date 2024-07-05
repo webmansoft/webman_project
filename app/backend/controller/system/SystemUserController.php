@@ -27,7 +27,7 @@ class SystemUserController extends BaseApiController
     {
         $logic = new SystemMenuLogic();
         $roleLogic = new SystemRoleLogic();
-        $info['admin'] = $this->admin;
+        $info['user'] = $this->admin;
         if ($this->admin['id'] === config('project.super_id')) {
             $info['codes'] = ['*'];
             $info['roles'] = ['superAdmin'];

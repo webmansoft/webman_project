@@ -39,4 +39,18 @@ class ArrayHelper
 
         return '';
     }
+
+    /**
+     * 是否一维数组
+     * @param array $array
+     * @return bool
+     */
+    public static function checkOneDimension(array $array)
+    {
+        if (count($array) == count($array, COUNT_RECURSIVE)) {
+            return true;
+        }
+
+        return false;
+    }
 }

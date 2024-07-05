@@ -80,13 +80,13 @@ class CaptchaService
     /**
      * 检查验证码是否正确
      * @param string $uuid
-     * @param string $captcha
+     * @param string $code
      * @return bool
      */
-    public function verify(string $uuid, string $captcha): bool
+    public function verify(string $uuid, string $code): bool
     {
         // 开启debug测试
-        if ($this->debug && $this->testValue === $captcha) {
+        if ($this->debug && $this->testValue === $code) {
             return true;
         }
 
@@ -94,13 +94,13 @@ class CaptchaService
         if ($this->mode === 'redis') {
             // 检测Redis
             check_redis();
-            $code = Redis::get($key);
+            $captcha = Redis::get($key);
             Redis::del($key);
         } else {
-            $code = session($key);
+            $captcha = session($key);
             request()->session()->forget($key);
         }
 
-        return strtolower($captcha) === strval($code);
+        return strtolower($code) === strval($captcha);
     }
 }

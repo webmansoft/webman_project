@@ -51,17 +51,17 @@ abstract class BaseController
         return json($result);
     }
 
-    protected function successCount(mixed $data, int $count, mixed $message = '操作成功', int $code = 0): Response
+    protected function successCount(mixed $data, int $count, mixed $message = '操作成功', int $code = 200): Response
     {
         return $this->json($code, $message, $data, $count, true);
     }
 
-    protected function successData(mixed $data, mixed $message = '操作成功', int $code = 0): Response
+    protected function successData(mixed $data, mixed $message = '操作成功', int $code = 200): Response
     {
         return $this->json($code, $message, $data);
     }
 
-    protected function success(mixed $message = '操作成功', mixed $data = '', int $code = 0): Response
+    protected function success(mixed $message = '操作成功', mixed $data = '', int $code = 200): Response
     {
         return $this->json($code, $message, $data);
     }

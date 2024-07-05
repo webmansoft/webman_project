@@ -17,14 +17,16 @@ class UploadService
      * 存储磁盘
      * @param int $type
      * @param string $upload
-     * @param bool $_is_file_upload
+     * @param bool $is_file_upload
      * @return mixed
      */
-    public static function disk(int $type = 1, string $upload = 'image', bool $_is_file_upload = true): mixed
+    public static function disk(int $type = 1, string $upload = 'image', bool $is_file_upload = true): mixed
     {
         $logic = new SystemConfigLogic();
         $uploadConfig = $logic->getGroupByCode('upload_config');
         $file = current(request()->file());
+        // write_log(request()->file(), 'disk request file');
+        // write_log($file, 'disk file');
         $ext = $file->getUploadExtension() ?: null;
         $file_size = $file->getSize();
         if ($file_size > ArrayHelper::getConfigValue($uploadConfig, 'upload_size')) {
@@ -84,7 +86,7 @@ class UploadService
             default => throw new ApiException('该上传模式不存在'),
         };
 
-        return new $config['adapter'](array_merge($config, ['_is_file_upload' => $_is_file_upload]));
+        return new $config['adapter'](array_merge($config, ['_is_file_upload' => $is_file_upload]));
     }
 
     /**

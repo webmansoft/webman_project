@@ -59,7 +59,7 @@ class SystemUploadController extends BaseApiController
     public function uploadImage(Request $request): Response
     {
         $type = $request->input('mode', 'local');
-        if ($type == 'local') {
+        if ($type === 'local') {
             return $this->successData($this->logic->uploadBase('image', true));
         }
 

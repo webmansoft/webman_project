@@ -48,6 +48,7 @@ class SystemConfigLogic extends BaseLogic
         $group = (new SystemConfigGroupLogic)->findOne($code, 'code')->toArray();
         if ($group) {
             $data = $this->findAll(['group_id' => $group['id']]);
+            // write_log($data, 'getGroupByCode data');
             Cache::set($prefix, $data);
             return $data;
         }

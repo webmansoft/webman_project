@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace app\common\base;
 
-use support\Model;
 use app\common\exception\ApiException;
+use app\common\library\ArrayHelper;
 use app\common\library\DatabaseHelper;
 use app\common\trait\TableFieldsTrait;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 abstract class LogicCrud
@@ -310,15 +311,14 @@ abstract class LogicCrud
      * 检测模型是否存在
      * @param int|string $id 编号
      * @param string|bool $primary_key
-     * @param array $hidden_fields
      * @param array $select_fields
      * @return Model
      */
-    public function checkModel(int|string $id, string|bool $primary_key = true, array $hidden_fields = ['*'], array $select_fields = ['*']): Model
+    public function checkModel(int|string $id, string|bool $primary_key = true, array $select_fields = ['*']): Model
     {
         $pk = $this->model->getKeyName();
         $field = $primary_key === true ? $pk : $primary_key;
-        $model = $this->findOne($id, $field, $hidden_fields, $select_fields);
+        $model = $this->findOne($id, $field, $select_fields);
         if ($model) {
             return $model;
         }
@@ -365,6 +365,7 @@ abstract class LogicCrud
 
     public function findAll(array $where, array $hidden_fields = [], array $select_fields = ['*']): array
     {
+        $where = ArrayHelper::checkOneDimension($where) ? [$where] : $where;
         return $this->search($where, $select_fields)->get()->when($hidden_fields, function ($query, $hidden_fields) {
             $query->makeHidden($hidden_fields);
         })->toArray();
@@ -374,22 +375,21 @@ abstract class LogicCrud
      * 获取模型
      * @param int|string $id
      * @param string $primary_key
-     * @param array $hidden_fields
      * @param array $select_fields
      * @return Model|bool
      */
-    public function findOne(int|string $id, string $primary_key = 'id', array $hidden_fields = [], array $select_fields = ['*']): Model|bool
+    public function findOne(int|string $id, string $primary_key = 'id', array $select_fields = ['*']): Model|bool
     {
         if ($id) {
             $pk = $this->model->getKeyName();
             if ($pk === $primary_key) {
-                $model = $this->model->newQuery()->select($select_fields)->find(intval($id))->when($hidden_fields, function ($query, $hidden_fields) {
-                    $query->makeHidden($hidden_fields);
-                });
+                $model = $this->model->newQuery()->select($select_fields)->find(intval($id));
             } else {
-                $model = $this->model->newQuery()->select($select_fields)->where($primary_key, $id)->first()->when($hidden_fields, function ($query, $hidden_fields) {
-                    $query->makeHidden($hidden_fields);
-                });
+                $query = $this->model->newQuery()->select($select_fields)->where($primary_key, $id);
+                $model = $query->first();
+                if (config('app.debug')) {
+                    write_log($query->toSql(), 'findOne toSql');
+                }
             }
 
             if ($model) {
@@ -414,10 +414,19 @@ abstract class LogicCrud
         return $this->getQuerySearch($query, $data);
     }
 
-    public function getQuerySearch(Builder $query, array $data)
+    /**
+     * @param Builder $query
+     * @param array $data
+     * @return Builder
+     */
+    public function getQuerySearch(Builder $query, array $data): Builder
     {
         $rules = ['>', '>=', '=', '<', '<=', '<>', 'like', 'notLike', 'in', 'notIn', 'null', 'notNull', 'betweenDate', 'between'];
         foreach ($data as $rule => $condition) {
+            if (!is_array($condition)) {
+                throw new ApiException('getQuerySearch data值必须为数组格式');
+            }
+
             foreach ($condition as $field => $value) {
                 if (is_string($value)) {
                     $value = trim($value);

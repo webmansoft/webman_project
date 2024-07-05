@@ -32,4 +32,14 @@ class SystemNoticeController extends BaseApiController
         $data = $this->logic->getQueryList($query);
         return $this->successData($data);
     }
+
+    public function getRecycleList(Request $request): Response
+    {
+        $condition = $request->formatInput([
+            ['type'],
+            'like' => ['title'],
+            'betweenDate' => ['create_time']
+        ]);
+        return $this->recycle($condition);
+    }
 }

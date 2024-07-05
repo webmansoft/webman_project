@@ -35,7 +35,7 @@ class SystemUserLogic extends BaseLogic
      * @param string $client
      * @return array
      */
-    public function login(string $username, string $password, string $client): array
+    public function login(string $username, string $password, string $client = 'WEB'): array
     {
         $status = 1;
         $message = '登录成功';

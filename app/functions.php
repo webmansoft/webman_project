@@ -92,7 +92,7 @@ function get_jwt_user(): bool|array
 {
     if (request()) {
         $authorization = request()->header(config('project.jwt.token_name', 'Authorization'));
-        $token = trim($authorization);
+        $token = $authorization ? trim($authorization) : false;
         if ($token && $token !== 'null') {
             [$id, $username, $client] = (new JwtService())->parseToken($token);
             return compact('id', 'username', 'client');

@@ -37,7 +37,7 @@ class LoginController extends BaseController
     {
         $data = $request->post();
         if ($this->validate->scene('login')->check($data)) {
-            $result = $this->logic->login($data['username'], $data['password'], strtoupper($data['client']));
+            $result = $this->logic->login($data['username'], $data['password']);
             return $this->successData($result);
         } else {
             $error = strval($this->validate->getError());
