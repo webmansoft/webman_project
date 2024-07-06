@@ -124,7 +124,7 @@ abstract class BaseApiController extends BaseController
      */
     protected function checkMethod(string $method): void
     {
-        if (request()->method() !== $method) {
+        if (strtolower(request()->method()) !== $method) {
             throw new ApiException('Not Found', 404);
         }
     }

@@ -29,15 +29,15 @@ Route::group('/backend/admin', function () {
     Route::get('/getList', [SystemUserController::class, 'getList']);
     Route::get('/getUserInfo', [SystemUserController::class, 'getUserInfo']);
     Route::get('/getListByIds', [SystemUserController::class, 'getListByIds']);
-    Route::post("/updateInfo", [SystemUserController::class, 'updateInfo']);
-    Route::post("/modifyPassword", [SystemUserController::class, 'modifyPassword']);
-    Route::post("/clearCache", [SystemUserController::class, 'clearCache']);
-    Route::post("/initUserPassword", [SystemUserController::class, 'initUserPassword']);
-    Route::post("/setHomePage", [SystemUserController::class, 'setHomePage']);
-
+    Route::post('/updateInfo', [SystemUserController::class, 'updateInfo']);
+    Route::post('/modifyPassword', [SystemUserController::class, 'modifyPassword']);
+    Route::post('/clearCache', [SystemUserController::class, 'clearCache']);
+    Route::post('/initUserPassword', [SystemUserController::class, 'initUserPassword']);
+    Route::post('/setHomePage', [SystemUserController::class, 'setHomePage']);
 });
 
 // 字典
+fastRoute('backend/dictionary', SystemDictionaryController::class);
 Route::group('/backend/dictionary', function () {
     Route::get('/getList', [SystemDictionaryController::class, 'getList']);
 });
@@ -79,11 +79,17 @@ Route::group('/backend/post', function () {
 //    Route::post('/downloadTemplate', [SystemPostController::class, 'downloadTemplate']);
 });
 
+// 配置
+fastRoute('backend/config', SystemConfigController::class);
+fastRoute('backend/configGroup', SystemConfigGroupController::class);
+Route::group('/backend/config', function () {
+    Route::post('/updateByKeys', [SystemConfigController::class, 'updateByKeys']);
+});
+
+// 字典
 // fastRoute('backend/post', SystemPostController::class);
 // fastRoute('backend/notice', SystemNoticeController::class);
 
-fastRoute('backend/config', SystemConfigController::class);
-fastRoute('backend/configGroup', SystemConfigGroupController::class);
 
 Route::group('/tool', function () {
 //    fastRoute('code', GenerateTablesController::class);

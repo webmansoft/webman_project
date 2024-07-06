@@ -44,19 +44,19 @@ class SystemConfigController extends BaseApiController
     public function updateByKeys(Request $request): Response
     {
         $data = $request->post();
-        $group = '';
+        $last_key = '';
         foreach ($data as $key => $value) {
-            $group = $key;
-            $update = ['value' => is_array($value) ? json_encode($value, JSON_UNESCAPED_UNICODE) : $value];
-            $this->logic->updateByWhere($update, ['key' => $key]);
+            $last_key = $key;
+            $update_data = ['value' => is_array($value) ? json_encode($value, JSON_UNESCAPED_UNICODE) : $value];
+            $this->logic->updateByWhere($update_data, ['key' => $key]);
             Cache::delete('config_' . $key);
         }
 
-        if ($group != '') {
-            $model = $this->logic->checkModel($group, 'key')->toArray();
-            $group_model = (new SystemConfigGroupLogic())->findOne($model['group_id'])->toArray();
-            if ($group_model) {
-                Cache::delete('config_group_' . $group_model['code']);
+        if ($last_key) {
+            $config = $this->logic->checkModel($last_key, 'key')->toArray();
+            $config_group = (new SystemConfigGroupLogic())->findOne($config['group_id'])->toArray();
+            if ($config_group) {
+                Cache::delete('config_group_' . $config_group['code']);
             }
         }
 

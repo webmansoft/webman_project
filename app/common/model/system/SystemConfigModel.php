@@ -7,6 +7,8 @@ use app\common\base\BaseModel;
 
 class SystemConfigModel extends BaseModel
 {
+    public $timestamps = false;
+
     /**
      * 数据表名称
      * @var string

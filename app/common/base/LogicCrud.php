@@ -164,10 +164,10 @@ abstract class LogicCrud
      * 按条件更新
      * @param array $data
      * @param array $where
-     * @param array $allow_fields
+     * @param array $update_fields 需更新的字段
      * @return int
      */
-    public function updateByWhere(array $data, array $where, array $allow_fields = []): int
+    public function updateByWhere(array $data, array $where, array $update_fields = []): int
     {
         $fields = $this->getCacheTableField($this->model->getTable());
         $update_data = [];
@@ -179,8 +179,13 @@ abstract class LogicCrud
             $update_data[$this->model::UPDATED_AT] = date('Y-m-d H:i:s');
         }
 
-        foreach ($allow_fields as $field) {
-            if (isset($fields[$field]) && isset($data[$field])) {
+        foreach ($fields as $field) {
+            if (isset($data[$field])) {
+                // 需更新的字段不为空则判断是否在提交数据中，若提交数据中没有指定字段则跳过
+                if ($update_fields && !isset($update_fields[$field])) {
+                    continue;
+                }
+
                 $update_data[$field] = $data[$field];
             }
         }
