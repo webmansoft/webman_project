@@ -169,21 +169,22 @@ abstract class LogicCrud
     public function updateByWhere(array $data, array $where, array $allow_fields = []): int
     {
         $fields = $this->getCacheTableField($this->model->getTable());
+        $update_data = [];
         if ($this->admin_id && isset($fields['updated_by'])) {
-            $data['updated_by'] = $this->admin_id;
+            $update_data['updated_by'] = $this->admin_id;
         }
 
         if (isset($fields[$this->model::UPDATED_AT])) {
-            $data[$this->model::UPDATED_AT] = date('Y-m-d H:i:s');
+            $update_data[$this->model::UPDATED_AT] = date('Y-m-d H:i:s');
         }
 
         foreach ($allow_fields as $field) {
-            if (!isset($fields[$field])) {
-                unset($data[$field]);
+            if (isset($fields[$field])) {
+                $update_data[$field] = $data[$field];
             }
         }
 
-        return $this->model->newQuery()->where($where)->update($data);
+        return $this->model->newQuery()->where($where)->update($update_data);
     }
 
     /**

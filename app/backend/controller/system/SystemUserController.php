@@ -84,10 +84,7 @@ class SystemUserController extends BaseApiController
     public function updateInfo(Request $request): Response
     {
         $data = $request->post();
-        unset($data['deptList']);
-        unset($data['postList']);
-        unset($data['roleList']);
-        $result = $this->logic->updateByWhere($data, ['id' => $this->admin_id], ['nickname', 'phone', 'email', 'avatar', 'backend_setting']);
+        $result = $this->logic->updateByWhere($data, ['id' => $this->admin_id], ['nickname', 'phone', 'email', 'avatar', 'signed', 'backend_setting']);
         if ($result) {
             return $this->success();
         }

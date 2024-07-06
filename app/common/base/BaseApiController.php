@@ -220,7 +220,7 @@ abstract class BaseApiController extends BaseController
 
     /**
      * 回收站数据
-     * @param Request $request
+     * @param array $condition
      * @return Response
      */
     public function recycle(array $condition): Response

@@ -28,7 +28,7 @@ Route::group('/backend', function () {
 Route::group('/backend/admin', function () {
     Route::get('/getList', [SystemUserController::class, 'getList']);
     Route::get('/getUserInfo', [SystemUserController::class, 'getUserInfo']);
-    Route::post('/getListByIds', [SystemUserController::class, 'getListByIds']);
+    Route::get('/getListByIds', [SystemUserController::class, 'getListByIds']);
     Route::post("/updateInfo", [SystemUserController::class, 'updateInfo']);
     Route::post("/modifyPassword", [SystemUserController::class, 'modifyPassword']);
     Route::post("/clearCache", [SystemUserController::class, 'clearCache']);

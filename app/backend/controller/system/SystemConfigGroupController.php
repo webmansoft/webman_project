@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace app\backend\controller\system;
 
-use support\Cache;
 use support\Request;
 use support\Response;
 use app\common\base\BaseApiController;
@@ -30,6 +29,7 @@ class SystemConfigGroupController extends BaseApiController
             ['code'],
             'like' => ['name'],
         ]);
+        write_log($condition,'$condition');
         $query = $this->logic->search($condition);
         $data = $this->logic->getQueryAll($query);
         return $this->successData($data);
