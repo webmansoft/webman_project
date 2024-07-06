@@ -2,6 +2,9 @@
 
 global $argv;
 
+use app\common\process\Task;
+use app\common\process\WebSocket;
+
 return [
     // File update detection and automatic reload
     'monitor' => [
@@ -26,5 +29,13 @@ return [
                 'enable_memory_monitor' => DIRECTORY_SEPARATOR === '/',
             ]
         ]
-    ]
+    ],
+    'task' => [
+        'handler' => Task::class
+    ],
+    'websocket' => [
+        'handler' => WebSocket::class,
+        'listen' => 'websocket://0.0.0.0:9527',
+        'count' => 1,
+    ],
 ];
