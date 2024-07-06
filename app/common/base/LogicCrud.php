@@ -9,6 +9,7 @@ use app\common\trait\TableFieldsTrait;
 use app\common\exception\ApiException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 abstract class LogicCrud
 {
@@ -371,12 +372,12 @@ abstract class LogicCrud
         return $this->search($where)->pluck($field, $key)->toArray();
     }
 
-    public function findAll(array $where, array $hidden_fields = [], array $select_fields = ['*']): array
+    public function findAll(array $where, array $hidden_fields = [], array $select_fields = ['*']): Builder|Collection
     {
         $where = ArrayHelper::checkOneDimension($where) ? [$where] : $where;
         return $this->search($where, $select_fields)->get()->when($hidden_fields, function ($query, $hidden_fields) {
             $query->makeHidden($hidden_fields);
-        })->toArray();
+        });
     }
 
     /**
