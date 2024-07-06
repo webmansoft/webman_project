@@ -32,7 +32,7 @@ Route::group('/backend/admin', function () {
     Route::post('/updateInfo', [SystemUserController::class, 'updateInfo']);
     Route::post('/modifyPassword', [SystemUserController::class, 'modifyPassword']);
     Route::post('/clearCache', [SystemUserController::class, 'clearCache']);
-    Route::post('/initUserPassword', [SystemUserController::class, 'initUserPassword']);
+    Route::post('/initAdminPassword', [SystemUserController::class, 'initAdminPassword']);
     Route::post('/setHomePage', [SystemUserController::class, 'setHomePage']);
 });
 
@@ -57,6 +57,7 @@ Route::group('/backend/operationLog', function () {
 });
 
 // 系统公告
+fastRoute('backend/notice', SystemNoticeController::class);
 Route::group('/backend/notice', function () {
     Route::get('/getList', [SystemNoticeController::class, 'getList']);
     Route::get('/getRecycleList', [SystemNoticeController::class, 'getRecycleList']);
@@ -75,6 +76,7 @@ Route::group('/backend/upload', function () {
 });
 
 // 岗位
+fastRoute('backend/post', SystemPostController::class);
 Route::group('/backend/post', function () {
 //    Route::post('/downloadTemplate', [SystemPostController::class, 'downloadTemplate']);
 });
@@ -85,11 +87,6 @@ fastRoute('backend/configGroup', SystemConfigGroupController::class);
 Route::group('/backend/config', function () {
     Route::post('/updateByKeys', [SystemConfigController::class, 'updateByKeys']);
 });
-
-// 字典
-// fastRoute('backend/post', SystemPostController::class);
-// fastRoute('backend/notice', SystemNoticeController::class);
-
 
 Route::group('/tool', function () {
 //    fastRoute('code', GenerateTablesController::class);

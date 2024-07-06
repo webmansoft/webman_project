@@ -123,7 +123,7 @@ class SystemUserController extends BaseApiController
      * @param Request $request
      * @return Response
      */
-    public function initUserPassword(Request $request): Response
+    public function initAdminPassword(Request $request): Response
     {
         $id = intval($request->post('id', 0));
         if ($id === config('project.super_id')) {
