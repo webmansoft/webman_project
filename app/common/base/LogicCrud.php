@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace app\common\base;
 
-use app\common\exception\ApiException;
 use app\common\library\ArrayHelper;
 use app\common\library\DatabaseHelper;
 use app\common\trait\TableFieldsTrait;
+use app\common\exception\ApiException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -102,7 +102,7 @@ abstract class LogicCrud
                 }
             }
 
-            return $this->model->insert($data);
+            return $this->model->newQuery()->insert($data);
         }
 
         return false;
@@ -156,16 +156,17 @@ abstract class LogicCrud
         }
 
         unset($data[$pk]);
-        return $this->model->whereIn($pk, $ids)->update($data);
+        return $this->model->newQuery()->whereIn($pk, $ids)->update($data);
     }
 
     /**
      * 按条件更新
      * @param array $data
      * @param array $where
+     * @param array $allow_fields
      * @return int
      */
-    public function updateByWhere(array $data, array $where): int
+    public function updateByWhere(array $data, array $where, array $allow_fields = []): int
     {
         $fields = $this->getCacheTableField($this->model->getTable());
         if ($this->admin_id && isset($fields['updated_by'])) {
@@ -176,7 +177,13 @@ abstract class LogicCrud
             $data[$this->model::UPDATED_AT] = date('Y-m-d H:i:s');
         }
 
-        return $this->model->where($where)->update($data);
+        foreach ($allow_fields as $field) {
+            if (!isset($fields[$field])) {
+                unset($data[$field]);
+            }
+        }
+
+        return $this->model->newQuery()->where($where)->update($data);
     }
 
     /**
@@ -199,7 +206,7 @@ abstract class LogicCrud
     {
         $ids = $this->getIds($batch);
         $pk = $this->model->getKeyName();
-        return $this->model->whereIn($pk, $ids)
+        return $this->model->newQuery()->whereIn($pk, $ids)
             ->when($where, function ($query, $where) {
                 $query->where($where);
             })->delete();

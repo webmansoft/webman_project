@@ -73,4 +73,15 @@ class SystemUserLogic extends BaseLogic
             'expires_time' => $token['params']['exp']
         ];
     }
+
+    public function modifyPassword(int $id, $oldPassword, $newPassword): bool
+    {
+        $model = $this->checkModel($id);
+        if (password_verify($oldPassword, $model->getAttribute('password'))) {
+            $model->setAttribute('password', password_hash($newPassword, PASSWORD_DEFAULT));
+            return $model->save();
+        } else {
+            throw new ApiException('原密码错误');
+        }
+    }
 }

@@ -29,6 +29,12 @@ Route::group('/backend/admin', function () {
     Route::get('/getList', [SystemUserController::class, 'getList']);
     Route::get('/getUserInfo', [SystemUserController::class, 'getUserInfo']);
     Route::post('/getListByIds', [SystemUserController::class, 'getListByIds']);
+    Route::post("/updateInfo", [SystemUserController::class, 'updateInfo']);
+    Route::post("/modifyPassword", [SystemUserController::class, 'modifyPassword']);
+    Route::post("/clearCache", [SystemUserController::class, 'clearCache']);
+    Route::post("/initUserPassword", [SystemUserController::class, 'initUserPassword']);
+    Route::post("/setHomePage", [SystemUserController::class, 'setHomePage']);
+
 });
 
 // 字典
