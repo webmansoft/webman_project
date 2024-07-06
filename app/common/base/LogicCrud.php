@@ -179,7 +179,7 @@ abstract class LogicCrud
         }
 
         foreach ($allow_fields as $field) {
-            if (isset($fields[$field])) {
+            if (isset($fields[$field]) && isset($data[$field])) {
                 $update_data[$field] = $data[$field];
             }
         }
