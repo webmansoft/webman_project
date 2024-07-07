@@ -24,6 +24,22 @@ class SystemUserController extends BaseApiController
     }
 
     /**
+     * 根据id获取管理员信息
+     * @param Request $request
+     * @return Response
+     */
+    public function getListByIds(Request $request): Response
+    {
+        $ids = $request->input('ids');
+        if (empty($ids)) {
+            return $this->fail('IDS 参数错误');
+        }
+
+        $data = $this->logic->inSearch(['id' => $ids], ['id', 'username', 'nickname', 'phone', 'email', 'avatar', 'create_time'])->get()->toArray();
+        return $this->successData($data);
+    }
+
+    /**
      * 获取管理员信息
      * @return Response
      */
@@ -46,22 +62,6 @@ class SystemUserController extends BaseApiController
         }
 
         return $this->successData($info);
-    }
-
-    /**
-     * 根据id获取管理员信息
-     * @param Request $request
-     * @return Response
-     */
-    public function getListByIds(Request $request): Response
-    {
-        $ids = $request->input('ids');
-        if (empty($ids)) {
-            return $this->fail('IDS 参数错误');
-        }
-
-        $data = $this->logic->inSearch(['id' => $ids], ['id', 'username', 'nickname', 'phone', 'email', 'avatar', 'create_time'])->get()->toArray();
-        return $this->successData($data);
     }
 
     /**

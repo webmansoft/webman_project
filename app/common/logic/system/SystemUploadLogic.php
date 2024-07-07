@@ -116,7 +116,6 @@ class SystemUploadLogic extends BaseLogic
         }
 
         $result = UploadService::disk($type, $upload)->uploadFile();
-        write_log($result,'uploadBase result');
         $data = $result[0];
         $hash = $data['unique_id'];
         $model = $this->findOne($hash, 'hash');

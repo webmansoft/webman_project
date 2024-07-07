@@ -180,13 +180,14 @@ abstract class LogicCrud
         }
 
         foreach ($fields as $field) {
-            if (isset($data[$field])) {
-                // 需更新的字段不为空则判断是否在提交数据中，若提交数据中没有指定字段则跳过
-                if ($update_fields && !isset($update_fields[$field])) {
-                    continue;
+            if ($update_fields) {
+                if (in_array($field, $update_fields) && isset($data[$field])) {
+                    $update_data[$field] = $data[$field];
                 }
-
-                $update_data[$field] = $data[$field];
+            } else {
+                if (isset($data[$field])) {
+                    $update_data[$field] = $data[$field];
+                }
             }
         }
 

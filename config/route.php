@@ -17,7 +17,7 @@ use app\backend\controller\system\SystemOperationLogController;
 Route::group('/backend', function () {
     // index
     Route::get('/index', [IndexController::class, 'index']);
-    Route::get("/getServerInfo", [IndexController::class, 'getServerInfo']);
+    Route::get('/getServerInfo', [IndexController::class, 'getServerInfo']);
     Route::get('/clearCache', [IndexController::class, 'clearCache']);
     // login
     Route::get('/captcha', [LoginController::class, 'captcha']);
@@ -26,7 +26,7 @@ Route::group('/backend', function () {
 
 // 系统用户
 Route::group('/backend/admin', function () {
-    Route::get('/getList', [SystemUserController::class, 'getList']);
+    Route::get('/index', [SystemUserController::class, 'index']);
     Route::get('/getUserInfo', [SystemUserController::class, 'getUserInfo']);
     Route::get('/getListByIds', [SystemUserController::class, 'getListByIds']);
     Route::post('/updateInfo', [SystemUserController::class, 'updateInfo']);
@@ -38,33 +38,27 @@ Route::group('/backend/admin', function () {
 
 // 字典
 fastRoute('backend/dictionary', SystemDictionaryController::class);
-Route::group('/backend/dictionary', function () {
-    Route::get('/getList', [SystemDictionaryController::class, 'getList']);
-});
 
 // 登录日志
 Route::group('/backend/loginLog', function () {
-    Route::get('/getList', [SystemLoginLogController::class, 'getList']);
+    Route::get('/index', [SystemLoginLogController::class, 'index']);
     Route::get('/getListByUsername', [SystemLoginLogController::class, 'getListByUsername']);
     Route::delete('/clearLog', [SystemLoginLogController::class, 'clearLog']);
 });
 
 // 操作日志
 Route::group('/backend/operationLog', function () {
-    Route::get('/getList', [SystemOperationLogController::class, 'getList']);
+    Route::get('/index', [SystemOperationLogController::class, 'index']);
     Route::get('/getListByUsername', [SystemOperationLogController::class, 'getListByUsername']);
     Route::delete('/clearLog', [SystemOperationLogController::class, 'clearLog']);
 });
 
 // 系统公告
 fastRoute('backend/notice', SystemNoticeController::class);
-Route::group('/backend/notice', function () {
-    Route::get('/getRecycleList', [SystemNoticeController::class, 'getRecycleList']);
-});
 
 // 上传
 Route::group('/backend/upload', function () {
-    Route::get('/getList', [SystemUploadController::class, 'getList']);
+    Route::get('/index', [SystemUploadController::class, 'index']);
     Route::get('/downloadById/{id}', [SystemUploadController::class, 'downloadById']);
     Route::get('/downloadByHash/{hash}', [SystemUploadController::class, 'downloadByHash']);
     Route::get('/getUploadInfoById/{id}', [SystemUploadController::class, 'getUploadInfoById']);

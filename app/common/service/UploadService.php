@@ -25,9 +25,6 @@ class UploadService
         $logic = new SystemConfigLogic();
         $uploadConfig = $logic->getGroupByCode('upload_config');
         $file = current(request()->file());
-        write_log(request()->file(), 'disk request file');
-        write_log($file, 'disk file');
-        write_log(request(), 'disk request()');
         $ext = $file->getUploadExtension() ?: null;
         $file_size = $file->getSize();
         if ($file_size > ArrayHelper::getConfigValue($uploadConfig, 'upload_size')) {
