@@ -16,6 +16,10 @@ class SystemUserController extends BaseApiController
     public function __construct()
     {
         $this->logic = new SystemUserLogic();
+        $this->condition = Request()->formatInput([
+            ['dept_id', 'role_id', 'post_id'],
+            'like' => ['username', 'nickname', 'phone', 'email'],
+        ]);
         parent::__construct();
     }
 
@@ -56,23 +60,7 @@ class SystemUserController extends BaseApiController
             return $this->fail('IDS 参数错误');
         }
 
-        $data = $this->logic->inSearch(['id' => $ids], ['id', 'username', 'nickname', 'phone', 'email', 'create_time'])->get()->toArray();
-        return $this->successData($data);
-    }
-
-    /**
-     * 获取用户列表
-     * @param Request $request
-     * @return Response
-     */
-    public function getList(Request $request): Response
-    {
-        $condition = $request->formatInput([
-            ['dept_id', 'role_id', 'post_id'],
-            'like' => ['username', 'nickname', 'phone', 'email'],
-        ]);
-        $query = $this->logic->search($condition);
-        $data = $this->logic->getQueryList($query);
+        $data = $this->logic->inSearch(['id' => $ids], ['id', 'username', 'nickname', 'phone', 'email', 'avatar', 'create_time'])->get()->toArray();
         return $this->successData($data);
     }
 
@@ -85,11 +73,7 @@ class SystemUserController extends BaseApiController
     {
         $data = $request->post();
         $result = $this->logic->updateByWhere($data, ['id' => $this->admin_id], ['nickname', 'phone', 'email', 'avatar', 'signed', 'backend_setting']);
-        if ($result) {
-            return $this->success();
-        }
-
-        return $this->fail();
+        return $result ? $this->success() : $this->fail();
     }
 
     /**
@@ -102,11 +86,7 @@ class SystemUserController extends BaseApiController
         $oldPassword = $request->input('oldPassword');
         $newPassword = $request->input('newPassword');
         $result = $this->logic->modifyPassword($this->admin_id, $oldPassword, $newPassword);
-        if ($result) {
-            return $this->success('修改成功');
-        }
-
-        return $this->fail();
+        return $result ? $this->success() : $this->fail();
     }
 
     /**
@@ -132,11 +112,7 @@ class SystemUserController extends BaseApiController
 
         $data = ['password' => password_hash('123456', PASSWORD_DEFAULT)];
         $result = $this->logic->updateByWhere($data, ['id' => $id]);
-        if ($result) {
-            return $this->success();
-        }
-
-        return $this->fail();
+        return $result ? $this->success() : $this->fail();
     }
 
     /**
@@ -148,8 +124,7 @@ class SystemUserController extends BaseApiController
     {
         $id = intval($request->post('id', 0));
         $dashboard = $request->post('dashboard', '');
-        $data = ['dashboard' => $dashboard];
-        $this->logic->updateByWhere($data, ['id' => $id]);
+        $this->logic->updateByWhere(['dashboard' => $dashboard], ['id' => $id]);
         return $this->success();
     }
 }

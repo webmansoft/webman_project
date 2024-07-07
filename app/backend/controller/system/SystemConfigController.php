@@ -17,23 +17,12 @@ class SystemConfigController extends BaseApiController
     {
         $this->logic = new SystemConfigLogic();
         $this->validate = new SystemConfigValidate;
-        parent::__construct();
-    }
-
-    /**
-     * 数据列表
-     * @param Request $request
-     * @return Response
-     */
-    public function index(Request $request): Response
-    {
-        $condition = $request->formatInput([
+        $this->tree_list = true;
+        $this->condition = Request()->formatInput([
             ['group_id', 'key'],
             'like' => ['name'],
         ]);
-        $query = $this->logic->search($condition);
-        $data = $this->logic->getQueryAll($query);
-        return $this->successData($data);
+        parent::__construct();
     }
 
     /**

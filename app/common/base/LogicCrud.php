@@ -227,7 +227,6 @@ abstract class LogicCrud
     public function recycle(array $where = []): array
     {
         return (new $this->modelClass)->onlyTrashed()->when($where, function ($query, $where) {
-            // $query->where($where);
             $this->getQuerySearch($query, $where);
         })->get()->toArray();
     }
@@ -529,7 +528,7 @@ abstract class LogicCrud
      * @param array $hidden_fields
      * @return array
      */
-    public function getQueryList(Builder $query, array $hidden_fields = ['*']): array
+    public function getQueryList(Builder $query, array $hidden_fields = []): array
     {
         $page = intval(request()->input('page') ?: 1);
         $limit = intval(request()->input('limit') ?: 3);

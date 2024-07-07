@@ -32,6 +32,24 @@ abstract class BaseApiController extends BaseController
     protected string $admin_name = '';
 
     /**
+     * 是否数据列表
+     * @var bool
+     */
+    protected bool $tree_list = false;
+
+    /**
+     * 数据列表条件
+     * @var array
+     */
+    protected array $condition = [];
+
+    /**
+     * 数据列表条件
+     * @var array
+     */
+    protected array $condition_hidden = [];
+
+    /**
      * 构造方法
      */
     public function __construct()
@@ -130,6 +148,30 @@ abstract class BaseApiController extends BaseController
     }
 
     /**
+     * 获取数据列表
+     * @param Request $request
+     * @return Response
+     */
+    public function index(Request $request): Response
+    {
+        $query = $this->logic->search($this->condition);
+        $data = $this->tree_list ? $this->logic->getQueryAll($query, $this->condition_hidden) : $this->logic->getQueryList($query, $this->condition_hidden);
+        return $this->successData($data);
+    }
+
+    /**
+     * 获取回收站数据
+     * @param Request $request
+     * @return Response
+     */
+    public function recycle(Request $request): Response
+    {
+        $query = $this->logic->search($this->condition);
+        $data = $this->tree_list ? $this->logic->getQueryAll($query, $this->condition_hidden) : $this->logic->getQueryList($query, $this->condition_hidden);
+        return $this->successData($data);
+    }
+
+    /**
      * 保存数据
      * @param Request $request
      * @return Response
@@ -215,18 +257,6 @@ abstract class BaseApiController extends BaseController
     public function read(int|string $id): Response
     {
         $data = $this->logic->checkModel($id)->toArray();
-        return $this->successData($data);
-    }
-
-    /**
-     * 回收站数据
-     * @param array $condition
-     * @return Response
-     */
-    public function recycle(array $condition): Response
-    {
-        $query = $this->logic->search($condition);
-        $data = $this->logic->getQueryList($query);
         return $this->successData($data);
     }
 

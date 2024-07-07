@@ -33,7 +33,7 @@ abstract class BaseLogic extends LogicCrud
      */
     public function getChildrenPath(int $pid): array
     {
-        $ids = $this->model->where('parent_id', $pid)->pluck('id')->toArray();
+        $ids = $this->model->newQuery()->where('parent_id', $pid)->pluck('id')->toArray();
         foreach ($ids as $id) {
             if ($child = $this->getChildrenPath($id)) {
                 $ids = array_merge($ids, $child);
@@ -51,6 +51,6 @@ abstract class BaseLogic extends LogicCrud
     public function clearLog(int $day = 30): mixed
     {
         $time = date('Y-m-d', strtotime('-' . $day . ' day'));
-        return $this->model->where($this->model::CREATED_AT, '<', $time)->forceDelete();
+        return $this->model->newQuery()->where($this->model::CREATED_AT, '<', $time)->forceDelete();
     }
 }

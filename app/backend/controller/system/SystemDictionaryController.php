@@ -18,11 +18,11 @@ class SystemDictionaryController extends BaseApiController
     }
 
     /**
-     * 获取字典列表
+     * 获取数据列表
      * @param Request $request
      * @return Response
      */
-    public function getList(Request $request): Response
+    public function index(Request $request): Response
     {
         $code = $request->input('code');
         if (empty($code)) {

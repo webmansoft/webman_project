@@ -14,23 +14,11 @@ class SystemUploadController extends BaseApiController
     public function __construct()
     {
         $this->logic = new SystemUploadLogic();
-        parent::__construct();
-    }
-
-    /**
-     * 获取资源列表
-     * @param Request $request
-     * @return Response
-     */
-    public function getList(Request $request): Response
-    {
-        $condition = $request->formatInput([
+        $this->condition = Request()->formatInput([
             ['mime_type', 'storage_mode'],
             'like' => ['origin_name']
         ]);
-        $query = $this->logic->search($condition);
-        $data = $this->logic->getQueryList($query);
-        return $this->successData($data);
+        parent::__construct();
     }
 
     /**
