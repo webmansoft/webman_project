@@ -10,6 +10,9 @@ return [
     // 超级管理员编号
     'super_id' => 1,
 
+    // 重置管理员默认密码
+    'init_password' => '123456',
+
     // 验证码存储模式
     'captcha' => [
         // 开启debug

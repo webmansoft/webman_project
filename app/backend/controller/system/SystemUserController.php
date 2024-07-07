@@ -103,14 +103,14 @@ class SystemUserController extends BaseApiController
      * @param Request $request
      * @return Response
      */
-    public function initAdminPassword(Request $request): Response
+    public function initPassword(Request $request): Response
     {
         $id = intval($request->post('id', 0));
         if ($id === config('project.super_id')) {
             return $this->fail('超级管理员不允许重置密码');
         }
 
-        $data = ['password' => password_hash('123456', PASSWORD_DEFAULT)];
+        $data = ['password' => password_hash(config('project.init_password','123456'), PASSWORD_DEFAULT)];
         $result = $this->logic->updateByWhere($data, ['id' => $id]);
         return $result ? $this->success() : $this->fail();
     }
