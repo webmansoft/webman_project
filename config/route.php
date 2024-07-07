@@ -59,7 +59,6 @@ Route::group('/backend/operationLog', function () {
 // 系统公告
 fastRoute('backend/notice', SystemNoticeController::class);
 Route::group('/backend/notice', function () {
-    Route::get('/getList', [SystemNoticeController::class, 'getList']);
     Route::get('/getRecycleList', [SystemNoticeController::class, 'getRecycleList']);
 });
 

@@ -17,22 +17,11 @@ class SystemOperationLogController extends BaseApiController
     }
 
     /**
-     * 获取我的操作日志
-     * @return Response
-     */
-    public function getListByUsername(): Response
-    {
-        $query = $this->logic->equalSearch(['username' => $this->admin_name]);
-        $data = $this->logic->getQueryList($query, ['request_data', 'delete_time']);
-        return $this->successData($data);
-    }
-
-    /**
      * 获取操作日志
      * @param Request $request
      * @return Response
      */
-    public function getList(Request $request): Response
+    public function index(Request $request): Response
     {
         $condition = $request->formatInput([
             ['ip'],
@@ -40,6 +29,17 @@ class SystemOperationLogController extends BaseApiController
             'betweenDate' => ['create_time']
         ]);
         $query = $this->logic->search($condition);
+        $data = $this->logic->getQueryList($query, ['request_data', 'delete_time']);
+        return $this->successData($data);
+    }
+
+    /**
+     * 获取我的操作日志
+     * @return Response
+     */
+    public function getListByUsername(): Response
+    {
+        $query = $this->logic->equalSearch(['username' => $this->admin_name]);
         $data = $this->logic->getQueryList($query, ['request_data', 'delete_time']);
         return $this->successData($data);
     }

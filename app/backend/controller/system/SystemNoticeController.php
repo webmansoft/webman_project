@@ -21,7 +21,7 @@ class SystemNoticeController extends BaseApiController
      * @param Request $request
      * @return Response
      */
-    public function getList(Request $request): Response
+    public function index(Request $request): Response
     {
         $condition = $request->formatInput([
             ['type'],

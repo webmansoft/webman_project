@@ -21,11 +21,11 @@ class SystemPostController extends BaseApiController
      * @param Request $request
      * @return Response
      */
-    public function index(Request $request) : Response
+    public function index(Request $request): Response
     {
         $condition = $request->formatInput([
             ['status'],
-            'like' => ['name','code'],
+            'like' => ['name', 'code'],
             'betweenDate' => ['create_time']
         ]);
         $query = $this->logic->search($condition);

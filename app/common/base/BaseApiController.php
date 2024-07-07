@@ -256,7 +256,7 @@ abstract class BaseApiController extends BaseController
      * 数据改变后执行
      * @return void
      */
-    public function afterChange($type)
+    protected function afterChange($type)
     {
         // todo
     }
