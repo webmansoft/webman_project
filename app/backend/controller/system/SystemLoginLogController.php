@@ -32,7 +32,7 @@ class SystemLoginLogController extends BaseApiController
     }
 
     /**
-     * 真实删除日志
+     * 真实删除 30之前日志
      * @return Response
      */
     public function clearLog(): Response

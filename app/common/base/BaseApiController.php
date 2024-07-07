@@ -161,10 +161,9 @@ abstract class BaseApiController extends BaseController
 
     /**
      * 获取回收站数据
-     * @param Request $request
      * @return Response
      */
-    public function recycle(Request $request): Response
+    public function recycle(): Response
     {
         $query = $this->logic->search($this->condition);
         $data = $this->tree_list ? $this->logic->getQueryAll($query, $this->condition_hidden) : $this->logic->getQueryList($query, $this->condition_hidden);
