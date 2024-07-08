@@ -45,7 +45,7 @@ class ArrayHelper
      * @param array $array
      * @return bool
      */
-    public static function checkOneDimension(array $array)
+    public static function checkOneDimension(array $array): bool
     {
         if (count($array) == count($array, COUNT_RECURSIVE)) {
             return true;

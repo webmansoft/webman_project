@@ -18,14 +18,22 @@ class Request extends \Webman\Http\Request
         foreach ($data as $rule => $fields) {
             if (in_array($rule, $rules)) {
                 foreach ($fields as $field) {
-                    $value = trim($this->input($field, ''));
+                    $value = $this->input($field, '');
+                    if (is_string($value)) {
+                        $value = trim($value);
+                    }
+
                     if ($value) {
                         $where[$rule][$field] = $value;
                     }
                 }
             } else {
                 foreach ($fields as $field) {
-                    $value = trim($this->input($field, ''));
+                    $value = $this->input($field, '');
+                    if (is_string($value)) {
+                        $value = trim($value);
+                    }
+
                     if ($value) {
                         $where['='][$field] = $value;
                     }

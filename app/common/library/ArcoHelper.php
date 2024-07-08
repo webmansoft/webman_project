@@ -18,21 +18,7 @@ class ArcoHelper
             $list[$value[$pk]] = $value;
         }
 
-        return self::tree($list);
-    }
-
-    protected static function tree(array $list, string $children = 'children', string $pk = 'id', string $pid = 'parent_id'): array
-    {
-        $tree = []; // 格式化好的树
-        foreach ($list as $item) {
-            if (isset($list[$item[$pid]])) {
-                $list[$item[$pid]][$children][] = &$list[$item[$pk]];
-            } else {
-                $tree[] = &$list[$item[$pk]];
-            }
-        }
-
-        return $tree;
+        return TreeHelper::tree($list);
     }
 
     /**
@@ -67,7 +53,7 @@ class ArcoHelper
             }
         }
 
-        return self::tree($list);
+        return TreeHelper::tree($list);
     }
 
     /**
@@ -117,7 +103,7 @@ class ArcoHelper
             }
         }
 
-        return self::tree($list);
+        return TreeHelper::tree($list);
     }
 
     /**

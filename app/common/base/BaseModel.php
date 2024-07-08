@@ -55,6 +55,16 @@ abstract class BaseModel extends Model
      */
     public function getExtraAttr(mixed $value): array
     {
-        return StringHelper::isJson($value) ? json_decode($value, true) : $value;
+        return $value ? json_decode($value, true) : [];
+    }
+
+    /**
+     * 字段属性处理
+     * @param mixed $value
+     * @return array
+     */
+    public function getExtraJsonAttr(mixed $value): array
+    {
+        return StringHelper::isJson($value) ? json_decode($value, true) : [];
     }
 }

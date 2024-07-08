@@ -5,37 +5,42 @@ namespace app\common\library;
 
 class TreeHelper
 {
-    /**
-     * 数据树形化
-     * @param array $data 数据
-     * @param string $childrenName 子数据名
-     * @param string $keyName 数据key名
-     * @param string $parentName 数据上级key名
-     * @return array
-     */
-    public static function makeTree(array $data, string $childrenName = 'children', string $keyName = 'id', string $parentName = 'parent_id'): array
+    public static function tree(array $list, string $children = 'children', string $pk = 'id', string $pid = 'parent_id'): array
     {
-        $list = [];
-        foreach ($data as $value) {
-            $list[$value[$keyName]] = $value;
-        }
-
         $tree = []; // 格式化好的树
         foreach ($list as $item) {
-            if (isset($list[$item[$parentName]])) {
-                $list[$item[$parentName]][$childrenName][] = &$list[$item[$keyName]];
+            if (isset($list[$item[$pid]])) {
+                $list[$item[$pid]][$children][] = &$list[$item[$pk]];
             } else {
-                $tree[] = &$list[$item[$keyName]];
+                $tree[] = &$list[$item[$pk]];
             }
         }
 
         return $tree;
     }
 
+    /**
+     * 数据树形化
+     * @param array $data 数据
+     * @param string $children
+     * @param string $pk
+     * @param string $pid
+     * @return array
+     */
+    public static function makeTree(array $data, string $children = 'children', string $pk = 'id', string $pid = 'parent_id'): array
+    {
+        $list = [];
+        foreach ($data as $value) {
+            $list[$value[$pk]] = $value;
+        }
+
+        return self::tree($list, $children, $pk, $pid);
+    }
+
     public static function formatArray(array &$data): void
     {
-        foreach ($data as $index=>$item){
-            if(is_object($item)){
+        foreach ($data as $index => $item) {
+            if (is_object($item)) {
                 $data[$index] = (array)$item;
             }
         }

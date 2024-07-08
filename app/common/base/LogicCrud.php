@@ -312,7 +312,14 @@ abstract class LogicCrud
             }
 
             if ($batch) {
-                return explode(',', $data[$pk]);
+                $id = $data[$pk];
+                if (is_int($id)) {
+                    return [$id];
+                }
+
+                if (str_contains($id, ',')) {
+                    return explode(',', $id);
+                }
             }
 
             return intval($data[$pk]);

@@ -14,4 +14,9 @@ class SystemConfigModel extends BaseModel
      * @var string
      */
     protected $table = 'system_config';
+
+    public function getConfigSelectDataAttribute($value): array
+    {
+        return $this->getExtraAttr($value);
+    }
 }

@@ -10,31 +10,39 @@ class SystemConfigValidate extends BaseValidate
     /**
      * 定义验证规则
      */
-    protected $rule = [
-        'id' => 'require|number',
+    protected $rule =   [
         'name' => 'require',
+        'key' => 'require',
+        'group_id' => 'require',
+        'input_type' => 'require',
     ];
 
     /**
      * 定义错误信息
      */
-    protected $message = [
-        'id.require' => 'id不能为空',
-        'id.number' => 'id必须为纯数字',
-
-        'name.require' => '标题不能为空',
+    protected $message  =   [
+        'name' => '配置标题必须填写',
+        'key' => '配置标识必须填写',
+        'group_id' => '所属组必须填写',
+        'input_type' => '输入组件必须填写',
     ];
 
     /**
      * 定义场景
      */
     protected $scene = [
-        'add' => [
+        'save' => [
             'name',
+            'key',
+            'group_id',
+            'input_type',
         ],
-        'edit' => [
-            'id',
+        'update' => [
             'name',
+            'key',
+            'group_id',
+            'input_type',
         ],
     ];
+
 }
